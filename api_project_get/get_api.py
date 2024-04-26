@@ -10,7 +10,6 @@ def sync_vivogpt(prompt):
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
     URI = '/vivogpt/completions'
-    # URI = '/ocr/general_recognition'
     DOMAIN = 'api-ai.vivo.com.cn'
 
 

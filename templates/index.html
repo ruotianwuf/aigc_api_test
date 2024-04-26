@@ -29,7 +29,7 @@
 
 function question() {
     var questionInput = document.getElementById("questionInput");
-    var question = questionInput.value.trim(); // 获取输入框的值并去除首尾空格
+    var question = questionInput.value.trim();
     if (question) {
         var data = { 'question': question };
         $.ajax({
