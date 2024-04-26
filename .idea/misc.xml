@@ -3,5 +3,5 @@
   <component name="Black">
     <option name="sdkName" value="Python 3.10 (aigc_api_test)" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10 (aigc_api_test)" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9 (aigc_api_test)" project-jdk-type="Python SDK" />
 </project>

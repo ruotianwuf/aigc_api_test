@@ -15,6 +15,7 @@
         <input type="text" id="questionInput" placeholder="请输入您的问题">
         <button onclick="question()">提问</button>
     </div>
+    <div id="questionDisplay"></div>
     <div id="answerDisplay"></div>
 </div>
 
@@ -39,7 +40,8 @@ function question() {
             dataType: "json",
             success: function (response) {
                 if (response.success) {
-                    document.getElementById("answerDisplay").innerHTML = '<div class="answer-box">' + response.result + '</div>';
+                    document.getElementById("questionDisplay").innerHTML = '<div class="answer-box">' + "你:" +data.question + '</div>';
+                    document.getElementById("answerDisplay").innerHTML = '<div class="answer-box">' + "BlueZZ:" + response.result + '</div>';
                     questionInput.value = "";
                 } else {
                     alert("未能获取到答案。");
