@@ -5,15 +5,18 @@ import requests
 import app
 from api_project_get.auth_util import gen_sign_headers
 
-
-def sync_vivogpt_msg(q1, a1, q2):
-
+message = []
+def sync_vivogpt_msg(ask):
+    
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
     URI = '/vivogpt/completions'
     DOMAIN = 'api-ai.vivo.com.cn'
 
+    message.append({"content": ask, "role": "user"})
+    print(message)
     METHOD = 'POST'
+
 
     params = {
         'requestId': str(uuid.uuid4())
@@ -21,10 +24,7 @@ def sync_vivogpt_msg(q1, a1, q2):
     print('requestId:', params['requestId'])
 
     data = {
-        'messages': {
-            'role': {'user':q1,'assistant':a1},
-            'content': q2
-        },
+        'messages': message,
         'model': 'vivo-BlueLM-TB',
         'sessionId': str(uuid.uuid4()),
         'extra': {
@@ -46,8 +46,9 @@ def sync_vivogpt_msg(q1, a1, q2):
         if res_obj['code'] == 0 and res_obj.get('data'):
             content = res_obj['data']['content']
             print(f'final content:\n{content}')
+            message.append({"content": content, "role": "assistant"})
+            print(message)
             return content
-
     else:
         print(response.status_code, response.text)
 
@@ -57,6 +58,7 @@ def sync_vivogpt_msg(q1, a1, q2):
 
 
 
+# while(1):
+#     sync_vivogpt_msg(message)
 
-sync_vivogpt_msg("我需要旅游资讯","好的，请问您想去哪个目的地旅游呢","成都")
 

@@ -33,7 +33,7 @@ function question() {
     if (question) {
         var data = { 'question': question };
         $.ajax({
-            url: "/answer",
+            url: "/answer_msg",
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json",

@@ -16,13 +16,15 @@ def index():
 
 @app.route('/answer_msg', methods=['POST'])
 def getanswer_msg():
-    data = json.loads(request.get_data(as_text=True))
-    data = data['question']
-    result = get_msg_answer(data)
-    if result != None:
-        return jsonify({'success': True, 'result': result}), 200
-    else:
-        return jsonify({'success': False}), 200
+
+        data = json.loads(request.get_data(as_text=True))
+        data = data['question']
+        result=sync_vivogpt_msg(data)
+        print(result)
+        if result != None:
+            return jsonify({'success': True, 'result': result}), 200
+        else:
+            return jsonify({'success': False}), 200
 
 @app.route('/answer', methods=['POST'])
 def getanswer():
