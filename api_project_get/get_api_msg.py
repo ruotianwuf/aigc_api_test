@@ -6,8 +6,9 @@ import app
 from api_project_get.auth_util import gen_sign_headers
 
 message = []
+
+
 def sync_vivogpt_msg(ask):
-    
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
     URI = '/vivogpt/completions'
@@ -16,7 +17,6 @@ def sync_vivogpt_msg(ask):
     message.append({"content": ask, "role": "user"})
     print(message)
     METHOD = 'POST'
-
 
     params = {
         'requestId': str(uuid.uuid4())
@@ -56,9 +56,6 @@ def sync_vivogpt_msg(ask):
     timecost = end_time - start_time
     print('请求耗时: %.2f秒' % timecost)
 
-
-
 # while(1):
 #     sync_vivogpt_msg(message)
-
 
