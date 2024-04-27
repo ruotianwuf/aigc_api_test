@@ -1,0 +1,26 @@
+一.环境设置
+1.把audio.conf的路径换成视频的绝对路径
+2.安装运行程序需要的python三方包
+进入到终端，执行安装第三方包指令
+pip install websocket-client
+pip install gevent
+pip install soundfile
+pip install numpy
+pip install requests
+
+二.语音识别
+1.实时短语音识别
+进入到实时短语音识别python接入demo目录下，执行命令：
+python ai_speech_input_client.py audio.conf
+说明：支持的音频格式为16k/16b 单声道的PCM编码格式音频
+
+2.长语句听写
+进入到长语句听写python接入demo目录下，执行命令：
+python ai_speech_client.py audio.conf
+说明：支持的音频为16k/16b 单声道的PCM编码格式音频
+
+
+3.长语音转写
+进入到长语音转写python接入demo目录下，执行命令：
+python ai_fileasr_client.py audio.conf
+说明：支持的音频格式有wav，pcm，m4a，mp3，acc，ogg，ogg_opus。
