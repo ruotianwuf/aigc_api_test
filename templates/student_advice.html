@@ -1,10 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>Addvice</title>
+    <title>Advice</title>
+     <style>
+          .background {
+            background-image: url('../static/img/feedback.jpg');
+            background-size: cover;
+            height: 500px;
+            width: 100%;
+            position: relative;
+            z-index:
+        }
+
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            z-index: 2;
+            color: black;
+            font-family: 'SimSun', 'Songti SC', 'serif';
+        }
+    </style>
+
 </head>
 <body>
+
+<div class="background">
+    <div class="content" id="output">
+    </div>
+</div>>
+
 
 </body>
 
@@ -17,17 +44,29 @@
                     var data = {"username": cookiePair[1]};
                     alert(JSON.stringify(data));
                     $.ajax({
-                        url: "/answer_msg/advice",
+                      url: "/answer_msg/advice",
                         type: "POST",
                         data: JSON.stringify(data),
                         contentType: "application/json",
                         dataType: "json",
                         success: function(response) {
                             if (response.success) {
-                                replay = response.result
+                                var replay = response.result
 
-                                document.write("<div>" + replay + "</div>")
-                            }
+
+                                replay = replay.replace(/(\d+)\. /g, '<h2>$1.</h2>');
+                                replay = replay.replace(/\((\d+)\) /g, '<h3>$1.</h3>');
+                                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '<h4>$1</h4>');
+
+
+                                replay = replay.replace(/\n/g, '<br>');
+
+
+                                var outputDiv = document.getElementById("output");
+                                outputDiv.innerHTML = "<div>" + replay + "</div>"; /* 使用内嵌元素添加内容 */
+
+
+                                }
                         },
                         error: function() {
                             alert("错误error");
