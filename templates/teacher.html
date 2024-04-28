@@ -3,8 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>PRD_TEACHER</title>
+    <link rel="stylesheet" href="/static/css/teacher.css">
+
 </head>
 <body>
+    <div class="container">
+        <h1>一体化在线教育社区系统</h1>
+        <a class="button" href="#">注册</a>
+        <a class="button" href="/login/teacher">登录</a>
+        <nav>
+            <ul>
+                <li><a href="/home">主页</a></li>
+                <li><a href="/courses">课程</a></li>
+                <li><a href="/upload">上传</a></li>
+                <li><a href="/grade">批改作业</a></li>
+                <li><a href="/publish">发布成绩</a></li>
+            </ul>
+        </nav>
+        <br>
+    </div>
 
+
+<script>
+ // 检测用户是否已登录的函数
+    function isUserLoggedIn() {
+        // 假设此处有逻辑判断用户是否已登录，返回true表示已登录，false表示未登录
+        return false; // 这里暂时返回false，模拟用户未登录的情况
+    }
+
+    // 获取所有链接元素
+    const links = document.querySelectorAll('a');
+
+    // 遍历所有链接元素，添加点击事件监听器
+    links.forEach(link => {
+        link.addEventListener('click', function(event) {
+            // 如果用户未登录，则阻止默认行为，弹出浏览器弹窗
+            if (!isUserLoggedIn()&& !link.href.includes("/login/teacher")) {
+                event.preventDefault(); // 阻止默认链接跳转行为
+                // 弹出浏览器弹窗
+                alert("您还未登录,请先登录！");
+                // 用户点击确定按钮后跳转到登录页面
+                window.location.href = "/login/teacher";
+            }
+        });
+    });
+</script>
 </body>
 </html>
