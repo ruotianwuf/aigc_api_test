@@ -83,9 +83,14 @@ class UserServerController:
         return {'result': result, 'consequence': consequence}
 
     def get_course_info_ServerStatus(self, status_data):
-        model = CommonDb('course')
-        consequence = model.selectAll(f"major='{status_data}'")
-        print(consequence)
+        if status_data == '计算机科学':
+            model = CommonDb('cs_course')
+            consequence = model.selectAll_Direct(f"")
+            print(consequence)
+        elif status_data == '软件工程':
+            model = CommonDb('se_course')
+            consequence = model.selectAll_Direct(f"")
+            print(consequence)
         if not consequence:
             result = False
             print('无此项')
@@ -94,15 +99,33 @@ class UserServerController:
         return {'result': result, 'consequence': consequence}
 
     def delete_course_info_ServerStatus(self, status_data):
-        model = CommonDb('course')
-        major = status_data['major']
+        if status_data['major'] == '计算机科学':
+            model = CommonDb('cs_course')
 
+        elif status_data['major'] == '软件工程':
+            model = CommonDb('se_course')
 
+        id = status_data['course']
 
-        info = "c" + str(status_data['course'])
-        print(info)
+        consequence = model.delete_where(f"id='{id}'")
+        print(consequence)
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
 
-        consequence = model.update_delete(info,f"major='{major}'")
+    def add_course_info_ServerStatus(self, status_data):
+        if status_data['major'] == '计算机科学':
+            model = CommonDb('cs_course')
+
+        elif status_data['major'] == '软件工程':
+            model = CommonDb('se_course')
+
+        course = status_data['course']
+
+        consequence = model.selectAll(f"course='{course}'")
         print(consequence)
         if not consequence:
             result = False

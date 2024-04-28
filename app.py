@@ -168,8 +168,10 @@ def get_teacher_info():
     con = UserServerController()
     result = con.get_teacher_info_ServerStatus(data)
     get_info = result['consequence']
+    print(get_info)
     info =get_info[0]
     major = info[4]
+    print(major)
     major_course = con.get_course_info_ServerStatus(major)
     get_course_info = major_course['consequence']
     course_info = get_course_info[0]
@@ -178,17 +180,29 @@ def get_teacher_info():
     if result:
         return jsonify({'success': True, 'info': info, 'course_info': course_info}), 200
     else:
-        return jsonify({'success': False}), 200
+        return jsonify({'success': True}), 200
 
 @app.route('/teacher/info/c_delete', methods=['POST'])
 def delete_teacher_c_info():
+
     data = json.loads(request.get_data(as_text=True))
     print(data)
 
     con = UserServerController()
+
     result = con.delete_course_info_ServerStatus(data)
-    print()
-    return jsonify({'success': True}), 200
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/teacher/info/addcourse', methods=['POST'])
+def add_teacher_c_info():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+
+    con = UserServerController()
+    result = con.add_course_info_ServerStatus(data)
+    if result:
+        return jsonify({'success': True}), 200
 
 
 if __name__ == '__main__':
