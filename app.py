@@ -92,5 +92,16 @@ def getlogin_teacher_info():
     else:
         return jsonify({'success': False}), 200  # 返回错误信息和401状态码
 
+@app.route('/login/student/1', methods=['POST'])
+def getlogin_student_info():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.findlogin_student_ServerStatus(data)
+    if result:
+        return jsonify({'success': True, 'data': result}), 200  # 返回 JSON 响应，并显示操作成功
+    else:
+        return jsonify({'success': False}), 200  # 返回错误信息和401状态码
+
 if __name__ == '__main__':
     app.run(debug=True)
