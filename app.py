@@ -66,7 +66,9 @@ def getstudent():
 @app.route('/teacher', methods=['GET'])
 def getteacher():
     return render_template('teacher.html')
-
+@app.route('/teacher/home', methods=['GET'])
+def getteacher_home():
+    return render_template('teacher_home.html')
 @app.route('/login', methods=['GET'])
 def getlogin():
     return render_template('/')
@@ -86,7 +88,7 @@ def getlogin_teacher_info():
     con = UserServerController()
     result = con.findlogin_teacher_ServerStatus(data)
     if result:
-        return jsonify({'success': True}), 200  # 返回 JSON 响应，并显示操作成功
+        return jsonify({'success': True, 'data': result}), 200  # 返回 JSON 响应，并显示操作成功
     else:
         return jsonify({'success': False}), 200  # 返回错误信息和401状态码
 

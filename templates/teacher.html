@@ -10,10 +10,10 @@
     <div class="container">
         <h1>一体化在线教育社区系统</h1>
         <a class="button" href="#">注册</a>
-        <a class="button" href="/login/teacher">登录</a>
+        <a class="button" href="/login/teacher" id="teacher_login">登录</a>
         <nav>
             <ul>
-                <li><a href="/home">主页</a></li>
+                <li><button onclick="go_home()">主页</button></li>
                 <li><a href="/courses">课程</a></li>
                 <li><a href="/upload">上传</a></li>
                 <li><a href="/grade">批改作业</a></li>
@@ -25,28 +25,54 @@
 
 
 <script>
- // 检测用户是否已登录的函数
-    function isUserLoggedIn() {
-        // 假设此处有逻辑判断用户是否已登录，返回true表示已登录，false表示未登录
-        return false; // 这里暂时返回false，模拟用户未登录的情况
+     var urlParams = new URLSearchParams(window.location.search);
+     var receivedData = urlParams.get('data');
+     var cookieName = "teacher";
+     var cookieValue = receivedData;
+     document.cookie = cookieName + "=" + cookieValue;
+
+    function checkCookie(cookieName) {
+    // 获取所有的 Cookie，并以分号加空格进行分割
+    var cookies = document.cookie.split("; ");
+
+    // 遍历所有 Cookie
+    for (var i = 0; i < cookies.length; i++) {
+        // 分割每个 Cookie 的键值对
+        var cookiePair = cookies[i].split("=");
+
+        // 检查当前 Cookie 是否为目标 Cookie
+        if (cookiePair[0] === cookieName && cookiePair[1] === cookieValue) {
+            // 如果找到目标 Cookie，返回 true
+            return cookieValue;
+        }
     }
 
-    // 获取所有链接元素
-    const links = document.querySelectorAll('a');
+    // 如果未找到目标 Cookie，则返回 false
+    return false;
+}
 
-    // 遍历所有链接元素，添加点击事件监听器
-    links.forEach(link => {
-        link.addEventListener('click', function(event) {
-            // 如果用户未登录，则阻止默认行为，弹出浏览器弹窗
-            if (!isUserLoggedIn()&& !link.href.includes("/login/teacher")) {
-                event.preventDefault(); // 阻止默认链接跳转行为
-                // 弹出浏览器弹窗
-                alert("您还未登录,请先登录！");
-                // 用户点击确定按钮后跳转到登录页面
-                window.location.href = "/login/teacher";
-            }
-        });
-    });
+
+     var myCookieValue = checkCookie("teacher");
+     if (myCookieValue){
+         alert(myCookieValue);
+         var cookieString ='<div>'+'欢迎你,'+myCookieValue+'</div>';
+         alert(cookieString);
+         document.getElementById("teacher_login").innerHTML = cookieString;
+
+     }
+
+     function go_home(){
+         var ck=checkCookie('teacher');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
+             window.location.href="/teacher/home";
+
+         }else{
+             alert("err");
+             window.location.href="/login/teacher";
+         }
+     }
 </script>
 </body>
 </html>
