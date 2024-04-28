@@ -22,9 +22,10 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            display: flex; /* 使用flexbox布局 */
+            flex-direction: column; /* 将子元素竖直排列 */
+            align-items: center; /* 将子元素水平居中 */
+        }
 
         .container h2 {
             text-align: center;
@@ -112,10 +113,10 @@
                         if(response.success){
                              alert("注册成功");
 
-                            window.location.href = "http://127.0.0.1:5000/login/teacher";
+                            window.location.href = "http://127.0.0.1:5000/login/student";
                         }else{
                             alert("错误");
-                            window.location.href="http://127.0.0.1:5000/adduser/teacher";
+                            window.location.href="http://127.0.0.1:5000/adduser/student";
                         }
 
             // 重定向到接收页面

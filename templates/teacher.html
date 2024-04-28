@@ -2,14 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PRD_TEACHER</title>
+    <title>TEACHER</title>
     <link rel="stylesheet" href="/static/css/teacher.css">
 
 </head>
 <body>
     <div class="container">
-        <h1>一体化在线教育社区系统</h1>
-        <button class="button" onclick="register()">注册</button>
+        <h1>一体化在线教育社区系统_教师端</h1>
+        <button class="Register_button" onclick="register()">注册</button>
         <button class="Login_button" onclick="login()" id="teacher_login">登录</button>
         <nav>
             <ul>
@@ -54,30 +54,28 @@
 
      var myCookieValue = checkCookie("teacher");
      if (myCookieValue){
-         alert(myCookieValue);
+         // alert(myCookieValue);
          var cookieString ='<div>'+'欢迎你,'+myCookieValue+'</div>';
-         alert(cookieString);
+         // alert(cookieString);
          document.getElementById("teacher_login").innerHTML = cookieString;
 
      }
      function login(){
          var ck=checkCookie('teacher');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
          }else{
              alert("err");
              window.location.href="/login/teacher";
          }
      }
-     function register(){
 
-     }
      function go_home(){
          var ck=checkCookie('teacher');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/teacher/home";
 
          }else{
@@ -88,20 +86,20 @@
 
        function go_courses(){
          var ck=checkCookie('teacher');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/teacher/info";
          }else{
-             alert("err");
+             // alert("err");
              window.location.href="/login/teacher";
          }
        }
        function go_upload(){
          var ck=checkCookie('teacher');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/teacher/upload";
 
          }else{
@@ -111,9 +109,9 @@
      }
        function go_grade(){
          var ck=checkCookie('teacher');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/teacher/grade";
 
          }else{
@@ -123,9 +121,9 @@
      }
        function go_public(){
          var ck=checkCookie('teacher');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/teacher/public";
 
          }else{

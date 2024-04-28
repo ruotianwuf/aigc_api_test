@@ -58,7 +58,7 @@
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    alert(JSON.stringify(data));
+                    // alert(JSON.stringify(data));
                     $.ajax({
                       url: "/answer_msg/advice",
                         type: "POST",

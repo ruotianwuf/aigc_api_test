@@ -40,7 +40,6 @@ def upload():
 
 @app.route('/answer_msg', methods=['POST'])
 def getanswer_msg():
-
         data = json.loads(request.get_data(as_text=True))
         data = data['question']
         result = sync_vivogpt_msg(data)
@@ -174,11 +173,12 @@ def get_teacher_info():
     print(major)
     major_course = con.get_course_info_ServerStatus(major)
     get_course_info = major_course['consequence']
-    course_info = get_course_info[0]
-    print(info)
-    print(course_info)
+
+    print("course_info", get_course_info)
+
+
     if result:
-        return jsonify({'success': True, 'info': info, 'course_info': course_info}), 200
+        return jsonify({'success': True, 'info': info, 'course_info': get_course_info}), 200
     else:
         return jsonify({'success': True}), 200
 
@@ -198,7 +198,6 @@ def delete_teacher_c_info():
 def add_teacher_c_info():
     data = json.loads(request.get_data(as_text=True))
     print(data)
-
     con = UserServerController()
     result = con.add_course_info_ServerStatus(data)
     if result:
