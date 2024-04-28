@@ -9,22 +9,57 @@
 
 <body>
     <div id="teacher_info"></div>
+<!--    <button onclick="getinfo()">getinfo</button>-->
 </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    // 自定义字符串,用于拼接标签
-    var loveStr = "";
+    // function getinfo(){
+            var cookies = document.cookie.split("; ");
 
-    // 自定义数组
-    var loveArr = ['喜爱一个人需要理由吗？', '需要吗？', '不需要吗？'];
+        // 遍历所有 Cookie
+        for (var i = 0; i < cookies.length; i++) {
+            // 分割每个 Cookie 的键值对
+            var cookiePair = cookies[i].split("=");
 
-    /****普通for循环****/
-    for (let i = 0; i < loveArr.length; i++) {
-        loveStr += '<div>' + loveArr[i] + '</div>';
-    };
-    console.log(loveStr)
+            // 检查当前 Cookie 是否为目标 Cookie
+            if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                var data = {"username": "sl"}
+                $.ajax({
+                    url: "/teacher/info/get",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function(response) {
+                        if (response.success) {
+                            alert("获取成功");
+                            info = response.info;
+                            course = response.course_info;
+                            alert(info)
+                            alert(course)
+                            // for (var i = 1; i <= 5; i++) {
+                            //     document.write('<li>Item ' + i + '</li>');
+                            // }
+                            document.write(info)
+                            for(var i=2;i<course.length;i++){
+                                // console.info(i +":"+ list2 [i]);
+                                document.write('<li> course' + (i-1) +course[i] + '</li>');
+}
+                        }
 
-    // 拼接完字符串数组后用innerHTML把它渲染到页面中
-    document.getElementById("teacher_info").innerHTML = loveStr;
+                    },
+                    error: function() {
+                        alert("错误error");
+                    }
+                });
+
+            }
+        // }
+    }
+
+
+
 </script>
 
 </html>

@@ -141,5 +141,30 @@ def getlogin_student_info():
 
 
 
+@app.route('/teacher/info', methods=['GET'])
+def teacher_info():
+    return render_template('teacher_data_info.html')
+
+
+@app.route('/teacher/info/get', methods=['POST'])
+def get_teacher_info():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_teacher_info_ServerStatus(data)
+    get_info = result['consequence']
+    info =get_info[0]
+    major = info[4]
+    major_course = con.get_course_info_ServerStatus(major)
+    get_course_info = major_course['consequence']
+    course_info = get_course_info[0]
+    print(info)
+    print(course_info)
+    if result:
+        return jsonify({'success': True, 'info': info, 'course_info': course_info}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+
 if __name__ == '__main__':
     app.run(debug=True)

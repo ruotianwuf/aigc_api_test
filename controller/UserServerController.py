@@ -71,3 +71,24 @@ class UserServerController:
         else:
             result = True
         return {'result': result, 'consequence': consequence}
+
+    def get_teacher_info_ServerStatus(self, status_data):
+        model = CommonDb('teacher')
+        consequence = model.selectAll(f"username='{status_data['username']}'")
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
+
+    def get_course_info_ServerStatus(self, status_data):
+        model = CommonDb('course')
+        consequence = model.selectAll(f"major='{status_data}'")
+        print(consequence)
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
