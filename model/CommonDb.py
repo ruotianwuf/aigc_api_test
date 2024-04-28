@@ -35,6 +35,7 @@ class CommonDb(BaseModel):
         return self.db.executeSql(sql)
 
     def selectAll(self,wheresql,optionstr="*",map=False):
+        print(wheresql)
         sql = "select " + optionstr + " from " + self.table + " where 1 and " + wheresql + ";"
         print(sql)
         if map:

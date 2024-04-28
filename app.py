@@ -1,6 +1,6 @@
 import json
 import os
-
+import random
 from flask import Flask, request, jsonify, render_template
 
 from api_project_get.get_api import sync_vivogpt
@@ -69,6 +69,42 @@ def getteacher():
 @app.route('/teacher/home', methods=['GET'])
 def getteacher_home():
     return render_template('teacher_home.html')
+
+
+@app.route('/adduser', methods=['GET'])
+def adduser():
+    return render_template('/')
+
+@app.route('/adduser/student', methods=['GET'])
+def adduser_student():
+    return render_template('')
+
+@app.route('/adduser/teacher', methods=['GET'])
+def adduser_teacher():
+    return render_template('')
+
+@app.route('/adduser/student/1', methods=['POST'])
+def adduser_student_info():
+    data = json.loads(request.get_data(as_text=True))
+    data["stu_no"] = "s" + str(random.randint(100000000 - 1, 1000000000 - 1))
+    print(data)
+    con = UserServerController()
+    result = con.adduser_student_ServerStatus(data)
+    print(result)
+    return jsonify({'success': True}), 200
+
+@app.route('/adduser/teacher/1', methods=['POST'])
+def adduser_teacher_info():
+    data = json.loads(request.get_data(as_text=True))
+    data["teach_no"] = "t" + str(random.randint(10000000-1, 100000000-1))
+    print(data)
+    con = UserServerController()
+    result = con.adduser_teacher_ServerStatus(data)
+    print(result)
+    return jsonify({'success': True}), 200
+
+
+
 @app.route('/login', methods=['GET'])
 def getlogin():
     return render_template('/')
@@ -88,9 +124,9 @@ def getlogin_teacher_info():
     con = UserServerController()
     result = con.findlogin_teacher_ServerStatus(data)
     if result:
-        return jsonify({'success': True, 'data': result}), 200  # 返回 JSON 响应，并显示操作成功
+        return jsonify({'success': True, 'data': result}), 200
     else:
-        return jsonify({'success': False}), 200  # 返回错误信息和401状态码
+        return jsonify({'success': False}), 200
 
 @app.route('/login/student/1', methods=['POST'])
 def getlogin_student_info():
@@ -99,9 +135,9 @@ def getlogin_student_info():
     con = UserServerController()
     result = con.findlogin_student_ServerStatus(data)
     if result:
-        return jsonify({'success': True, 'data': result}), 200  # 返回 JSON 响应，并显示操作成功
+        return jsonify({'success': True, 'data': result}), 200
     else:
-        return jsonify({'success': False}), 200  # 返回错误信息和401状态码
+        return jsonify({'success': False}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
