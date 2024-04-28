@@ -4,26 +4,38 @@
     <meta charset="UTF-8">
     <title>Advice</title>
      <style>
-          .background {
-            background-image: url('../static/img/feedback.jpg');
-            background-size: cover;
-            height: 500px;
-            width: 100%;
-            position: relative;
-            z-index:
+
+        body {
+            background-color: black;
+            color: white;
+            font-family: 'SimSun', 'Songti SC', 'serif';
+            padding: 20px;
         }
 
-        .content {
-            position: absolute;
-            top: 0;
-            left: 0;
+
+        .content-box {
+            background-color: #333;
             padding: 20px;
-            z-index: 2;
-            color: black;
-            font-family: 'SimSun', 'Songti SC', 'serif';
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+
+        .chat-box {
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
+            background-color: #444;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
     </style>
-
 </head>
 <body>
 
@@ -32,6 +44,15 @@
     </div>
 </div>>
 
+<div class="content-box" id="content">
+    <!-- 内容框中的内容将动态添加 -->
+</div>
+
+<!-- 聊天框，包含输入和发送按钮 -->
+<div class="chat-box">
+    <input type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
+    <button style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;">发送</button>
+</div>
 
 </body>
 
@@ -62,8 +83,8 @@
                                 replay = replay.replace(/\n/g, '<br>');
 
 
-                                var outputDiv = document.getElementById("output");
-                                outputDiv.innerHTML = "<div>" + replay + "</div>"; /* 使用内嵌元素添加内容 */
+                                var outputDiv = document.getElementById("content");
+                                outputDiv.innerHTML = "<div>" + replay.content + "</div>"; /* 使用内嵌元素添加内容 */
 
 
                                 }
