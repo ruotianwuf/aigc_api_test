@@ -138,7 +138,7 @@
                             if (response.success) {
                                 info = response.info;
                                 course = response.course_info;
-                                alert(course)
+                                // alert(course)
                                 document.getElementById('info').innerHTML='<table class="table-style">\n' +
                                     '        <caption></caption>\n' +
                                     '        <thead>\n' +
@@ -185,7 +185,7 @@
                                 info = response.info;
                                 course = response.course_info;
                                 document.write()
-                                alert(course);
+                                // alert(course);
                                 addCourse(info[4]);
                             }
                         },
@@ -242,7 +242,7 @@
                         return function () {
                             var rowIndex = this.parentNode.parentNode.rowIndex; // 获取当前按钮所在的行号
                             var courseName = course[parseInt(rowIndex) - 1]; // 根据行号获取课程名称
-                            alert(courseName)
+                            // alert(courseName)
                             // 弹出确认框，确认后执行删除操作
                             if (confirm('Are you sure you want to delete ' + courseName + '?')) {
                                 // 使用AJAX发送请求到后端
@@ -296,7 +296,7 @@
                         },
                         error: function () {
                             alert("添加成功");
-                                location.reload();
+                            window.reload();
                         }
                     });
                 }

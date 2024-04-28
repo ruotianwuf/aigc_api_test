@@ -77,6 +77,18 @@ def getstudent():
 def getstudent_advice():
     return render_template('student_advice.html')
 
+@app.route('/student/course', methods=['GET'])
+def getstudent_course():
+    return render_template('student_course.html')
+
+@app.route('/student/advice', methods=['GET'])
+def getstudent_advice():
+    return render_template('student_advice.html')
+
+@app.route('/student/advice', methods=['GET'])
+def getstudent_advice():
+    return render_template('student_advice.html')
+
 @app.route('/teacher', methods=['GET'])
 def getteacher():
     return render_template('teacher.html')
@@ -84,6 +96,17 @@ def getteacher():
 def getteacher_home():
     return render_template('teacher_home.html')
 
+@app.route('/teacher/upload', methods=['GET'])
+def getteacher_upload():
+    return render_template('teacher_upload.html')
+
+@app.route('/teacher/check', methods=['GET'])
+def getteacher_check():
+    return render_template('teacher_check.html')
+
+@app.route('/teacher/public', methods=['GET'])
+def getteacher_public():
+    return render_template('teacher_public.html')
 
 @app.route('/adduser', methods=['GET'])
 def adduser():

@@ -45,8 +45,8 @@
 
 
 <div class="chat-box">
-    <input type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
-    <button style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;">发送</button>
+    <input id="questionInput" type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
+    <button onclick="question()" style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;">发送</button>
 </div>
 
 </body>
@@ -90,5 +90,42 @@
                     });
                 }
             }
+
+
+    document.getElementById("questionInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            question();
+        }
+    });
+
+    function question() {
+        var questionInput = document.getElementById("questionInput");
+        var question = questionInput.value.trim();
+        if (question) {
+            var data = { 'question': question };
+            $.ajax({
+                url: "/answer_msg",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        document.getElementById("questionDisplay").innerHTML = '<div class="answer-box">' + "你:" +data.question + '</div>';
+                        document.getElementById("answerDisplay").innerHTML = '<div class="answer-box">' + "BlueZZ:" + response.result + '</div>';
+                        questionInput.value = "";
+                    } else {
+                        alert("未能获取到答案。");
+                    }
+                },
+                error: function () {
+                    alert("发生错误，请稍后重试。");
+                }
+            });
+        } else {
+            alert("问题不能为空。");
+        }
+    }
 </script>
 </html>

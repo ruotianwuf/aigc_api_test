@@ -16,7 +16,7 @@
                 <li><button onclick="go_home()">主页</button></li>
                 <li><button onclick="go_courses()">信息</button></li>
                 <li><button onclick="go_upload()">上传</button></li>
-                <li><button onclick="go_grade()">批改作业</button></li>
+                <li><button onclick="go_check()">批改作业</button></li>
                 <li><button onclick="go_public()">发布成绩</button></li>
             </ul>
         </nav>
@@ -107,12 +107,12 @@
              window.location.href="/login/teacher";
          }
      }
-       function go_grade(){
+       function go_check(){
          var ck=checkCookie('teacher');
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/teacher/grade";
+             window.location.href="/teacher/check";
 
          }else{
              alert("err");
