@@ -39,16 +39,11 @@
 </head>
 <body>
 
-<div class="background">
-    <div class="content" id="output">
-    </div>
-</div>>
-
 <div class="content-box" id="content">
-    <!-- 内容框中的内容将动态添加 -->
+
 </div>
 
-<!-- 聊天框，包含输入和发送按钮 -->
+
 <div class="chat-box">
     <input type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
     <button style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;">发送</button>
@@ -84,7 +79,7 @@
 
 
                                 var outputDiv = document.getElementById("content");
-                                outputDiv.innerHTML = "<div>" + replay.content + "</div>"; /* 使用内嵌元素添加内容 */
+                                outputDiv.innerHTML = "<div>" + replay + "</div>";
 
 
                                 }
