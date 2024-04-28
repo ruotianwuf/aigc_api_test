@@ -34,7 +34,7 @@ class UserServerController:
 
     def adduser_teacher_ServerStatus(self, status_data):
         model = CommonDb('teacher')
-        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}' and teach_no='{status_data['teach_no']}'")
+        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}' and teach_no='{status_data['teach_no']}' and major='{status_data['major']}'")
         if consequence:
             result = False
             print('已有此用户，无法添加')

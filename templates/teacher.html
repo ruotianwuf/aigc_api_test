@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>一体化在线教育社区系统</h1>
-        <button class="button" onclick="register">注册</button>
+        <button class="button" onclick="register()">注册</button>
         <button class="Login_button" onclick="login()" id="teacher_login">登录</button>
         <nav>
             <ul>
@@ -130,6 +130,10 @@
              window.location.href="/login/teacher";
          }
      }
+
+     function register(){
+        window.location.href="http://127.0.0.1:5000/adduser/teacher"
+    }
 </script>
 </body>
 </html>
