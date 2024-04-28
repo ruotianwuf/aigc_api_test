@@ -81,7 +81,7 @@ def adduser_student():
 
 @app.route('/adduser/teacher', methods=['GET'])
 def adduser_teacher():
-    return render_template('')
+    return render_template('register_teacher.html')
 
 @app.route('/adduser/student/1', methods=['POST'])
 def adduser_student_info():
