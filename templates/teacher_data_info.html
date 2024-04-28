@@ -66,14 +66,17 @@
 </head>
 <body>
     <div id="teacher_info">教师信息</div>
+    <button onclick="addCourse()">添加课程</button>
     <div id="courseTableContainer">
         <!-- 表格将通过JavaScript动态生成 -->
     </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
 
         var cookies = document.cookie.split("; ");
+
 
             for (var i = 0; i < cookies.length; i++) {
                 var cookiePair = cookies[i].split("=");
@@ -95,6 +98,7 @@
                         },
                         error: function() {
                             alert("错误error");
+
                         }
                     });
                 }
@@ -113,7 +117,7 @@
             var tbody = table.createTBody();
 
             // 遍历课程数据来创建表格行
-            for (var i = 2; i < course.length; i++) {
+            for (var i = 1; i < course.length; i++) {
                 // 假设每个课程对象中有一个唯一的标识符 id 和一个名称 name
                 var courseItem = course[i];
                 if (course[i] == null) {
@@ -126,7 +130,7 @@
                     var cell3 = row.insertCell(); // 添加操作单元格
 
                     // 课程编号
-                    cell1.textContent = "Course " + (i - 1);
+                    cell1.textContent = "Course " + i;
 
                     // 课程名称
                     cell2.textContent = courseItem;
@@ -178,7 +182,82 @@
             tableContainer.appendChild(table);
         }
 
+        function addCourse(){
+                 var cookies = document.cookie.split("; ");
 
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    $.ajax({
+                        url: "/teacher/info/get",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                info = response.info;
+                                course = response.course_info;
+                                alert(course)
+                                alert(info);
+                var course_name=prompt('请输入需要添加的课程:');
+
+                if(course_name){
+                    $.ajax({
+                        url: '/teacher/info/addcourse',
+                        type: 'POST',
+                        data: JSON.stringify({'major': info, 'course': course_name}),
+                        contentType: 'application/json',
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                alert("添加成功");
+                                window.reload()
+                            } else {
+                                alert('添加失败');
+                            }
+                        },
+                        error: function () {
+                            alert('添加请求出错');
+                        }
+                    });
+                }
+                            }
+                        },
+                        error: function() {
+                            alert("错误error");
+
+                        }
+                    });
+                }
+            }
+
+                alert(info);
+                var course_name=prompt('请输入需要添加的课程:');
+
+                if(course_name){
+                    $.ajax({
+                        url: '/teacher/info/addcourse',
+                        type: 'POST',
+                        data: JSON.stringify({'major': info, 'course': course_name}),
+                        contentType: 'application/json',
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                alert("添加成功");
+                                window.reload()
+                            } else {
+                                alert('添加失败');
+                            }
+                        },
+                        error: function () {
+                            alert('添加请求出错');
+                        }
+                    });
+                }
+        }
     </script>
 </body>
 </html>
