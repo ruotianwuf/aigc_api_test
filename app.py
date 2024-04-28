@@ -96,7 +96,7 @@ def adduser_student_info():
 @app.route('/adduser/teacher/1', methods=['POST'])
 def adduser_teacher_info():
     data = json.loads(request.get_data(as_text=True))
-    data["teach_no"] = "t" + str(random.randint(10000000-1, 100000000-1))
+    data["teach_no"] = "t" + str(random.randint(10000000 - 1, 100000000 - 1))
     print(data)
     con = UserServerController()
     result = con.adduser_teacher_ServerStatus(data)
@@ -138,6 +138,8 @@ def getlogin_student_info():
         return jsonify({'success': True, 'data': result}), 200
     else:
         return jsonify({'success': False}), 200
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

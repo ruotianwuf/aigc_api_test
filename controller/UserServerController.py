@@ -24,7 +24,7 @@ class UserServerController:
 
     def adduser_student_ServerStatus(self, status_data):
         model = CommonDb('student')
-        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}' and stu_no='{status_data['stu_no']}'")
+        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}' and stu_no='{status_data['stu_no']}' and major='{status_data['major']}'")
         if consequence:
             result = False
             print('已有此用户，无法添加')
@@ -62,3 +62,12 @@ class UserServerController:
             result = True
         return result
 
+    def make_selfplan(self, status_data):
+        model = CommonDb('student')
+        consequence = model.selectAll(f"username='{status_data['username']}'")
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
