@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify, render_template
 
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
+from controller.UserServerController import UserServerController
 from msg_api_test.msg_api_test import get_msg_answer
 
 app = Flask(__name__)
@@ -77,6 +78,17 @@ def getlogin_student():
 @app.route('/login/teacher', methods=['GET'])
 def getlogin_teacher():
     return render_template('login_teacher.html')
+
+@app.route('/login/teacher/1', methods=['POST'])
+def getlogin_teacher_info():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.findlogin_teacher_ServerStatus(data)
+    if result:
+        return jsonify({'success': True}), 200  # 返回 JSON 响应，并显示操作成功
+    else:
+        return jsonify({'success': False}), 200  # 返回错误信息和401状态码
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -44,7 +44,7 @@ class UserServerController:
 
     def findlogin_student_ServerStatus(self, status_data):
         model = CommonDb('student')
-        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}'")
+        consequence = model.selectAll(f"username='{status_data['username']}' and password='{status_data['password']}'")
         if not consequence:
             result = False
             print('无此项')
@@ -54,7 +54,7 @@ class UserServerController:
 
     def findlogin_teacher_ServerStatus(self, status_data):
         model = CommonDb('teacher')
-        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}'")
+        consequence = model.selectAll(f"username='{status_data['username']}' and password='{status_data['password']}'")
         if not consequence:
             result = False
             print('无此项')

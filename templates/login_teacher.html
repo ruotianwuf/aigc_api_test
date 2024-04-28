@@ -81,6 +81,7 @@
         </form>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
  <script>
         // 获取登录表单元素
         const loginForm = document.getElementById('loginForm');
@@ -94,27 +95,26 @@
             const password = document.getElementById('password').value;
 
             // 创建一个FormData对象，用于将表单数据发送给后端
-            const formData = new FormData();
-            formData.append('username', username);
-            formData.append('password', password);
-
-            // 使用AJAX向后端发送登录请求
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', '/login/teacher', true);
-            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        // 登录成功，根据后端返回的响应进行相应处理
-                        alert('登录成功！'); // 这里可以根据实际需求跳转到其他页面或执行其他操作
-                    } else {
-                        // 登录失败，显示错误消息
-                        alert('登录失败，请检查用户名和密码！');
+            var data = {'username': username, 'password': password};
+            if (username && password) {
+                $.ajax({
+                    url: "/login/teacher/1",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        alert("登录成功");
+                    },
+                    error: function () {
+                        alert("错误error");
                     }
-                }
-            };
-            xhr.send(formData);
-        });
+                });
+            } else {
+                alert("用户名和密码不能为空");
+            }
+        })
+
     </script>
 </body>
 </html>

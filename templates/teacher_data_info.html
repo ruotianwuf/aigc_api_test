@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher_info</title>
+</head>
+
+<body>
+    <div id="teacher_info"></div>
+</body>
+<script>
+    // 自定义字符串,用于拼接标签
+    var loveStr = "";
+
+    // 自定义数组
+    var loveArr = ['喜爱一个人需要理由吗？', '需要吗？', '不需要吗？'];
+
+    /****普通for循环****/
+    for (let i = 0; i < loveArr.length; i++) {
+        loveStr += '<div>' + loveArr[i] + '</div>';
+    };
+    console.log(loveStr)
+
+    // 拼接完字符串数组后用innerHTML把它渲染到页面中
+    document.getElementById("teacher_info").innerHTML = loveStr;
+</script>
+
+</html>
