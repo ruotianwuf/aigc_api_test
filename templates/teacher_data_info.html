@@ -24,7 +24,7 @@
 
             // 检查当前 Cookie 是否为目标 Cookie
             if (cookiePair[0] === "teacher" && cookiePair[1]) {
-                var data = {"username": "sl"}
+                var data = {"username": cookiePair[1]}
                 $.ajax({
                     url: "/teacher/info/get",
                     type: "POST",
