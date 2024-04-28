@@ -60,7 +60,7 @@ def getanswer():
 
 @app.route('/student', methods=['GET'])
 def getstudent():
-    return render_template('')
+    return render_template('student.html')
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():
@@ -68,15 +68,15 @@ def getteacher():
 
 @app.route('/login', methods=['GET'])
 def getlogin():
-    return render_template('')
+    return render_template('/')
 
 @app.route('/login/student', methods=['GET'])
 def getlogin_student():
-    return (render_template('')
+    return render_template('login_student.html')
 
-@app.route('/login/teacher', methods=['GET']))
+@app.route('/login/teacher', methods=['GET'])
 def getlogin_teacher():
-    return render_template('')
+    return render_template('login_teacher.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
