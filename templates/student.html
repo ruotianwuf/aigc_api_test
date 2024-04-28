@@ -13,10 +13,10 @@
         <a class="button" href="/login/student">登录</a>
         <nav>
             <ul>
-                <li><a href="#">主页</a></li>
-                <li><a href="#">课程</a></li>
-                <li><a href="#">讨论区</a></li>
-                <li><a href="#">成绩</a></li>
+                <li><button onclick="go_home()">主页</button></li>
+                <li><button onclick="go_courses()">课程</button></li>
+                <li><button onclick="go_bbs">论坛</button></li>
+                <li><button onclick="go_grades">成绩</button></li>
             </ul>
         </nav>
         <br>
@@ -44,18 +44,96 @@
 </body>
 
 <script>
-    document.querySelectorAll('nav a').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
+     var urlParams = new URLSearchParams(window.location.search);
+     var receivedData = urlParams.get('data');
+     var cookieName = "student";
+     var cookieValue = receivedData;
+     document.cookie = cookieName + "=" + cookieValue;
 
-        const targetId = this.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
+    function checkCookie(cookieName) {
+    // 获取所有的 Cookie，并以分号加空格进行分割
+    var cookies = document.cookie.split("; ");
 
-        window.scrollTo({
-            top: targetElement.offsetTop - 50, // 考虑到顶部固定导航栏的高度
-            behavior: 'smooth' // 平滑滚动效果
-        });
-    });
-});
+    // 遍历所有 Cookie
+    for (var i = 0; i < cookies.length; i++) {
+        // 分割每个 Cookie 的键值对
+        var cookiePair = cookies[i].split("=");
+
+        // 检查当前 Cookie 是否为目标 Cookie
+        if (cookiePair[0] === cookieName && cookiePair[1] === cookieValue) {
+            // 如果找到目标 Cookie，返回 true
+            return cookieValue;
+        }
+    }
+
+    // 如果未找到目标 Cookie，则返回 false
+    return false;
+}
+
+
+     var myCookieValue = checkCookie("student");
+     if (myCookieValue){
+         alert(myCookieValue);
+         var cookieString ='<div>'+'欢迎你,'+myCookieValue+'</div>';
+         alert(cookieString);
+         document.getElementById("student_login").innerHTML = cookieString;
+
+     }
+
+     function go_home(){
+         var ck=checkCookie('student');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
+             window.location.href="/student/home";
+
+         }else{
+             alert("err");
+             window.location.href="/login/student";
+         }
+     }
+     function go_courses(){
+         var ck=checkCookie('student');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
+             window.location.href="/student/courses";
+         }else{
+             alert("err");
+             window.location.href="/login/student";
+         }
+     }
+     function go_bbs(){
+         var ck=checkCookie('student');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
+             window.location.href="/student/bbs";
+         }else{
+             alert("err");
+             window.location.href="/login/student";
+         }
+     }
+     function go_grades(){
+         var ck=checkCookie('student');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
+             window.location.href="/student/grades";
+         }else{
+             alert("err");
+             window.location.href="/login/student";
+         }
+     }
+     function login(){
+         var ck=checkCookie('student');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
+         }else{
+             alert("err");
+             window.location.href="/login/student";
+         }
+     }
 </script>
 </html>
