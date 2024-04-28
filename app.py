@@ -1,4 +1,5 @@
 import json
+import os
 
 from flask import Flask, request, jsonify, render_template
 
@@ -12,6 +13,27 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+@app.route('/file/upload/', methods=['POST', 'GET'])
+def upload():
+    try:
+        # get 请求返回上传页面
+        if request.method == 'GET':
+            return render_template('get_file_test.html')
+        if request.method == 'POST':
+            f = request.files['file']
+            paths = os.path.join('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\static\\file')
+            da = os.path.exists(paths)
+            if da:
+                ...
+            else:
+                os.makedirs(paths)
+            upload_path = os.path.join(paths, f.filename)
+            f.save(upload_path)
+            return "上传成功"
+    except Exception as e:
+        print(e)
+        return {'code': 0, 'msg': f'{e}'}
 
 
 @app.route('/answer_msg', methods=['POST'])
