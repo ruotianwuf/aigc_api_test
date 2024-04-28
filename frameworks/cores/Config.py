@@ -21,11 +21,11 @@ class Config:
         self.conf.read(cfgpath, encoding="utf-8")  # python3
 
     def getDB(self):
-        return [self.conf.get("userserver", "host"),
-                self.conf.get("userserver", "user"),
-                self.conf.get("userserver", "pass"),
-                self.conf.getint("userserver", "port"),
-                self.conf.get("userserver", "dbname")
+        return [self.conf.get("api_vivo_project", "host"),
+                self.conf.get("api_vivo_project", "user"),
+                self.conf.get("api_vivo_project", "pass"),
+                self.conf.getint("api_vivo_project", "port"),
+                self.conf.get("api_vivo_project", "dbname")
                 ]
 
     def getOcsOnline(self):
