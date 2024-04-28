@@ -20,54 +20,51 @@
     </div>
 
     <script>
-        // 发起Ajax请求获取教师数据
-        function getTeacherData() {
-            // 假设后端接口URL为 '/api/teacher'
-            var url = '/api/teacher';
+    // 发起Ajax请求获取教师课程数据
+    function getTeacherCourses() {
+        // 发送GET请求到后端路由 '/teacher/info/get'
+        fetch('/teacher/info/get', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({}) // 可以传递需要的参数，如教师ID
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                displayTeacherCourses(data.info, data.course_info);
+            } else {
+                console.error('获取教师课程数据失败');
+            }
+        })
+        .catch(error => console.error('获取教师课程数据出错:', error));
+    }
 
-            // 使用XMLHttpRequest对象发起GET请求
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        var teacherData = JSON.parse(xhr.responseText);
-                        displayTeacherInfo(teacherData);
-                        displayTeacherCourses(teacherData.courses);
-                    } else {
-                        console.error('获取教师数据失败');
-                    }
-                }
-            };
-            xhr.open('GET', url);
-            xhr.send();
-        }
+    // 显示教师所教授的课程列表
+    function displayTeacherCourses(teacherInfo, courseInfo) {
+        var teacherCoursesContainer = document.getElementById("teacherCourses");
+        var courses = courseInfo.courses; // 假设课程信息在返回数据中的courses字段中
+        var specialty = teacherInfo.specialty; // 假设专业信息在返回数据中的specialty字段中
 
-        // 页面加载完成后获取并显示教师信息和所教授的课程
-        window.onload = function() {
-            getTeacherData();
-        };
+        // 在页面上显示专业信息
+        var specialtyElement = document.createElement("p");
+        specialtyElement.textContent = "您的专业：" + specialty;
+        teacherCoursesContainer.appendChild(specialtyElement);
 
-        // 显示教师的专业信息
-        function displayTeacherInfo(teacherData) {
-            var teacherSpecialty = document.getElementById("teacherSpecialty");
-            teacherSpecialty.textContent = "您的专业：" + teacherData.specialty;
-        }
+        // 动态生成课程列表
+        courses.forEach(function(course) {
+            var courseItem = document.createElement("div");
+            courseItem.textContent = course.name;
+            teacherCoursesContainer.appendChild(courseItem);
+        });
+    }
 
-        // 显示教师所教授的课程列表
-        function displayTeacherCourses(courses) {
-            var teacherCoursesContainer = document.getElementById("teacherCourses");
-            courses.forEach(function(course) {
-                var courseItem = document.createElement("div");
-                courseItem.textContent = course.name;
-                teacherCoursesContainer.appendChild(courseItem);
-            });
-        }
+    // 页面加载完成后获取并显示教师课程数据
+    window.onload = function() {
+        getTeacherCourses();
+    };
+</script>
 
-        // 根据所选课程显示课程详情
-        function showCourseDetails(courseName) {
-            // 在实际应用中，可以根据需要从后端获取课程详情
-            alert('查看 ' + courseName + ' 的详情');
-        }
-    </script>
 </body>
 </html>
