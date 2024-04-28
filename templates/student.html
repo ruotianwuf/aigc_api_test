@@ -8,9 +8,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>一体化在线教育社区系统</h1>
-        <button class="Login_button" onclick="register()">注册</button>
-        <button class="button" onclick="login()" id="student_login">登录</button>
+        <h1>一体化在线教育社区系统_学生端</h1>
+        <button class="Register_button" onclick="register()">注册</button>
+        <button class="Login_button" onclick="login()" id="teacher_login">登录</button>
         <nav>
             <ul>
                 <li><button onclick="go_advice()">建议</button></li>
@@ -21,26 +21,6 @@
         </nav>
         <br>
     </div>
-<!--    <div class="content" id="course">-->
-<!--        <div class="container">-->
-<!--            <h2>推荐课程</h2>-->
-<!--            <div class="course">-->
-<!--                <h2>计算机编程入门</h2>-->
-<!--                <p>本课程介绍计算机编程的基础知识，适合初学者。</p>-->
-<!--                <a class="btn" href="#">开始学习</a>-->
-<!--            </div>-->
-<!--            <div class="course">-->
-<!--                <h2>数据结构与算法</h2>-->
-<!--                <p>本课程深入讲解数据结构和算法的原理和应用。</p>-->
-<!--                <a class="btn" href="#">开始学习</a>-->
-<!--            </div>-->
-<!--            <div class="course">-->
-<!--                <h2>英语口语提高</h2>-->
-<!--                <p>本课程旨在提高学生的英语口语水平。</p>-->
-<!--                <a class="btn" href="#">开始学习</a>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
 </body>
 
 <script>
@@ -73,18 +53,18 @@
 
      var myCookieValue = checkCookie("student");
      if (myCookieValue){
-         alert(myCookieValue);
+         // alert(myCookieValue);
          var cookieString ='<div>'+'欢迎你,'+myCookieValue+'</div>';
-         alert(cookieString);
+         // alert(cookieString);
          document.getElementById("student_login").innerHTML = cookieString;
 
      }
 
      function go_advice(){
          var ck=checkCookie('student');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/student/advice";
 
          }else{
@@ -94,9 +74,9 @@
      }
      function go_courses(){
          var ck=checkCookie('student');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/student/courses";
          }else{
              alert("err");
@@ -105,9 +85,9 @@
      }
      function go_bbs(){
          var ck=checkCookie('student');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/student/bbs";
          }else{
              alert("err");
@@ -116,9 +96,9 @@
      }
      function go_grades(){
          var ck=checkCookie('student');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
              window.location.href="/student/grades";
          }else{
              alert("err");
@@ -127,9 +107,9 @@
      }
      function login(){
          var ck=checkCookie('student');
-         alert(cookieValue);
+         // alert(cookieValue);
          if(ck==cookieValue){
-             alert(ck);
+             // alert(ck);
          }else{
              alert("err");
              window.location.href="/login/student";

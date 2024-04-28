@@ -43,7 +43,7 @@ class CommonDb(BaseModel):
         else:
             return self.db.executeSql(sql)
 
-    def selectAll_Direct(self, wheresql, optionstr="*", map=False):
+    def selectAll_Direct(self, wheresql, optionstr, map=False):
         print(wheresql)
         sql = "select " + optionstr + " from " + self.table + " where 1 " + wheresql + ";"
         print(sql)
@@ -86,3 +86,10 @@ class CommonDb(BaseModel):
         sql = "update " + self.table + " set " + sql_test + " where 1 and " + wheresql + ";"
         print(sql)
         return self.db.update(sql)
+
+    def addcourse(self,info):
+
+
+        sql = "insert into " + self.table + "(course) values(" + info[1] + ");"
+        print(sql)
+        return self.db.add(sql)

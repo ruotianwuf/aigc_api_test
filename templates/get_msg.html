@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI_Chat_Test</title>
+<link rel="stylesheet" href="../static/css/styles.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>AI_Chat_Test</h1>
+    <div class="form">
+        <input type="text" id="questionInput" placeholder="请输入您的问题">
+        <button onclick="question()">提问</button>
+    </div>
+    <div id="questionDisplay"></div>
+    <div id="answerDisplay"></div>
+</div>
+
+<script>
+    document.getElementById("questionInput").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            question();
+        }
+    });
+
+function question() {
+    var questionInput = document.getElementById("questionInput");
+    var question = questionInput.value.trim();
+    if (question) {
+        var data = { 'question': question };
+        $.ajax({
+            url: "/answer_msg",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                if (response.success) {
+                    document.getElementById("questionDisplay").innerHTML = '<div class="answer-box">' + "你:" +data.question + '</div>';
+                    document.getElementById("answerDisplay").innerHTML = '<div class="answer-box">' + "BlueZZ:" + response.result + '</div>';
+                    questionInput.value = "";
+                } else {
+                    alert("未能获取到答案。");
+                }
+            },
+            error: function () {
+                alert("发生错误，请稍后重试。");
+            }
+        });
+    } else {
+        alert("问题不能为空。");
+    }
+}
+
+</script>
+
+</body>
+</html>

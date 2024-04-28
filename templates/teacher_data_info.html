@@ -62,15 +62,61 @@
             cursor: pointer;
             width: 20%; /* 按钮宽度100% */
         }
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 auto; /* 上下自动边距实现垂直居中 */
+            display: block; /* 使按钮宽度100% */
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%; /* 按钮宽度100% */
+        }
+        .table-style {
+            margin: auto;
+            border-collapse: collapse; /* 合并边框 */
+            width: 50%; /* 可以设置表格的宽度，这里以页面宽度的50%为例 */
+        }
+        .table-style th, .table-style td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center; /* 使单元格内的文本居中 */
+        }
+        .table-style th {
+            background-color: #f2f2f2;
+        }
+
+        .return-button {
+            position: fixed; /* 绝对定位 */
+            right: 20px; /* 距离页面右侧20px */
+            bottom: 20px; /* 距离页面底部20px */
+            padding: 10px 20px; /* 按钮的内边距 */
+            background-color: #008CBA; /* 按钮的背景颜色 */
+            color: white; /* 按钮的文字颜色 */
+            border: none; /* 移除边框 */
+            border-radius: 5px; /* 圆角边框 */
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+        }
+
+        .return-button:hover {
+            background-color: #005f73; /* 鼠标悬停时按钮的背景颜色 */
+        }
+
     </style>
 </head>
 <body>
     <div id="teacher_info">教师信息</div>
-    <button onclick="addCourse()">添加课程</button>
+    <br>
+    <div id="info"></div>
+    <br>
+    <br>
+
     <div id="courseTableContainer">
         <!-- 表格将通过JavaScript动态生成 -->
-    </div>
-
+    </div><br><br>
+    <button onclick="getCookie()" class="add-btn">添加课程</button>
+    <button onclick="backhome()" class="return-button">返回</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
@@ -93,6 +139,24 @@
                                 info = response.info;
                                 course = response.course_info;
                                 alert(course)
+                                document.getElementById('info').innerHTML='<table class="table-style">\n' +
+                                    '        <caption></caption>\n' +
+                                    '        <thead>\n' +
+                                    '            <tr>\n' +
+                                    '                <th>编号</th>\n' +
+                                    '                <th>姓名</th>\n' +
+                                    '                <th>专业</th>\n' +
+                                    '            </tr>\n' +
+                                    '        </thead>\n' +
+                                    '        <tbody>\n' +
+                                    '            <tr>\n' +
+                                    '                <td>'+info[3]+'</td>\n' +
+                                    '                <td>'+info[1]+'</td>\n' +
+                                    '                <td>'+info[4]+'</td>\n' +
+                                    '            </tr>\n' +
+                                    '            <!-- 更多行可以继续添加 -->\n' +
+                                    '        </tbody>\n' +
+                                    '    </table>'
                                 createTable(course,info[4]);
                             }
                         },
@@ -103,6 +167,37 @@
                     });
                 }
             }
+
+        function getCookie(){
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    $.ajax({
+                        url: "/teacher/info/get",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                info = response.info;
+                                course = response.course_info;
+                                document.write()
+                                alert(course);
+                                addCourse(info[4]);
+                            }
+                        },
+                        error: function() {
+                            alert("错误error");
+                            return null
+
+                        }
+                    });
+                }
+            }
+        }
 
        function createTable(course,major) {
             var tableContainer = document.getElementById('courseTableContainer');
@@ -117,7 +212,7 @@
             var tbody = table.createTBody();
 
             // 遍历课程数据来创建表格行
-            for (var i = 1; i < course.length; i++) {
+            for (var i = 0; i < course.length; i++) {
                 // 假设每个课程对象中有一个唯一的标识符 id 和一个名称 name
                 var courseItem = course[i];
                 if (course[i] == null) {
@@ -130,7 +225,7 @@
                     var cell3 = row.insertCell(); // 添加操作单元格
 
                     // 课程编号
-                    cell1.textContent = "Course " + i;
+                    cell1.textContent = "Course " + (i+1);
 
                     // 课程名称
                     cell2.textContent = courseItem;
@@ -146,15 +241,15 @@
                     deleteBtn.onclick = (function () {
                         return function () {
                             var rowIndex = this.parentNode.parentNode.rowIndex; // 获取当前按钮所在的行号
-                            var courseName = course[parseInt(rowIndex) - 1].name; // 根据行号获取课程名称
-
+                            var courseName = course[parseInt(rowIndex) - 1]; // 根据行号获取课程名称
+                            alert(courseName)
                             // 弹出确认框，确认后执行删除操作
                             if (confirm('Are you sure you want to delete ' + courseName + '?')) {
                                 // 使用AJAX发送请求到后端
                                 $.ajax({
                                     url: '/teacher/info/c_delete',
                                     type: 'POST',
-                                    data: JSON.stringify({'major': major, 'course': rowIndex}), // 传递课程id
+                                    data: JSON.stringify({'major': major, 'course': courseName}), // 传递课程id
                                     contentType: 'application/json',
                                     dataType: "json",
                                     success: function (response) {
@@ -163,6 +258,7 @@
                                             window.reload()
                                         } else {
                                             alert('删除失败');
+                                            location.reload();
                                         }
                                     },
                                     error: function () {
@@ -182,81 +278,40 @@
             tableContainer.appendChild(table);
         }
 
-        function addCourse(){
-                 var cookies = document.cookie.split("; ");
+        function addCourse(info){
+                var course_name=prompt('请输入需要添加的课程:');
+                if(course_name){
+                    $.ajax({
+                        url: '/teacher/info/addcourse',
+                        type: 'POST',
+                        data: JSON.stringify({'major': info, 'course': course_name}),
+                        contentType: 'application/json',
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                alert('添加失败');
+                            }
+                        },
+                        error: function () {
+                            alert("添加成功");
+                                location.reload();
+                        }
+                    });
+                }
+        }
 
-
-            for (var i = 0; i < cookies.length; i++) {
+        function backhome() {
+                var cookies = document.cookie.split("; ");
+                for (var i = 0; i < cookies.length; i++) {
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "teacher" && cookiePair[1]) {
-                    var data = {"username": cookiePair[1]};
-                    $.ajax({
-                        url: "/teacher/info/get",
-                        type: "POST",
-                        data: JSON.stringify(data),
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                info = response.info;
-                                course = response.course_info;
-                                alert(course)
-                                alert(info);
-                var course_name=prompt('请输入需要添加的课程:');
-
-                if(course_name){
-                    $.ajax({
-                        url: '/teacher/info/addcourse',
-                        type: 'POST',
-                        data: JSON.stringify({'major': info, 'course': course_name}),
-                        contentType: 'application/json',
-                        dataType: "json",
-                        success: function (response) {
-                            if (response.success) {
-                                alert("添加成功");
-                                window.reload()
-                            } else {
-                                alert('添加失败');
-                            }
-                        },
-                        error: function () {
-                            alert('添加请求出错');
-                        }
-                    });
-                }
-                            }
-                        },
-                        error: function() {
-                            alert("错误error");
-
-                        }
-                    });
+                    var dataToSend = cookiePair[1];
+                    var url = "http://127.0.0.1:5000/teacher?data=" + dataToSend;
+                    window.location.href = url;
                 }
             }
-
-                alert(info);
-                var course_name=prompt('请输入需要添加的课程:');
-
-                if(course_name){
-                    $.ajax({
-                        url: '/teacher/info/addcourse',
-                        type: 'POST',
-                        data: JSON.stringify({'major': info, 'course': course_name}),
-                        contentType: 'application/json',
-                        dataType: "json",
-                        success: function (response) {
-                            if (response.success) {
-                                alert("添加成功");
-                                window.reload()
-                            } else {
-                                alert('添加失败');
-                            }
-                        },
-                        error: function () {
-                            alert('添加请求出错');
-                        }
-                    });
-                }
         }
     </script>
 </body>

@@ -10,7 +10,7 @@
     padding-top: 30px;
 }
 nav {
-    background-color: #2662fc;
+    background-color: #2c88ee;
     padding: 10px 0;
 }
 nav ul {
@@ -44,7 +44,7 @@ nav ul li button:hover {
     transition: background-color 0.3s;
 }
 .btn:hover {
-    background-color: #0056b3;
+    background-color: skyblue;
 }
 .Login_button{
     position: absolute;
@@ -58,6 +58,21 @@ nav ul li button:hover {
     cursor: pointer;
     font-size: 20px;
     background-color: #10e650;
+    color: white;
+    text-decoration: none;
+}
+.Register_button{
+    position: absolute;
+    top: 50px;
+    right: 200px;
+    border: none;
+    outline: none;
+    padding: 15px 25px;
+    margin-right: 150px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 20px;
+    background-color: olivedrab;
     color: white;
     text-decoration: none;
 }

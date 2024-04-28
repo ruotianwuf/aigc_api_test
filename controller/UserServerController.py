@@ -85,18 +85,24 @@ class UserServerController:
     def get_course_info_ServerStatus(self, status_data):
         if status_data == '计算机科学':
             model = CommonDb('cs_course')
-            consequence = model.selectAll_Direct(f"")
-            print(consequence)
+
+
         elif status_data == '软件工程':
             model = CommonDb('se_course')
-            consequence = model.selectAll_Direct(f"")
-            print(consequence)
+
+        consequence = model.selectAll_Direct(f"","course")
+
         if not consequence:
             result = False
             print('无此项')
         else:
             result = True
         return {'result': result, 'consequence': consequence}
+
+    def output_string(self,elements):
+        return '"' + ''.join(elements) + '"'
+
+    # 调用函数
 
     def delete_course_info_ServerStatus(self, status_data):
         if status_data['major'] == '计算机科学':
@@ -105,9 +111,11 @@ class UserServerController:
         elif status_data['major'] == '软件工程':
             model = CommonDb('se_course')
 
-        id = status_data['course']
+        course = status_data['course']
 
-        consequence = model.delete_where(f"id='{id}'")
+        print(self.output_string(course))
+        course = str(self.output_string(course))
+        consequence = model.delete_where(f"course={course}")
         print(consequence)
         if not consequence:
             result = False
@@ -119,17 +127,13 @@ class UserServerController:
     def add_course_info_ServerStatus(self, status_data):
         if status_data['major'] == '计算机科学':
             model = CommonDb('cs_course')
-
         elif status_data['major'] == '软件工程':
             model = CommonDb('se_course')
-
         course = status_data['course']
-
         consequence = model.selectAll(f"course='{course}'")
-        print(consequence)
-        if not consequence:
+        if consequence:
             result = False
-            print('无此项')
+            print('已有此用户，无法添加')
         else:
-            result = True
-        return {'result': result, 'consequence': consequence}
+            result = model.add({'course': course})
+        return result
