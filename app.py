@@ -7,6 +7,7 @@ from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
 from msg_api_test.msg_api_test import get_msg_answer
+from self_study_plan_project.get_plan_program import get_plan
 
 app = Flask(__name__)
 
@@ -42,7 +43,17 @@ def getanswer_msg():
 
         data = json.loads(request.get_data(as_text=True))
         data = data['question']
-        result=sync_vivogpt_msg(data)
+        result = sync_vivogpt_msg(data)
+        print(result)
+        if result != None:
+            return jsonify({'success': True, 'result': result}), 200
+        else:
+            return jsonify({'success': False}), 200
+
+@app.route('/answer_msg/advice', methods=['POST'])
+def getanswer_advice_msg():
+        data = json.loads(request.get_data(as_text=True))
+        result = get_plan(data)
         print(result)
         if result != None:
             return jsonify({'success': True, 'result': result}), 200
@@ -62,6 +73,10 @@ def getanswer():
 @app.route('/student', methods=['GET'])
 def getstudent():
     return render_template('student.html')
+
+@app.route('/student/advice', methods=['GET'])
+def getstudent_advice():
+    return render_template('student_advice.html')
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():

@@ -9,11 +9,11 @@
 <body>
     <div class="container">
         <h1>一体化在线教育社区系统</h1>
-        <button class="button" onclick="register()">注册</button>
-        <button class="Login_button" onclick="login()" id="student_login">登录</button>
+        <button class="Login_button" onclick="register()">注册</button>
+        <button class="button" onclick="login()" id="student_login">登录</button>
         <nav>
             <ul>
-                <li><button onclick="go_home()">主页</button></li>
+                <li><button onclick="go_advice()">建议</button></li>
                 <li><button onclick="go_courses()">课程</button></li>
                 <li><button onclick="go_bbs">论坛</button></li>
                 <li><button onclick="go_grades">成绩</button></li>
@@ -80,12 +80,12 @@
 
      }
 
-     function go_home(){
+     function go_advice(){
          var ck=checkCookie('student');
          alert(cookieValue);
          if(ck==cookieValue){
              alert(ck);
-             window.location.href="/student/home";
+             window.location.href="/student/advice";
 
          }else{
              alert("err");
