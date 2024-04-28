@@ -92,3 +92,21 @@ class UserServerController:
         else:
             result = True
         return {'result': result, 'consequence': consequence}
+
+    def delete_course_info_ServerStatus(self, status_data):
+        model = CommonDb('course')
+        major = status_data['major']
+
+
+
+        info = "c" + str(status_data['course'])
+        print(info)
+
+        consequence = model.update_delete(info,f"major='{major}'")
+        print(consequence)
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}

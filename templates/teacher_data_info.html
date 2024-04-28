@@ -1,65 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher_info</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+        #teacher_info {
+            font-size: 2em;
+            margin: 20px 0; /* 上下边距 */
+            text-align: center;
+        }
+        .centered-table {
+            width: 100%; /* 表格宽度100% */
+            max-width: none; /* 移除最大宽度限制 */
+            border-collapse: collapse;
+            table-layout: fixed; /* 固定表格布局，让最后一列有足够的空间 */
+            background: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: auto;
+            margin: auto; /* 上下自动边距实现垂直居中 */
+        }
+        .centered-table thead {
+            background: #5B69FF;
+            color: #FFFFFF;
+        }
+        .centered-table th, .centered-table td {
+            text-align: center; /* 内容水平居中 */
+            padding: 20px;
+            font-size: 1.2em;
+            border: 1px solid #eaeaea;
+        }
+        .centered-table td {
+            font-weight: 300;
+            color: #333;
+        }
+        .centered-table tr:hover td {
+            background-color: #E0E0E0;
+        }
+        .centered-table th {
+            font-weight: 700;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .delete-btn {
+            background-color: #ff5252;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 auto; /* 上下自动边距实现垂直居中 */
+            display: block; /* 使按钮宽度100% */
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%; /* 按钮宽度100% */
+        }
+    </style>
 </head>
-
 <body>
-    <div id="teacher_info"></div>
-<!--    <button onclick="getinfo()">getinfo</button>-->
-</body>
+    <div id="teacher_info">教师信息</div>
+    <div id="courseTableContainer">
+        <!-- 表格将通过JavaScript动态生成 -->
+    </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script>
-    // function getinfo(){
-            var cookies = document.cookie.split("; ");
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        var cookies = document.cookie.split("; ");
 
-        // 遍历所有 Cookie
-        for (var i = 0; i < cookies.length; i++) {
-            // 分割每个 Cookie 的键值对
-            var cookiePair = cookies[i].split("=");
-
-            // 检查当前 Cookie 是否为目标 Cookie
-            if (cookiePair[0] === "teacher" && cookiePair[1]) {
-                var data = {"username": cookiePair[1]}
-                $.ajax({
-                    url: "/teacher/info/get",
-                    type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function(response) {
-                        if (response.success) {
-                            alert("获取成功");
-                            info = response.info;
-                            course = response.course_info;
-                            alert(info)
-                            alert(course)
-                            // for (var i = 1; i <= 5; i++) {
-                            //     document.write('<li>Item ' + i + '</li>');
-                            // }
-                            document.write(info)
-                            for(var i=2;i<course.length;i++){
-                                // console.info(i +":"+ list2 [i]);
-                                document.write('<li> course' + (i-1) +course[i] + '</li>');
-}
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    $.ajax({
+                        url: "/teacher/info/get",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                info = response.info;
+                                course = response.course_info;
+                                alert(course)
+                                createTable(course,info[4]);
+                            }
+                        },
+                        error: function() {
+                            alert("错误error");
                         }
-
-                    },
-                    error: function() {
-                        alert("错误error");
-                    }
-                });
-
+                    });
+                }
             }
-        // }
-    }
+
+       function createTable(course,major) {
+            var tableContainer = document.getElementById('courseTableContainer');
+            var table = document.createElement('table');
+            table.className = 'centered-table';
+
+            // 创建表头
+            var thead = table.createTHead();
+            var headerRow = thead.insertRow();
+            headerRow.innerHTML = "<th>课程编号</th><th>课程信息</th><th>删除</th>";
+
+            var tbody = table.createTBody();
+
+            // 遍历课程数据来创建表格行
+            for (var i = 2; i < course.length; i++) {
+                // 假设每个课程对象中有一个唯一的标识符 id 和一个名称 name
+                var courseItem = course[i];
+                if (course[i] == null) {
+                    i = i
+                }
+                else{
+                    var row = tbody.insertRow();
+                    var cell1 = row.insertCell();
+                    var cell2 = row.insertCell();
+                    var cell3 = row.insertCell(); // 添加操作单元格
+
+                    // 课程编号
+                    cell1.textContent = "Course " + (i - 1);
+
+                    // 课程名称
+                    cell2.textContent = courseItem;
+
+                    // 创建删除按钮并添加到操作单元格
+                    var deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'delete-btn';
+
+                    // 为按钮添加一个唯一的id，这里直接使用课程的id属性
+                    deleteBtn.setAttribute('data-id', courseItem.id);
+
+                    deleteBtn.onclick = (function () {
+                        return function () {
+                            var rowIndex = this.parentNode.parentNode.rowIndex; // 获取当前按钮所在的行号
+                            var courseName = course[parseInt(rowIndex) - 1].name; // 根据行号获取课程名称
+
+                            // 弹出确认框，确认后执行删除操作
+                            if (confirm('Are you sure you want to delete ' + courseName + '?')) {
+                                // 使用AJAX发送请求到后端
+                                $.ajax({
+                                    url: '/teacher/info/c_delete',
+                                    type: 'POST',
+                                    data: JSON.stringify({'major': major, 'course': rowIndex}), // 传递课程id
+                                    contentType: 'application/json',
+                                    dataType: "json",
+                                    success: function (response) {
+                                        if (response.success) {
+                                            alert("删除成功");
+                                            window.reload()
+                                        } else {
+                                            alert('删除失败');
+                                        }
+                                    },
+                                    error: function () {
+                                        alert('删除请求出错');
+                                    }
+                                });
+                            }
+                        };
+                    })(courseItem.id);
+
+                    cell3.appendChild(deleteBtn);
+                }
+            }
+
+            // 清空容器内容并添加表格
+            tableContainer.innerHTML = '';
+            tableContainer.appendChild(table);
+        }
 
 
-
-</script>
-
+    </script>
+</body>
 </html>

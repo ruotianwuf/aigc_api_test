@@ -165,6 +165,16 @@ def get_teacher_info():
     else:
         return jsonify({'success': False}), 200
 
+@app.route('/teacher/info/c_delete', methods=['POST'])
+def delete_teacher_c_info():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+
+    con = UserServerController()
+    result = con.delete_course_info_ServerStatus(data)
+    print()
+    return jsonify({'success': True}), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)

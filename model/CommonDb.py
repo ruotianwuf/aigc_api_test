@@ -71,3 +71,10 @@ class CommonDb(BaseModel):
 
     def execute(self,sql):
         return self.db.executeSql(sql)
+
+    def update_delete(self,info,wheresql):
+        sql_test = info + " = " + "null"
+
+        sql = "update " + self.table + " set " + sql_test + " where 1 and " + wheresql + ";"
+        print(sql)
+        return self.db.update(sql)
