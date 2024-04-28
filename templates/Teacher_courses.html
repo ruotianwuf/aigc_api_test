@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Coueses</title>
+    <!-- 这里可以引入你的样式表文件 -->
+    <link rel="stylesheet" href="/static/css/teacher.css">
+</head>
+<body>
+    <div class="container">
+        <p>您所教授的课程：</p>
+        <!-- 显示教师所教授课程的容器 -->
+
+        <div id="teacherCourses">
+            <!-- 这里将动态生成教师所教授的课程 -->
+        </div>
+        <p>请选择您要查看的课程：</p>
+        <!-- 添加课程选择按钮 -->
+
+    </div>
+
+    <script>
+        // 发起Ajax请求获取教师数据
+        function getTeacherData() {
+            // 假设后端接口URL为 '/api/teacher'
+            var url = '/api/teacher';
+
+            // 使用XMLHttpRequest对象发起GET请求
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var teacherData = JSON.parse(xhr.responseText);
+                        displayTeacherInfo(teacherData);
+                        displayTeacherCourses(teacherData.courses);
+                    } else {
+                        console.error('获取教师数据失败');
+                    }
+                }
+            };
+            xhr.open('GET', url);
+            xhr.send();
+        }
+
+        // 页面加载完成后获取并显示教师信息和所教授的课程
+        window.onload = function() {
+            getTeacherData();
+        };
+
+        // 显示教师的专业信息
+        function displayTeacherInfo(teacherData) {
+            var teacherSpecialty = document.getElementById("teacherSpecialty");
+            teacherSpecialty.textContent = "您的专业：" + teacherData.specialty;
+        }
+
+        // 显示教师所教授的课程列表
+        function displayTeacherCourses(courses) {
+            var teacherCoursesContainer = document.getElementById("teacherCourses");
+            courses.forEach(function(course) {
+                var courseItem = document.createElement("div");
+                courseItem.textContent = course.name;
+                teacherCoursesContainer.appendChild(courseItem);
+            });
+        }
+
+        // 根据所选课程显示课程详情
+        function showCourseDetails(courseName) {
+            // 在实际应用中，可以根据需要从后端获取课程详情
+            alert('查看 ' + courseName + ' 的详情');
+        }
+    </script>
+</body>
+</html>
