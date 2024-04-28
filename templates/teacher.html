@@ -10,7 +10,7 @@
     <div class="container">
         <h1>一体化在线教育社区系统</h1>
         <a class="button" href="#">注册</a>
-        <a class="button" href="/login/teacher" id="teacher_login">登录</a>
+        <button class="button" onclick="login()" id="teacher_login">登录</button>
         <nav>
             <ul>
                 <li><button onclick="go_home()">主页</button></li>
@@ -68,6 +68,16 @@
              alert(ck);
              window.location.href="/teacher/home";
 
+         }else{
+             alert("err");
+             window.location.href="/login/teacher";
+         }
+     }
+     function login(){
+         var ck=checkCookie('teacher');
+         alert(cookieValue);
+         if(ck==cookieValue){
+             alert(ck);
          }else{
              alert("err");
              window.location.href="/login/teacher";
