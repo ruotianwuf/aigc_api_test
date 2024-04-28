@@ -64,7 +64,7 @@ def getstudent():
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():
-    return render_template('')
+    return render_template('teacher.html')
 
 @app.route('/login', methods=['GET'])
 def getlogin():
