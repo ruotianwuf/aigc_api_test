@@ -85,10 +85,10 @@
      }
      function go_forum(){
          var ck=checkCookie('student');
-         // alert(cookieValue);
+         alert(cookieValue);
          if(ck==cookieValue){
-             // alert(ck);
-             window.location.href="/student/forum";
+             alert(ck);
+             window.location.href="http://127.0.0.1:5000/student/forum";
          }else{
              alert("err");
              window.location.href="/login/student";

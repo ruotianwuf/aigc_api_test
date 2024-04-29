@@ -2,9 +2,356 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #87CEFA, #4682B4);
+            position: relative;
+        }
+
+        .container {
+            max-width: 95%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        h1, h2, h3 {
+            color: #333;
+        }
+
+        input[type="text"], input[type="password"], textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            border-radius: 8px;
+        }
+
+        #closeBtn {
+            float: right;
+            background-color: #f44336;
+        }
+
+        #closeBtn:hover {
+            background-color: #d32f2f;
+        }
+
+        #likeBtn {
+            background-color: #007bff;
+        }
+
+        #likeBtn:hover {
+            background-color: #0056b3;
+        }
+
+        #commentFormBtn {
+            background-color: #ffc107;
+        }
+
+        #commentFormBtn:hover {
+            background-color: #ff9800;
+        }
+
+        #commentsList {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        #commentsList li {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+        }
+
+        #commentsList li:last-child {
+            border-bottom: none;
+        }
+
+        .post {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .post h3 {
+            margin-top: 0;
+        }
+
+        .post button {
+            margin-top: 10px;
+        }
+
+        .gradient-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.9) 100%);
+        }
+    </style>
 </head>
 <body>
+    <div class="gradient-bar"></div>
+    <div class="container">
+        <h1>Welcome to Student Forum</h1>
 
+        <!-- 发表帖子按钮 -->
+        <button id="postFormBtn" onclick="openPostForm()">New Post</button>
+
+        <!-- 发表帖子模态框 -->
+        <div id="postModal" class="modal">
+            <div class="modal-content">
+                <span id="closeBtn" onclick="closePostForm()">&times;</span>
+                <h2>New Post</h2>
+                <input type="text" id="postTitle" placeholder="Title">
+                <textarea id="postContent" placeholder="Content"></textarea>
+                <button onclick="submitPost()">Submit</button>
+            </div>
+        </div>
+
+        <!-- 帖子列表 -->
+        <div id="postList">
+            <h2>Posts</h2>
+            <div id="posts"></div>
+        </div>
+    </div>
+
+        <!-- 评论模态框 -->
+    <div id="commentModal" class="modal">
+        <div class="modal-content">
+            <span id="closeCommentBtn" onclick="closeCommentForm()">&times;</span>
+            <h2>New Comment</h2>
+            <textarea id="commentContent" placeholder="Enter your comment here"></textarea>
+            <button onclick="submitComment()">Submit</button>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function openPostForm() {
+            $("#postModal").css("display", "block");
+        }
+
+                // 关闭发帖模态框
+        function closePostForm() {
+            $("#postModal").css("display", "none");
+        }
+
+        function submitPost() {
+            // 获取帖子标题和内容
+            var title = $("#postTitle").val();
+            var content = $("#postContent").val();
+
+            // 此处可以进行输入验证
+
+            // 使用AJAX发送帖子数据到后端
+            $.ajax({
+                url: "/api/post",
+                type: "POST",
+                data: {
+                    title: title,
+                    content: content
+                },
+                success: function(response) {
+                    // 成功提交后可以刷新页面或者更新帖子列表
+                    // 此处仅为示例
+                    alert("Post submitted successfully!");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // 处理错误
+                    alert("Failed to submit post: " + error);
+                }
+            });
+        }
+
+        // 打开评论模态框
+        function openCommentForm(postId) {
+            // 将当前帖子的ID存储起来
+            $("#commentModal").data("postId", postId);
+            $("#commentModal").css("display", "block");
+        }
+
+        // 关闭评论模态框
+        function closeCommentForm() {
+            $("#commentModal").css("display", "none");
+        }
+
+        // 提交评论
+        function submitComment() {
+            // 获取帖子ID和评论内容
+            var postId = $("#commentModal").data("postId");
+            var content = $("#commentContent").val();
+            alert(JSON.stringify(postId))
+            alert(content)
+            // 此处可以进行输入验证
+            data = {'postId': JSON.stringify(postId),
+                    'content': content}
+            // 使用AJAX发送评论数据到后端
+            $.ajax({
+                url: "/student/forum/comment",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json", // 响应数据类型为 JSON
+                success: function(response) {
+                    // 成功提交后可以刷新页面或者更新评论列表
+                    // 此处仅为示例
+                    alert("Comment submitted successfully!");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // 处理错误
+                    alert("Failed to submit comment: " + error);
+                }
+            });
+        }
+
+
+        // 使用 jQuery 发送 AJAX 请求获取后端数据
+        $(document).ready(function() {
+            // 发送 AJAX 请求
+                var cookies = document.cookie.split("; ");
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookiePair = cookies[i].split("=");
+                    if (cookiePair[0] === "student" && cookiePair[1]) {
+                        var data = {"username": cookiePair[1]};
+                        $.ajax({
+                            url: "/student/forum/getPost", // 后端提供数据的 API 地址
+                            type: "POST", // 请求类型为 GET
+                            data: JSON.stringify(data),
+                            contentType: "application/json",
+                            dataType: "json", // 响应数据类型为 JSON
+                            success: function (response) {
+                                // 请求成功时执行的回调函数
+                                if (response.success) {
+                                    // 解析后端传递的数据
+                                    // const data = JSON.stringify(response.result);
+
+
+                                var posts = response.result.Post;
+                                var comments = response.result.Comment;
+
+                                renderPosts(posts, comments);
+                                    // 渲染帖子和评论到页面
+                                    // renderPosts(posts, comments);
+                                } else {
+                                    console.error("Failed to fetch posts:", response.error);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                // 请求失败时执行的回调函数
+                                console.error("Failed to fetch posts:", error);
+                            }
+                        });
+                    }
+                }
+
+        });
+
+        // 渲染帖子和评论到页面
+                 // 根据学生号码、帖子号码、评论号码匹配帖子和评论
+
+
+        // 渲染帖子和评论到页面
+    function renderPosts(posts, comments) {
+        const postsContainer = $("#posts");
+
+        // 清除之前的内容
+        postsContainer.empty();
+
+        // 确保posts和comments是数组
+        if (!Array.isArray(posts) || !Array.isArray(comments)) {
+            console.error("Posts or Comments are not in the expected array format.");
+            return;
+        }
+
+        // 遍历每个帖子
+        posts.forEach(post => {
+            // 创建帖子元素
+            const postElement = $("<div></div>").addClass("post");
+            postElement.append(`<h3>${post[2]}</h3>`);
+            postElement.append(`<p>${post[3]}</p>`);
+            postElement.append(`<p>发布日期: ${post[4]}</p>`);
+            postElement.append(`<p>喜欢: ${post[5]}</p>`);
+            postElement.append(`<button onclick="like(post[6])">点赞</button>&ensp;`);
+            postElement.append(`<button onclick="openCommentForm()">评论</button>`);
+
+
+            // 创建评论元素
+            const commentsList = $("<ul></ul>", { "class": "comments" });
+
+            // 遍历当前帖子的评论
+            comments.forEach(comment => {
+                if (comment[1] === post[6]) {
+                    const commentElement = $("<li></li>");
+                    commentElement.append(`<p id="${comment[2]}">${comment[2]}</p>`);
+                    commentElement.append(`<p>Posted by: ${comment[3]} on ${comment[4]}</p>`);
+                    commentsList.append(commentElement);
+                }
+            });
+
+            postElement.append(commentsList);
+
+            // 将帖子元素添加到容器中
+            postsContainer.append(postElement);
+        });
+    }
+
+    function like(pid){
+
+    }
+    </script>
 </body>
 </html>

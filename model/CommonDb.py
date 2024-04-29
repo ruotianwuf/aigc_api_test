@@ -51,6 +51,16 @@ class CommonDb(BaseModel):
             return self.db.executeSqlMap(sql, self.table)
         else:
             return self.db.executeSql(sql)
+
+    def selectAllPost_Direct(self, wheresql, optionstr="*", map=False):
+        print(wheresql)
+        sql = "select " + optionstr + " from " + self.table + " where 1 " + wheresql + ";"
+        print(sql)
+        if map:
+            return self.db.executeSqlMap(sql, self.table)
+        else:
+            return self.db.executeSql(sql)
+
     def selectByWhere(self,wheresql,page,num,field,desc):
         if page <= 1:
             start = 0;
