@@ -226,6 +226,25 @@ def add_teacher_c_info():
     if result:
         return jsonify({'success': True}), 200
 
+# 老师上传作业页面路由
+@app.route('/teacher/upload_homework', methods=['GET', 'POST'])
+def upload_homework():
+    if request.method == 'GET':
+        return render_template('teacher_upload.html')
+    elif request.method == 'POST':
+        try:
+            # 获取上传的文件
+            uploaded_file = request.files['file']
+
+            # 指定上传文件保存的路径
+            upload_dir = 'static/file'  # 修改保存路径
+
+            # 将文件保存到指定路径
+            uploaded_file.save(os.path.join(upload_dir, uploaded_file.filename))
+
+            return render_template('teacher_upload.html', upload_success=True)
+        except Exception as e:
+            return render_template('teacher_upload.html', upload_error=str(e))
 
 if __name__ == '__main__':
     app.run(debug=True)
