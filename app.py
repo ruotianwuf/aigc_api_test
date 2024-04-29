@@ -53,7 +53,7 @@ def getanswer_msg():
 def getanswer_advice_msg():
         data = json.loads(request.get_data(as_text=True))
         result = get_plan(data)
-        print(result)
+        print('内容:'+result)
         if result != None:
             return jsonify({'success': True, 'result': result}), 200
         else:

@@ -56,6 +56,5 @@ def sync_vivogpt_msg(ask):
     timecost = end_time - start_time
     print('请求耗时: %.2f秒' % timecost)
 
-# while(1):
-#     sync_vivogpt_msg(message)
+# sync_vivogpt_msg('你好')
 
