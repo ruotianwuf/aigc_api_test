@@ -6,13 +6,14 @@ body {
 }
 
 .container {
-    max-width: 600px;
-    margin: 50px auto;
+    max-width: 400px; /* 你想要的新宽度 */
+    margin: 50px auto; /* 居中 */
     padding: 20px;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 
 h1 {
     text-align: center;
@@ -28,6 +29,8 @@ h1 {
 }
 
 input[type="text"] {
+    max-width: 400px; /* 你想要的新宽度 */
+    margin: 50px auto; /* 居中 */
     width: 70%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -50,16 +53,22 @@ button:hover {
 }
 
 #answerDisplay {
+    max-width: 400px; /* 你想要的新宽度 */
+    margin: 50px auto; /* 居中 */
     background-color: #f9f9f9;
     padding: 20px;
     border-radius: 5px;
 }
 
 .answer {
+    max-width: 400px; /* 你想要的新宽度 */
+    margin: 50px auto; /* 居中 */
     margin-bottom: 10px;
 }
 .answer-box {
-    background-color: #f0f0f0;
+    max-width: 400px; /* 你想要的新宽度 */
+    margin: 50px auto; /* 居中 */
+    background-color: black;
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 10px;
