@@ -81,6 +81,38 @@ def getstudent_advice():
 def getstudent_course():
     return render_template('student_course.html')
 
+@app.route('/student/forum', methods=['GET'])
+def getstudent_forum():
+    return render_template('student_forum.html')
+
+@app.route('/student/forum/comment', methods=['POST'])
+def getstudent_forum_submit_comment():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    # con = UserServerController()
+    # result = con.find_student_Post_ServerStatus(data)
+    result = True
+    print(result)
+    if result:
+        return jsonify({'success': True,}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+@app.route('/student/forum/getPost', methods=['POST'])
+def getstudent_forum_post():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.find_student_Post_ServerStatus(data)
+    print(result)
+    if result:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+@app.route('/student/grades', methods=['GET'])
+def getstudent_grades():
+    return render_template('student_grades.html')
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():
@@ -219,6 +251,25 @@ def add_teacher_c_info():
     if result:
         return jsonify({'success': True}), 200
 
+# 老师上传作业页面路由
+@app.route('/teacher/upload_homework', methods=['GET', 'POST'])
+def upload_homework():
+    if request.method == 'GET':
+        return render_template('teacher_upload.html')
+    elif request.method == 'POST':
+        try:
+            # 获取上传的文件
+            uploaded_file = request.files['file']
+
+            # 指定上传文件保存的路径
+            upload_dir = 'static/file'  # 修改保存路径
+
+            # 将文件保存到指定路径
+            uploaded_file.save(os.path.join(upload_dir, uploaded_file.filename))
+
+            return render_template('teacher_upload.html', upload_success=True)
+        except Exception as e:
+            return render_template('teacher_upload.html', upload_error=str(e))
 
 
 # 处理删除文件的请求
