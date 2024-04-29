@@ -271,5 +271,25 @@ def upload_homework():
         except Exception as e:
             return render_template('teacher_upload.html', upload_error=str(e))
 
+
+# 处理删除文件的请求
+@app.route('/teacher/delete_file', methods=['DELETE'])
+def delete_file():
+    file_name = request.args.get('fileName')
+    file_path = os.path.join(app.root_path, 'static', 'file', file_name)
+    try:
+        os.remove(file_path)
+        return jsonify({'success': True, 'message': '文件删除成功'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+# 用于返回文件列表
+@app.route('/teacher/file_list', methods=['GET'])
+def get_file_list():
+    upload_dir = 'static/file'
+    file_list = os.listdir(upload_dir)
+    return jsonify(file_list)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
