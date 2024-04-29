@@ -52,6 +52,16 @@ class UserServerController:
             result = True
         return result
 
+    def find_student_ServerStatus(self, status_data):
+        model = CommonDb('student')
+        consequence = model.selectAll(f"username='{status_data['username']}'")
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return result
+
     def findlogin_teacher_ServerStatus(self, status_data):
         model = CommonDb('teacher')
         consequence = model.selectAll(f"username='{status_data['username']}' and password='{status_data['password']}'")
@@ -85,8 +95,6 @@ class UserServerController:
     def get_course_info_ServerStatus(self, status_data):
         if status_data == '计算机科学':
             model = CommonDb('cs_course')
-
-
         elif status_data == '软件工程':
             model = CommonDb('se_course')
 
@@ -107,12 +115,9 @@ class UserServerController:
     def delete_course_info_ServerStatus(self, status_data):
         if status_data['major'] == '计算机科学':
             model = CommonDb('cs_course')
-
         elif status_data['major'] == '软件工程':
             model = CommonDb('se_course')
-
         course = status_data['course']
-
         print(self.output_string(course))
         course = str(self.output_string(course))
         consequence = model.delete_where(f"course={course}")
@@ -137,3 +142,13 @@ class UserServerController:
         else:
             result = model.add({'course': course})
         return result
+
+    def find_student_Post_ServerStatus(self,data):
+        if self.find_student_ServerStatus(data):
+            post_model = CommonDb('post')
+            comment_model = CommonDb('comment')
+            post_consequence = post_model.selectAllPost_Direct(f"")
+            comment_consequence = comment_model.selectAllPost_Direct(f"")
+            print(post_consequence)
+            print(comment_consequence)
+            return {'Post': post_consequence, 'Comment': comment_consequence}

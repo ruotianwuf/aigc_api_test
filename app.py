@@ -85,6 +85,31 @@ def getstudent_course():
 def getstudent_forum():
     return render_template('student_forum.html')
 
+@app.route('/student/forum/comment', methods=['POST'])
+def getstudent_forum_submit_comment():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    # con = UserServerController()
+    # result = con.find_student_Post_ServerStatus(data)
+    result = True
+    print(result)
+    if result:
+        return jsonify({'success': True,}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+@app.route('/student/forum/getPost', methods=['POST'])
+def getstudent_forum_post():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.find_student_Post_ServerStatus(data)
+    print(result)
+    if result:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
+
 @app.route('/student/grades', methods=['GET'])
 def getstudent_grades():
     return render_template('student_grades.html')
