@@ -5,13 +5,33 @@ import requests
 import app
 from api_project_get.auth_util import gen_sign_headers
 
-def sync_vivogpt(prompt):
+
+import re
+
+def extract_chinese_with_punctuation(string):
+    # 使用正则表达式匹配中文字符和逗号、句号
+    chinese_text = re.findall(r'[\u4e00-\u9fff’。]+', string)
+    # 将列表中的元素连接成一个字符串
+    chinese_text = ''.join(chinese_text)
+    return chinese_text
+
+def sync_vivogpt():
 
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
     URI = '/vivogpt/completions'
     DOMAIN = 'api-ai.vivo.com.cn'
 
+    # 打开文件
+    with open('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\long_vedio_transfer\\output.txt', 'r', encoding='utf-8') as f:
+        # 读取文件内容
+        content = f.read()
+        prompt = content
+        # 输出文件内容
+        print(content)
+    #
+    prompt = extract_chinese_with_punctuation(str(prompt))
+    print("筛选后的内容："+prompt)
 
     METHOD = 'POST'
 
@@ -21,7 +41,7 @@ def sync_vivogpt(prompt):
     print('requestId:', params['requestId'])
 
     data = {
-        'prompt': prompt,
+        'prompt': '根据以下文字内容分析课堂的上课情况和互动情况，并给出具体详细的课堂报告：'+ prompt,
 
         'model': 'vivo-BlueLM-TB',
         'sessionId': str(uuid.uuid4()),
@@ -56,5 +76,10 @@ def sync_vivogpt(prompt):
 
 
 
-
+content = sync_vivogpt()
+print(content)
+with open('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\long_vedio_transfer\\aigc_content.txt', 'w', encoding='utf-8') as f:
+    print("正在写入")
+    f.write(str(content))
+    print("写入完成")
 

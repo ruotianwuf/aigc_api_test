@@ -15,7 +15,7 @@
             <ul>
                 <li><button onclick="go_advice()">建议</button></li>
                 <li><button onclick="go_courses()">课程</button></li>
-                <li><button onclick="go_bbs">论坛</button></li>
+                <li><button onclick="go_forum">论坛</button></li>
                 <li><button onclick="go_grades">成绩</button></li>
             </ul>
         </nav>
@@ -83,12 +83,12 @@
              window.location.href="/login/student";
          }
      }
-     function go_bbs(){
+     function go_forum(){
          var ck=checkCookie('student');
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/bbs";
+             window.location.href="/student/forum";
          }else{
              alert("err");
              window.location.href="/login/student";
