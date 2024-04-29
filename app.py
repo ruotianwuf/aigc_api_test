@@ -81,13 +81,6 @@ def getstudent_advice():
 def getstudent_course():
     return render_template('student_course.html')
 
-@app.route('/student/advice', methods=['GET'])
-def getstudent_advice():
-    return render_template('student_advice.html')
-
-@app.route('/student/advice', methods=['GET'])
-def getstudent_advice():
-    return render_template('student_advice.html')
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():
