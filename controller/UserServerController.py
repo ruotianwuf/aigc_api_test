@@ -152,3 +152,29 @@ class UserServerController:
             print(post_consequence)
             print(comment_consequence)
             return {'Post': post_consequence, 'Comment': comment_consequence}
+
+    def add_likes_to_post_ServerStatus(self,data):
+        model = CommonDb('post')
+        likes = {'like_count': int(data['like']) + 1}
+        consequence = model.update(likes,'post_no='+str('"'+data['post_no']+'"'))
+        print(consequence)
+        return True
+
+    def add_comments_to_post_ServerStatus(self,data):
+        model = CommonDb('comment')
+
+        consequence = model.add_comment(data)
+        print(consequence)
+        return True
+
+    def add_post_ServerStatus(self,data):
+        model = CommonDb('post')
+
+        consequence = model.add_comment(data)
+        print(consequence)
+        return True
+
+    def get_sid(self,sname):
+        model = CommonDb('student')
+        consequence = model.select_sid(sname)
+        return consequence
