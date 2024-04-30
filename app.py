@@ -268,10 +268,14 @@ def upload_homework():
             # 指定上传文件保存的路径
             if file_type == 'homework':
                 upload_dir = os.path.join(app.root_path, 'static', 'file', 'homework')
+            elif file_type == 'hw_answer':
+                upload_dir = os.path.join(app.root_path, 'static', 'file', 'hw_answer')
             elif file_type == 'courseware':
                 upload_dir = os.path.join(app.root_path, 'static', 'file', 'courseware')
             elif file_type == 'paper':
                 upload_dir = os.path.join(app.root_path, 'static', 'file', 'paper')
+            elif file_type == 'pp_answer':
+                upload_dir = os.path.join(app.root_path, 'static', 'file', 'pp_answer')
             else:
                 raise Exception('Invalid file type')
 
@@ -288,10 +292,50 @@ def upload_homework():
 
 
 # 处理删除文件的请求
-@app.route('/teacher/delete_file', methods=['DELETE'])
-def delete_file():
+@app.route('/teacher/delete_file/homework', methods=['DELETE'])
+def delete_file_homework():
     file_name = request.args.get('fileName')
-    file_path = os.path.join(app.root_path, 'static', 'file', file_name)
+    file_path = os.path.join(app.root_path, 'static', 'file','homework',file_name)
+    try:
+        os.remove(file_path)
+        return jsonify({'success': True, 'message': '文件删除成功'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/teacher/delete_file/hw_answer', methods=['DELETE'])
+def delete_file_hw_answer():
+    file_name = request.args.get('fileName')
+    file_path = os.path.join(app.root_path, 'static', 'file','hw_answer',file_name)
+    try:
+        os.remove(file_path)
+        return jsonify({'success': True, 'message': '文件删除成功'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/teacher/delete_file/courseware', methods=['DELETE'])
+def delete_file_courseware():
+    file_name = request.args.get('fileName')
+    file_path = os.path.join(app.root_path, 'static', 'file','courseware',file_name)
+    try:
+        os.remove(file_path)
+        return jsonify({'success': True, 'message': '文件删除成功'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/teacher/delete_file/paper', methods=['DELETE'])
+def delete_file_paper():
+    file_name = request.args.get('fileName')
+    file_path = os.path.join(app.root_path, 'static', 'file','paper',file_name)
+    try:
+        os.remove(file_path)
+        return jsonify({'success': True, 'message': '文件删除成功'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/teacher/delete_file/pp_answer', methods=['DELETE'])
+def delete_file_pp_answer():
+    file_name = request.args.get('fileName')
+    file_path = os.path.join(app.root_path, 'static', 'file','pp_answer',file_name)
     try:
         os.remove(file_path)
         return jsonify({'success': True, 'message': '文件删除成功'})
@@ -311,6 +355,13 @@ def get_file_list_homework():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
+@app.route('/teacher/file_list/hw_answer', methods=['GET'])
+def get_file_list_hw_answer():
+    upload_dir = 'static/file/hw_answer'
+    file_list = os.listdir(upload_dir)
+    return jsonify(file_list)
+
+
 @app.route('/teacher/file_list/courseware', methods=['GET'])
 def get_file_list_courseware():
     upload_dir = 'static/file/courseware'
@@ -320,6 +371,13 @@ def get_file_list_courseware():
 @app.route('/teacher/file_list/paper', methods=['GET'])
 def get_file_list_paper():
     upload_dir = 'static/file/paper'
+    file_list = os.listdir(upload_dir)
+    return jsonify(file_list)
+
+
+@app.route('/teacher/file_list/pp_answer', methods=['GET'])
+def get_file_list_pp_answer():
+    upload_dir = 'static/file/pp_answer'
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 

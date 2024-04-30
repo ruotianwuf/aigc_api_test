@@ -83,13 +83,19 @@
 
         /* 不同文件列表的特定样式 */
         .homework-list a {
-            color: green; /* 作业列表的链接颜色 */
+            color: #018801; /* 作业列表的链接颜色 */
+        }
+        .hw_answer-list a {
+            color: #7b0188; /* 作业答案列表的链接颜色 */
         }
         .courseware-list a {
-            color: blue; /* 课件列表的链接颜色 */
+            color: #0606fc; /* 课件列表的链接颜色 */
         }
         .paper-list a {
-            color: red; /* 试卷列表的链接颜色 */
+            color: #ff0000; /* 试卷列表的链接颜色 */
+        }
+        .pp_answer-list a {
+            color: #00ffc4; /* 试卷答案列表的链接颜色 */
         }
     </style>
 </head>
@@ -103,8 +109,10 @@
             <select name="fileType" required>
                 <option value="">选择文件类型</option>
                 <option value="homework">作业</option>
+                <option value="hw_answer">作业答案</option>
                 <option value="courseware">课件</option>
                 <option value="paper">试卷</option>
+                <option value="pp_answer">试卷答案</option>
             </select><br>
             <input type="file" name="file" required><br>
             <button type="submit">Upload</button>
@@ -126,6 +134,13 @@
         </ul>
     </div>
 
+     <div class="container">
+        <h2>作业答案</h2>
+        <ul id="fileList_hw_answer" class="file-list hw_answer-list">
+            <!-- 文件列表将由 JavaScript 动态填充 -->
+        </ul>
+    </div>
+
     <!-- 课件列表 -->
     <div class="container">
         <h2>课件</h2>
@@ -138,6 +153,13 @@
     <div class="container">
         <h2>试卷</h2>
         <ul id="fileList_paper" class="file-list paper-list">
+            <!-- 文件列表将由 JavaScript 动态填充 -->
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>试卷答案</h2>
+        <ul id="fileList_pp_answer" class="file-list pp_answer-list">
             <!-- 文件列表将由 JavaScript 动态填充 -->
         </ul>
     </div>
@@ -221,7 +243,7 @@
                             deleteBtn.textContent = '删除';
                             deleteBtn.classList.add('delete-btn');
                             deleteBtn.onclick = function() {
-                                deleteFile(fileName);
+                                deleteFile_homework(fileName);
                             };
                             li.appendChild(icon);
                             li.appendChild(a);
@@ -236,7 +258,43 @@
             xhr.open('GET', '/teacher/file_list/homework', true);
             xhr.send();
         }
-
+         function updateFileList_hw_answer() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // 请求成功，更新文件列表
+                        var fileList = JSON.parse(xhr.responseText);
+                        var fileListUl = document.getElementById('fileList_hw_answer');
+                        fileListUl.innerHTML = '';
+                        fileList.forEach(function(fileName) {
+                            var li = document.createElement('li');
+                            var icon = document.createElement('i');
+                            icon.classList.add('fas', getFileIconClass(fileName)); // 添加文件类型图标类名
+                            icon.classList.add('file-icon');
+                            var a = document.createElement('a');
+                            a.textContent = fileName;
+                            a.href = '/static/file/hw_answer/' + fileName; // 设置链接地址为文件路径
+                            a.target = '_blank'; // 在新窗口中打开文件
+                            var deleteBtn = document.createElement('button');
+                            deleteBtn.textContent = '删除';
+                            deleteBtn.classList.add('delete-btn');
+                            deleteBtn.onclick = function() {
+                                deleteFile_hw_answer(fileName);
+                            };
+                            li.appendChild(icon);
+                            li.appendChild(a);
+                            li.appendChild(deleteBtn);
+                            fileListUl.appendChild(li);
+                        });
+                    } else {
+                        console.error('获取文件列表失败');
+                    }
+                }
+            };
+            xhr.open('GET', '/teacher/file_list/hw_answer', true);
+            xhr.send();
+        }
          function updateFileList_courseware() {
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
@@ -259,7 +317,7 @@
                             deleteBtn.textContent = '删除';
                             deleteBtn.classList.add('delete-btn');
                             deleteBtn.onclick = function() {
-                                deleteFile(fileName);
+                                deleteFile_courseware(fileName);
                             };
                             li.appendChild(icon);
                             li.appendChild(a);
@@ -296,7 +354,7 @@
                             deleteBtn.textContent = '删除';
                             deleteBtn.classList.add('delete-btn');
                             deleteBtn.onclick = function() {
-                                deleteFile(fileName);
+                                deleteFile_paper(fileName);
                             };
                             li.appendChild(icon);
                             li.appendChild(a);
@@ -312,12 +370,52 @@
             xhr.send();
         }
 
+        function updateFileList_pp_answer() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // 请求成功，更新文件列表
+                        var fileList = JSON.parse(xhr.responseText);
+                        var fileListUl = document.getElementById('fileList_pp_answer');
+                        fileListUl.innerHTML = '';
+                        fileList.forEach(function(fileName) {
+                            var li = document.createElement('li');
+                            var icon = document.createElement('i');
+                            icon.classList.add('fas', getFileIconClass(fileName)); // 添加文件类型图标类名
+                            icon.classList.add('file-icon');
+                            var a = document.createElement('a');
+                            a.textContent = fileName;
+                            a.href = '/static/file/pp_answer/' + fileName; // 设置链接地址为文件路径
+                            a.target = '_blank'; // 在新窗口中打开文件
+                            var deleteBtn = document.createElement('button');
+                            deleteBtn.textContent = '删除';
+                            deleteBtn.classList.add('delete-btn');
+                            deleteBtn.onclick = function() {
+                                deleteFile_pp_answer(fileName);
+                            };
+                            li.appendChild(icon);
+                            li.appendChild(a);
+                            li.appendChild(deleteBtn);
+                            fileListUl.appendChild(li);
+                        });
+                    } else {
+                        console.error('获取文件列表失败');
+                    }
+                }
+            };
+            xhr.open('GET', '/teacher/file_list/pp_answer', true);
+            xhr.send();
+        }
+
         // 页面加载时获取文件列表并更新
         window.onload = function() {
             // updateFileList();
             updateFileList_homework();
+            updateFileList_hw_answer();
             updateFileList_courseware();
             updateFileList_paper();
+            updateFileList_pp_answer();
         };
 
         // 根据文件名获取文件类型图标类名
@@ -341,23 +439,102 @@
         }
 
         // 删除文件
-        function deleteFile(fileName) {
+        function deleteFile_homework(fileName) {
             if (confirm('确定要删除该文件吗？')) {
+                alert(fileName);
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             // 删除成功，重新加载文件列表
-                            // updateFileList();
                             updateFileList_homework();
+
+                        } else {
+                            console.error('删除文件失败');
+                        }
+                    }
+                };
+                xhr.open('DELETE', '/teacher/delete_file/homework?fileName=' + fileName , true);
+                xhr.send();
+            }
+        }
+
+         function deleteFile_hw_answer(fileName) {
+            if (confirm('确定要删除该文件吗？')) {
+                alert(fileName);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // 删除成功，重新加载文件列表
+
+                            updateFileList_hw_answer();
+
+                        } else {
+                            console.error('删除文件失败');
+                        }
+                    }
+                };
+                xhr.open('DELETE', '/teacher/delete_file/hw_answer?fileName=' + fileName , true);
+                xhr.send();
+            }
+        }
+        function deleteFile_courseware(fileName) {
+            if (confirm('确定要删除该文件吗？')) {
+                alert(fileName);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // 删除成功，重新加载文件列表
+
                             updateFileList_courseware();
+
+                        } else {
+                            console.error('删除文件失败');
+                        }
+                    }
+                };
+                xhr.open('DELETE', '/teacher/delete_file/courseware?fileName=' + fileName , true);
+                xhr.send();
+            }
+        }
+        function deleteFile_paper(fileName) {
+            if (confirm('确定要删除该文件吗？')) {
+                alert(fileName);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // 删除成功，重新加载文件列表
+
                             updateFileList_paper();
                         } else {
                             console.error('删除文件失败');
                         }
                     }
                 };
-                xhr.open('DELETE', '/teacher/delete_file?fileName=' + fileName, true);
+                xhr.open('DELETE', '/teacher/delete_file/paper?fileName=' + fileName , true);
+                xhr.send();
+            }
+        }
+
+        function deleteFile_pp_answer(fileName) {
+            if (confirm('确定要删除该文件吗？')) {
+                alert(fileName);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // 删除成功，重新加载文件列表
+
+                            updateFileList_pp_answer();
+                        } else {
+                            console.error('删除文件失败');
+                        }
+                    }
+                };
+                xhr.open('DELETE', '/teacher/delete_file/pp_answer?fileName=' + fileName , true);
                 xhr.send();
             }
         }
