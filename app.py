@@ -251,18 +251,33 @@ def add_teacher_c_info():
     if result:
         return jsonify({'success': True}), 200
 
+
 # 老师上传作业页面路由
 @app.route('/teacher/upload_homework', methods=['GET', 'POST'])
 def upload_homework():
     if request.method == 'GET':
-        return render_template('teacher_upload.html')
+        return render_template('teacher_upload_homework.html')
     elif request.method == 'POST':
         try:
             # 获取上传的文件
             uploaded_file = request.files['file']
 
+            # 获取上传文件类型
+            file_type = request.form['fileType']
+
             # 指定上传文件保存的路径
-            upload_dir = 'static/file'  # 修改保存路径
+            if file_type == 'homework':
+                upload_dir = os.path.join(app.root_path, 'static', 'file', 'homework')
+            elif file_type == 'courseware':
+                upload_dir = os.path.join(app.root_path, 'static', 'file', 'courseware')
+            elif file_type == 'paper':
+                upload_dir = os.path.join(app.root_path, 'static', 'file', 'paper')
+            else:
+                raise Exception('Invalid file type')
+
+            # 如果目录不存在则创建
+            if not os.path.exists(upload_dir):
+                os.makedirs(upload_dir)
 
             # 将文件保存到指定路径
             uploaded_file.save(os.path.join(upload_dir, uploaded_file.filename))
@@ -283,13 +298,30 @@ def delete_file():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
-# 用于返回文件列表
-@app.route('/teacher/file_list', methods=['GET'])
-def get_file_list():
-    upload_dir = 'static/file'
+# # 用于返回文件列表
+# @app.route('/teacher/file_list', methods=['GET'])
+# def get_file_list():
+#     upload_dir = 'static/file'
+#     file_list = os.listdir(upload_dir)
+#     return jsonify(file_list)
+
+@app.route('/teacher/file_list/homework', methods=['GET'])
+def get_file_list_homework():
+    upload_dir = 'static/file/homework'
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
+@app.route('/teacher/file_list/courseware', methods=['GET'])
+def get_file_list_courseware():
+    upload_dir = 'static/file/courseware'
+    file_list = os.listdir(upload_dir)
+    return jsonify(file_list)
+
+@app.route('/teacher/file_list/paper', methods=['GET'])
+def get_file_list_paper():
+    upload_dir = 'static/file/paper'
+    file_list = os.listdir(upload_dir)
+    return jsonify(file_list)
 
 if __name__ == '__main__':
     app.run(debug=True)
