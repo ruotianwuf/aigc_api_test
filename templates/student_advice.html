@@ -35,8 +35,10 @@
     display: none;
     background-color: white;
     color: black;
-    margin-right: auto;
+    margin-left: auto;
+    margin-top: 10px;
     border: 1px solid #ddd;
+    align-items: flex-end;
 }
 
 
@@ -44,9 +46,9 @@
     display: none;
     background-color: #3333cc;
     color: white;
-    margin-left: auto;
+    margin-right: auto;
     border: 1px solid #ddd;
-    align-items: flex-end;
+    align-items: flex-start;
 }
 
 
@@ -67,6 +69,17 @@
 .text {
     max-width: 100%;
     margin: 0;
+}
+
+.black-background {
+    background-color: black;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.chat-box{
+    margin-top: 15px;
 }
 
 
@@ -92,7 +105,7 @@
 
 
 <div class="chat-box">
-    <input id="questionInput" type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
+    <input id="questionInput" ty  pe="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
     <button onclick="question()" style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;">发送</button>
 </div>
 
@@ -119,14 +132,12 @@
 
                                 replay = replay.replace(/(\d+)\. /g, '$1.');
                                 replay = replay.replace(/\((\d+)\) /g, '($1)');
-                                 replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
                                 replay = replay.replace(/\n/g, '<br>');
 
 
                                 var outputDiv = document.getElementById("content");
-                                outputDiv.innerHTML = "<div>" + replay + "</div>";
-
-
+                                outputDiv.innerHTML = "<div class='"+"black-background"+"'>" + replay + "</div>";
                                 }
                         },
                         error: function() {
@@ -144,53 +155,48 @@
         }
     });
 
-   function question() {
-        var questionInput = document.getElementById("questionInput");
-        var question = questionInput.value.trim();
-        if (question) {
-            var data = { 'question': question };
-            $.ajax({
-                url: "/answer_msg",
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                dataType: "json",
-        success: function (response) {
-        if (response.success) {
-            var formattedAnswer = response.result;
-
-
-        formattedAnswer = formattedAnswer.replace(/(\d+)\. /g, '$1. ');
-        formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');
-        formattedAnswer = formattedAnswer.replace(/(①|②|③|④|⑤|⑥) /g, '$1 ');
-        formattedAnswer = formattedAnswer.replace(/\n/g, '<br>');
-
-
-            var questionHTML = '<img src="../static/img/student.png" alt="User Avatar" class="avatar">' +
-                '<div class="name">Student</div>' +
-                '<div class="text">' + "You: " + data.question + '</div>';
-
-            var answerHTML = '<img src="../static/img/AI%20UI.png" alt="AI Avatar" class="avatar">' +
-                '<div class="name">Assistant</div>' +
-                '<div class="text">' + formattedAnswer + '</div>';
-
-
-            var questionDisplay = document.getElementById("questionDisplay");
-            var answerDisplay = document.getElementById("answerDisplay");
-            questionDisplay.innerHTML = questionHTML;
-            answerDisplay.innerHTML = answerHTML;
-            questionDisplay.style.display = "flex";
-            answerDisplay.style.display = "flex";
-            questionInput.value = "";
-        } else {
-            alert("未能获取到答案。");
-        }
-    },
-
-    error: function (xhr, status, error) {
-        alert("发生错误，请稍后重试。");
-    }
-
+  function question() {
+    var questionInput = document.getElementById("questionInput");
+    var questionText = questionInput.value.trim();
+    if (questionText) {
+        var data = { 'question': questionText };
+        $.ajax({
+            url: "/answer_msg",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    var formattedAnswer = response.result;
+                    formattedAnswer = formattedAnswer.replace(/(\d+)\. /g, '$1. ');
+                    formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');
+                    formattedAnswer = formattedAnswer.replace(/(①|②|③|④|⑤|⑥) /g, '$1 ');
+                    formattedAnswer = formattedAnswer.replace(/\n/g, '<br>');
+                    var outputDiv = document.getElementById("content");
+                    var questionHTML = "<div class='message user-message' style='display: flex;'>" +
+                                       "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
+                                       "<div>" +
+                                         "<div class='name'>You</div>" +
+                                         "<div class='text'>" + "You: " + data.question + "</div>" +
+                                       "</div>" +
+                                       "</div>";
+                    var answerHTML = "<div class='message ai-message' style='display: flex;'>" +
+                                     "<img src='../static/img/AI UI.png' alt='AI Avatar' class='avatar'>" +
+                                     "<div>" +
+                                       "<div class='name'>Assistant</div>" +
+                                       "<div class='text'>" + formattedAnswer + "</div>" +
+                                     "</div>" +
+                                     "</div>";
+                    outputDiv.innerHTML += questionHTML + answerHTML;
+                    questionInput.value = "";
+                } else {
+                    alert("未能获取到答案。");
+                }
+            },
+            error: function(xhr, status, error) {
+                alert("发生错误，请稍后重试。");
+            }
         });
     } else {
         alert("问题不能为空。");
