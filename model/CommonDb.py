@@ -52,7 +52,7 @@ class CommonDb(BaseModel):
         return self.db.executeSql(sql)
 
     def select_sid(self,sname):
-
+        print(sname)
         sql = "select stu_no from " + self.table + " where username = "+sname+";"
         print(sql)
         return self.db.executeSql(sql)

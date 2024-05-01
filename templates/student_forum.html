@@ -197,26 +197,31 @@
             var content = $("#postContent").val();
             var cookies = document.cookie.split("; ");
             for (var i = 0; i < cookies.length; i++) {
+
                 var cookiePair = cookies[i].split("=");
-                data = {'title': title,'content': content, 'sname': cookiePair[1]}
-                // alert(data)
-                $.ajax({
-                url: "/student/forum/post",
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                dataType: "json", // 响应数据类型为 JSON
-                success: function(response) {
-                    // 成功提交后可以刷新页面或者更新评论列表
-                    // 此处仅为示例
-                    // alert("Comment submitted successfully!");
-                    location.reload();
-                },
-                error: function() {
-                    // 处理错误
-                    alert("Failed to submit comment: ");
+                if (cookiePair[0] === 'student' && cookiePair[1]) {
+                    data = {'title': title, 'content': content, 'sname': cookiePair[1]}
+                    // alert(data)
+                    $.ajax({
+                        url: "/student/forum/post",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json", // 响应数据类型为 JSON
+                        success: function (response) {
+                            // 成功提交后可以刷新页面或者更新评论列表
+                            // 此处仅为示例
+                            // alert("Comment submitted successfully!");
+                            if (response.success) {
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            // 处理错误
+                            alert("Failed to submit comment: ");
+                        }
+                    });
                 }
-            });
             }
         }
 
