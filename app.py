@@ -154,9 +154,9 @@ def getstudent_grades():
 @app.route('/teacher', methods=['GET'])
 def getteacher():
     return render_template('teacher.html')
-@app.route('/teacher/home', methods=['GET'])
-def getteacher_home():
-    return render_template('teacher_home.html')
+@app.route('/teacher/report', methods=['GET'])
+def getteacher_report():
+    return render_template('teacher_report.html')
 
 @app.route('/teacher/upload', methods=['GET'])
 def getteacher_upload():

@@ -6,8 +6,11 @@ class DB:
     cursor = ''
 
     def __init__(self,db="localhost"):
+
         if db == "localhost":
+
             conf = Config().getDB()
+            print(conf[0])
         else:
             conf = Config().getOcsOnline()
         self.db = pymysql.connect(host=conf[0],user=conf[1],password=conf[2],port=conf[3],database=conf[4],charset='utf8')
