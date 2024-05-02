@@ -2,9 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>teacher_report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>课堂报告</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form {
+            text-align: center;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* 文件列表样式 */
+        .file-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .file-list li {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* 文件左对齐 */
+            transition: box-shadow 0.3s; /* 添加过渡效果 */
+        }
+        .file-list li:hover {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 鼠标悬停时添加阴影边框 */
+        }
+        .file-list a {
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+            transition: color 0.3s;
+            margin-left: 10px;
+            position: relative;
+        }
+        .file-list a:hover {
+            color: #007bff;
+        }
+        .delete-btn {
+            display: none; /* 默认不显示删除按钮 */
+            margin-left: auto; /* 放置在最右边 */
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            color: red;
+        }
+        .file-list li:hover .delete-btn {
+            display: inline-block; /* 鼠标悬停时显示删除按钮 */
+        }
+
+    </style>
 </head>
 <body>
+    <div>
+        <button onclick="go_home()">返回</button>
+    </div>
+    <div class="container">
+        <h2>上传视频</h2>
+        <form action="/teacher/upload_video" method="post" enctype="multipart/form-data">
+            <input type="file" name="video" accept="video/*" required><br>
+            <button type="submit">上传</button>
+        </form>
+    </div>
 
+    <div class="container">
+        <h2>视频列表</h2>
+        <ul id="fileList_course_video" class="file-list course_video-list">
+            <!-- 文件列表将由 JavaScript 动态填充 -->
+        </ul>
+    </div>
+
+    <script>
+          // 定义函数来获取文件列表并更新页面内容
+       function updateFileList_course_video() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // 请求成功，更新文件列表
+                        var fileList = JSON.parse(xhr.responseText);
+                        var fileListUl = document.getElementById('fileList_course_video');
+                        fileListUl.innerHTML = '';
+                        fileList.forEach(function(fileName) {
+                            var li = document.createElement('li');
+                            var icon = document.createElement('i');
+                            icon.classList.add('file-icon');
+                            var a = document.createElement('a');
+                            a.textContent = fileName;
+                            a.href = '/static/video/class_video_report/' + fileName; // 设置链接地址为文件路径
+                            a.target = '_blank';
+                            var deleteBtn = document.createElement('button');
+                            deleteBtn.textContent = '删除';
+                            deleteBtn.classList.add('delete-btn');
+                            deleteBtn.onclick = function() {
+                                deleteFile_course_video(fileName);
+                            };
+                            li.appendChild(icon);
+                            li.appendChild(a);
+                            li.appendChild(deleteBtn);
+                            fileListUl.appendChild(li);
+                        });
+                    } else {
+                        console.error('获取文件列表失败');
+                    }
+                }
+            };
+            xhr.open('GET', '/teacher/file_list/course_video', true);
+            xhr.send();
+        }
+
+        window.onload = function() {
+            updateFileList_course_video();
+        };
+
+       function deleteFile_course_video(fileName) {
+            if (confirm('确定要删除该文件吗？')) {
+                alert(fileName);
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // 删除成功，重新加载文件列表
+                            updateFileList_course_video();
+                        } else {
+                            console.error('删除文件失败');
+                        }
+                    }
+                };
+                xhr.open('DELETE', '/teacher/delete_file/course_video?fileName=' + fileName , true);
+                xhr.send();
+            }
+        }
+
+         function go_home(){
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    window.location.href = 'http://127.0.0.1:5000/teacher?data='+data.username;
+                }
+            }
+        }
+    </script>
 </body>
 </html>

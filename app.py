@@ -445,6 +445,43 @@ def get_file_list_pp_answer():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
+#上传视频
+@app.route('/teacher/upload_video', methods=['POST'])
+def upload_video():
+    try:
+        # 获取上传的视频文件
+        video_file = request.files['video']
+
+        # 指定上传视频保存的路径
+        upload_dir = os.path.join(app.root_path, 'static', 'video', 'class_video_report')
+
+        # 如果目录不存在则创建
+        if not os.path.exists(upload_dir):
+            os.makedirs(upload_dir)
+
+        # 将视频文件保存到指定路径
+        video_file.save(os.path.join(upload_dir, video_file.filename))
+
+        return render_template('teacher_report.html', upload_success=True)
+    except Exception as e:
+        return render_template('teacher_report.html', upload_error=str(e))
+
+@app.route('/teacher/delete_file/course_video', methods=['DELETE'])
+def delete_file_course_video():
+    file_name = request.args.get('fileName')
+    file_path = os.path.join(app.root_path, 'static', 'video','class_video_report',file_name)
+    try:
+        os.remove(file_path)
+        return jsonify({'success': True, 'message': '文件删除成功'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)})
+
+@app.route('/teacher/file_list/course_video', methods=['GET'])
+def get_file_list_course_video():
+    upload_dir = 'static/video/class_video_report'
+    file_list = os.listdir(upload_dir)
+    return jsonify(file_list)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
