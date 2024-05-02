@@ -15,7 +15,7 @@ def sync_vivogpt_selfplan(prompt):
 
     METHOD = 'POST'
 
-    prompt = '根据学生信息生成详细未来学习计划并推荐对应专业的课程,必须有具体的执行任务和未来要上的课程等，grade是已学内容的综合成绩，course_now是现在正在学习的课程，course_past是已经学的课程，course_past后面的字母是这一门课的成绩评级.' + str(prompt)
+    prompt = '根据学生信息生成详细未来学习计划并推荐对应专业的课程,必须有具体的执行任务和未来要上的课程等，grade是已学内容的综合成绩，course_past是已经学的课程，c_grade是对应course_pas这一门课的成绩评级,不要生成字典回答，请处理成成段回答' + str(prompt)
 
     params = {
         'requestId': str(uuid.uuid4())

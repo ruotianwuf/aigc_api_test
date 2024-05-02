@@ -13,7 +13,7 @@
         <button class="Login_button" onclick="login()" id="teacher_login">登录</button>
         <nav>
             <ul>
-                <li><button onclick="go_home()">主页</button></li>
+                <li><button onclick="go_report()">课堂报告</button></li>
                 <li><button onclick="go_courses()">信息</button></li>
                 <li><button onclick="go_upload()">上传</button></li>
                 <li><button onclick="go_check()">批改作业</button></li>
@@ -71,12 +71,12 @@
          }
      }
 
-     function go_home(){
+     function go_report(){
          var ck=checkCookie('teacher');
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/teacher/home";
+             window.location.href="/teacher/report";
 
          }else{
              alert("err");

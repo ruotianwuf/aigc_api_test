@@ -82,6 +82,33 @@ def getstudent_advice():
 def getstudent_course():
     return render_template('student_course.html')
 
+@app.route('/student/course/get', methods=['POST'])
+def getstudent_course_get():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_student_info_ServerStatus(data)
+    get_info = result['consequence']
+    print(get_info)
+    info = get_info[0]
+    course_grade = []
+    p = 0
+    for i in get_info:
+        content = i
+        print(content,type(content))
+        course_past = content[6]
+        grade = content[7]
+        # c_g = {'course': course_past, 'grade': grade}
+        c_g = [course_past,grade]
+        print(type(c_g))
+        course_grade.append(c_g)
+    print(course_grade)
+    if result:
+        return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4]}), 200
+    else:
+        return jsonify({'success': True}), 200
+
+
 @app.route('/student/forum', methods=['GET'])
 def getstudent_forum():
     return render_template('student_forum.html')
@@ -154,9 +181,9 @@ def getstudent_grades():
 @app.route('/teacher', methods=['GET'])
 def getteacher():
     return render_template('teacher.html')
-@app.route('/teacher/home', methods=['GET'])
-def getteacher_home():
-    return render_template('teacher_home.html')
+@app.route('/teacher/report', methods=['GET'])
+def getteacher_report():
+    return render_template('teacher_report.html')
 
 @app.route('/teacher/upload', methods=['GET'])
 def getteacher_upload():
