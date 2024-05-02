@@ -82,6 +82,46 @@ def getstudent_advice():
 def getstudent_course():
     return render_template('student_course.html')
 
+@app.route('/student/course/get', methods=['POST'])
+def getstudent_course_get():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_student_info_ServerStatus(data)
+    get_info = result['consequence']
+    print(get_info)
+    info = get_info[0]
+    course_grade = []
+    p = 0
+    for i in get_info:
+        content = i
+        print(content,type(content))
+        course_past = content[6]
+        grade = content[7]
+        # c_g = {'course': course_past, 'grade': grade}
+        c_g = [course_past,grade]
+        print(type(c_g))
+        course_grade.append(c_g)
+    print(course_grade)
+    sid = info[2]
+    # major_course = con.get_course_info_ServerStatus(major)
+    # get_course_info = major_course['consequence']
+    course_now_consequence = con.get_student_course_now_ServerStatus(sid)
+    c_n = course_now_consequence['consequence']
+    course_n = []
+    for i in c_n:
+        content_c = i[2]
+        course_n.append(content_c)
+    print(course_n)
+
+    # print("course_info", get_course_info)
+    # print(get_info[4])
+    if result:
+        return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4], 'course_now': course_n}), 200
+    else:
+        return jsonify({'success': True}), 200
+
+
 @app.route('/student/forum', methods=['GET'])
 def getstudent_forum():
     return render_template('student_forum.html')

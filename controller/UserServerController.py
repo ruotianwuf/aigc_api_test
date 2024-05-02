@@ -92,6 +92,27 @@ class UserServerController:
             result = True
         return {'result': result, 'consequence': consequence}
 
+
+    def get_student_info_ServerStatus(self, status_data):
+        model = CommonDb('student')
+        consequence = model.selectAll(f"username='{status_data['username']}'")
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
+
+    def get_student_course_now_ServerStatus(self, status_data):
+        model = CommonDb('s_course_now')
+        consequence = model.selectAll(f"stu_no='{status_data}'")
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
+
     def get_course_info_ServerStatus(self, status_data):
         if status_data == '计算机科学':
             model = CommonDb('cs_course')
