@@ -12,6 +12,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
+            background-image: url("../static/img/teacher_back.jpg");
+
         }
         #teacher_info {
             font-size: 2em;
@@ -19,7 +21,7 @@
             text-align: center;
         }
         .centered-table {
-            width: 100%; /* 表格宽度100% */
+            width: 70%; /* 表格宽度100% */
             max-width: none; /* 移除最大宽度限制 */
             border-collapse: collapse;
             table-layout: fixed; /* 固定表格布局，让最后一列有足够的空间 */
@@ -31,16 +33,19 @@
         }
         .centered-table thead {
             background: #5B69FF;
+            border: black;
             color: #FFFFFF;
         }
         .centered-table th, .centered-table td {
             text-align: center; /* 内容水平居中 */
             padding: 20px;
-            font-size: 1.2em;
-            border: 1px solid #eaeaea;
+
+            font-size: 1.5em;
+            font-weight: bold;
+            border: 1px solid black;
         }
         .centered-table td {
-            font-weight: 300;
+            font-weight: 800;
             color: #333;
         }
         .centered-table tr:hover td {
@@ -61,6 +66,7 @@
             border-radius: 5px;
             cursor: pointer;
             width: 20%; /* 按钮宽度100% */
+            transform: scale(1.5);
         }
         .add-btn {
             background-color: #007bff;
@@ -82,6 +88,7 @@
             border: 1px solid black;
             padding: 8px;
             text-align: center; /* 使单元格内的文本居中 */
+            background: whitesmoke;
         }
         .table-style th {
             background-color: #f2f2f2;
@@ -89,14 +96,15 @@
 
         .return-button {
             position: fixed; /* 绝对定位 */
-            right: 20px; /* 距离页面右侧20px */
-            bottom: 20px; /* 距离页面底部20px */
+            right: 300px; /* 距离页面右侧20px */
+            bottom: 60px; /* 距离页面底部20px */
             padding: 10px 20px; /* 按钮的内边距 */
             background-color: #008CBA; /* 按钮的背景颜色 */
             color: white; /* 按钮的文字颜色 */
-            border: none; /* 移除边框 */
+            border: black; /* 移除边框 */
             border-radius: 5px; /* 圆角边框 */
             cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            transform: scale(1.5);
         }
 
         .return-button:hover {
@@ -115,7 +123,7 @@
     <div id="courseTableContainer">
         <!-- 表格将通过JavaScript动态生成 -->
     </div><br><br>
-    <button onclick="getCookie()" class="add-btn">添加课程</button>
+    <button onclick="getCookie()" class="add-btn" style="transform: scale(1.5)">添加课程</button>
     <button onclick="backhome()" class="return-button">返回</button>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

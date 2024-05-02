@@ -25,12 +25,35 @@ class CommonDb(BaseModel):
         print(sql)
         return self.db.add(sql)
 
+
+    def add_comment(self,info,isctime=False,noUpdate=False):
+        sInsertField = ""
+        sInsertValue = ""
+
+        sUpdateSql = ""
+        for key in info.keys():
+            sInsertField += "," + key
+            sInsertValue += ",\"" + str(info[key]) + "\""
+            sUpdateSql += key + "=\"" + str(info[key]) + "\","
+        if noUpdate:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:]+ ") ON DUPLICATE KEY UPDATE " + sUpdateSql[:-1] + ";"
+        else:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ");"
+        print(sql)
+        return self.db.add(sql)
+
     def select(self,page,num,field,desc):
         if page <= 1:
             start = 0;
         else:
             start = (page-1) * num;
         sql = "select * from " + self.table + " order by " + field + " " + desc + " limit " + str(start) + "," + str(num) +  ";"
+        print(sql)
+        return self.db.executeSql(sql)
+
+    def select_sid(self,sname):
+        print(sname)
+        sql = "select stu_no from " + self.table + " where username = "+sname+";"
         print(sql)
         return self.db.executeSql(sql)
 

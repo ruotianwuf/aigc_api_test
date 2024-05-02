@@ -1,6 +1,7 @@
 import json
 import os
 import random
+import datetime
 from flask import Flask, request, jsonify, render_template
 
 from api_project_get.get_api import sync_vivogpt
@@ -85,13 +86,49 @@ def getstudent_course():
 def getstudent_forum():
     return render_template('student_forum.html')
 
+@app.route('/student/forum/post', methods=['POST'])
+def getstudent_forum_submit_post():
+    data = json.loads(request.get_data(as_text=True))
+    sname = data['sname']
+    con = UserServerController()
+    sid = con.get_sid(sname)
+    print("sid"+str(sid))
+    sid = ((list(sid))[0])[0]
+    data['stu_no'] = sid
+    data['date'] = datetime.datetime.today()
+    data['post_no'] = 'p'+str(random.randint(1000000, 10000000))
+    del data['sname']
+    # print(data)
+    result = con.add_post_ServerStatus(data)
+    # print(result)
+    if result:
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': False}), 200
+
 @app.route('/student/forum/comment', methods=['POST'])
 def getstudent_forum_submit_comment():
     data = json.loads(request.get_data(as_text=True))
+    data['date'] = datetime.datetime.today()
+    data['com_no'] = 'c'+str(random.randint(100000, 1000000))
     print(data)
-    # con = UserServerController()
-    # result = con.find_student_Post_ServerStatus(data)
-    result = True
+    con = UserServerController()
+    result = con.add_comments_to_post_ServerStatus(data)
+
+    print(result)
+    if result:
+        return jsonify({'success': True,}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+@app.route('/student/forum/like', methods=['POST'])
+def getstudent_forum_like():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+
+    con = UserServerController()
+    result = con.add_likes_to_post_ServerStatus(data)
+
     print(result)
     if result:
         return jsonify({'success': True,}), 200
@@ -380,6 +417,7 @@ def get_file_list_pp_answer():
     upload_dir = 'static/file/pp_answer'
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
