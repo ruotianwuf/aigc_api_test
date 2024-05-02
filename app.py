@@ -103,21 +103,8 @@ def getstudent_course_get():
         print(type(c_g))
         course_grade.append(c_g)
     print(course_grade)
-    sid = info[2]
-    # major_course = con.get_course_info_ServerStatus(major)
-    # get_course_info = major_course['consequence']
-    course_now_consequence = con.get_student_course_now_ServerStatus(sid)
-    c_n = course_now_consequence['consequence']
-    course_n = []
-    for i in c_n:
-        content_c = i[2]
-        course_n.append(content_c)
-    print(course_n)
-
-    # print("course_info", get_course_info)
-    # print(get_info[4])
     if result:
-        return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4], 'course_now': course_n}), 200
+        return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4]}), 200
     else:
         return jsonify({'success': True}), 200
 

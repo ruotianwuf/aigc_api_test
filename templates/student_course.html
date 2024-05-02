@@ -149,7 +149,6 @@
                             info = response.info;
                             course = response.course_grade;
                             all_grade = response.all_grade
-                            course_now = response.course_now
                             // alert(course)
                             // document.getElementById('all_grade').innerHTML='<div >'+'总成绩：'+all_grade+'</div>'
                             document.getElementById('info').innerHTML='<table class="table-style">\n' +
@@ -174,7 +173,7 @@
                                 '    </table>'
 
                             createTable(course)
-                            create_course_now_Table(course_now)
+
 
                         }
                     },
@@ -217,39 +216,6 @@
             tableContainer.innerHTML = '';
             tableContainer.appendChild(table);
         }
-
-
-        function create_course_now_Table(course) {
-            var tableContainer = document.getElementById('courseTableContainer2'); // 假设这是你的表格容器的ID
-            if (!tableContainer) {
-                console.error('Table container not found');
-                return;
-            }
-
-            var table = document.createElement('table');
-            table.className = 'centered-table';
-
-            // 创建表头
-            var thead = table.createTHead();
-            var headerRow = thead.insertRow();
-            headerRow.innerHTML = "<th>课程名称</th>"; // 设置表头为“课程名称”
-
-            var tbody = table.createTBody();
-
-            // 遍历课程数据来创建表格行
-            course.forEach(function(courseName) {
-                var row = tbody.insertRow();
-                var cell = row.insertCell();
-                cell.textContent = courseName; // 设置单元格文本为课程名称
-            });
-
-            // 清空容器内容并添加表格
-            tableContainer.innerHTML = '';
-            tableContainer.appendChild(table);
-        }
-
-// 调用函数并传入课程数据
-createTable(['计算机组成原理', '概率与统计']);
 
         function backhome() {
                 var cookies = document.cookie.split("; ");
