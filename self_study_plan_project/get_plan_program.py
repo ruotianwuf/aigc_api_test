@@ -19,6 +19,8 @@ def get_plan(info):
         major = condition_list_info[5]
         course_past = condition_list_info[6]
         c_grade = condition_list_info[7]
+        if c_grade == '':
+            c_grade = '正在学习'
         data = {'name': name, 'student_id': student_id, 'grade': grade, 'major': major,'course_past': course_past,'c_grade': c_grade}
         message[i] = data
     print(message)

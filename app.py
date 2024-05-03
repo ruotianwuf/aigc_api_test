@@ -98,6 +98,8 @@ def getstudent_course_get():
         print(content,type(content))
         course_past = content[6]
         grade = content[7]
+        if grade == '':
+            grade = '正在学习'
         # c_g = {'course': course_past, 'grade': grade}
         c_g = [course_past,grade]
         print(type(c_g))
