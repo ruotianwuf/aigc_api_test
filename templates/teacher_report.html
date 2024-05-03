@@ -87,81 +87,48 @@
     </div>
     <div class="container">
         <h2>上传视频</h2>
-        <form action="/teacher/upload_video" method="post" enctype="multipart/form-data">
+        <form  enctype="multipart/form-data">
+
             <input type="file" name="video" accept="video/*" required><br>
             <button type="submit">上传</button>
         </form>
     </div>
 
-    <div class="container">
-        <h2>视频列表</h2>
-        <ul id="fileList_course_video" class="file-list course_video-list">
-            <!-- 文件列表将由 JavaScript 动态填充 -->
-        </ul>
-    </div>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-          // 定义函数来获取文件列表并更新页面内容
-       function updateFileList_course_video() {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-                    if (xhr.status === 200) {
-                        // 请求成功，更新文件列表
-                        var fileList = JSON.parse(xhr.responseText);
-                        var fileListUl = document.getElementById('fileList_course_video');
-                        fileListUl.innerHTML = '';
-                        fileList.forEach(function(fileName) {
-                            var li = document.createElement('li');
-                            var icon = document.createElement('i');
-                            icon.classList.add('file-icon');
-                            var a = document.createElement('a');
-                            a.textContent = fileName;
-                            a.href = '/static/video/class_video_report/' + fileName; // 设置链接地址为文件路径
-                            a.target = '_blank';
-                            var deleteBtn = document.createElement('button');
-                            deleteBtn.textContent = '删除';
-                            deleteBtn.classList.add('delete-btn');
-                            deleteBtn.onclick = function() {
-                                deleteFile_course_video(fileName);
-                            };
-                            li.appendChild(icon);
-                            li.appendChild(a);
-                            li.appendChild(deleteBtn);
-                            fileListUl.appendChild(li);
-                        });
-                    } else {
-                        console.error('获取文件列表失败');
-                    }
-                }
-            };
-            xhr.open('GET', '/teacher/file_list/course_video', true);
-            xhr.send();
-        }
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "student" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    // alert(JSON.stringify(data));
+                    $.ajax({
+                      url: "/teacher/upload_video",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                var replay = response.result
 
-        window.onload = function() {
-            updateFileList_course_video();
-        };
 
-       function deleteFile_course_video(fileName) {
-            if (confirm('确定要删除该文件吗？')) {
-                alert(fileName);
-                var xhr = new XMLHttpRequest();
-                xhr.onreadystatechange = function() {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // 删除成功，重新加载文件列表
-                            updateFileList_course_video();
-                        } else {
-                            console.error('删除文件失败');
+                                replay = replay.replace(/(\d+)\. /g, '$1.');
+                                replay = replay.replace(/\((\d+)\) /g, '($1)');
+                                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                                replay = replay.replace(/\n/g, '<br>');
+
+
+                                var outputDiv = document.getElementById("content");
+                                outputDiv.innerHTML = "<div class='"+"black-background"+"'>" + replay + "</div>";
+                                }
+                        },
+                        error: function() {
+                            alert("错误error");
                         }
-                    }
-                };
-                xhr.open('DELETE', '/teacher/delete_file/course_video?fileName=' + fileName , true);
-                xhr.send();
+                    });
+                }
             }
-        }
-
          function go_home(){
             var cookies = document.cookie.split("; ");
             for (var i = 0; i < cookies.length; i++) {
@@ -172,6 +139,7 @@
                 }
             }
         }
+
     </script>
 </body>
 </html>

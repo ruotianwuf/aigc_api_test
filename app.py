@@ -465,21 +465,21 @@ def upload_video():
         return jsonify({'success': True}), 200
 
 
-@app.route('/teacher/delete_file/course_video', methods=['DELETE'])
-def delete_file_course_video():
-    file_name = request.args.get('fileName')
-    file_path = os.path.join(app.root_path, 'static', 'video','class_video_report',file_name)
-    try:
-        os.remove(file_path)
-        return jsonify({'success': True, 'message': '文件删除成功'})
-    except Exception as e:
-        return jsonify({'success': False, 'message': str(e)})
+# @app.route('/teacher/delete_file/course_video', methods=['DELETE'])
+# def delete_file_course_video():
+#     file_name = request.args.get('fileName')
+#     file_path = os.path.join(app.root_path, 'static', 'video','class_video_report',file_name)
+#     try:
+#         os.remove(file_path)
+#         return jsonify({'success': True, 'message': '文件删除成功'})
+#     except Exception as e:
+#         return jsonify({'success': False, 'message': str(e)})
 
-@app.route('/teacher/file_list/course_video', methods=['GET'])
-def get_file_list_course_video():
-    upload_dir = 'static/video/class_video_report'
-    file_list = os.listdir(upload_dir)
-    return jsonify(file_list)
+# @app.route('/teacher/file_list/course_video', methods=['GET'])
+# def get_file_list_course_video():
+#     upload_dir = 'static/video/class_video_report'
+#     file_list = os.listdir(upload_dir)
+#     return jsonify(file_list)
 
 
 if __name__ == '__main__':
