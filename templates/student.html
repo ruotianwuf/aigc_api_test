@@ -68,7 +68,7 @@
              window.location.href="/student/advice";
 
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/student";
          }
      }
@@ -79,7 +79,7 @@
              // alert(ck);
              window.location.href="/student/course";
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/student";
          }
      }
@@ -90,7 +90,7 @@
              // alert(ck);
              window.location.href="http://127.0.0.1:5000/student/forum";
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/student";
          }
      }
@@ -101,7 +101,7 @@
              // alert(ck);
              window.location.href="/student/grades";
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/student";
          }
      }
@@ -111,9 +111,17 @@
          if(ck==cookieValue){
              // alert(ck);
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/student";
          }
      }
+
+     document.addEventListener("DOMContentLoaded",function (){
+         var ck = checkCookie('student');
+         if (ck == cookieValue) {
+             var registerButton = document.querySelector('.Register_button');
+             registerButton.classList.add('hidden');
+         }
+     });
 </script>
 </html>
