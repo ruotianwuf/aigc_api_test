@@ -11,7 +11,7 @@
             padding: 0;
             background-color: #f4f4f4;
         }
-        .container {
+         .container {
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
@@ -21,15 +21,16 @@
         }
         h2 {
             text-align: center;
-            margin-bottom: 20px;
         }
-        form {
-            text-align: center;
-        }
+
         input[type="file"] {
-            margin-bottom: 20px;
+            display: block;
+            margin: 20px auto;
         }
+
         button {
+            display: block;
+            margin: 0 auto;
             padding: 10px 20px;
             background-color: #007bff;
             color: #fff;
@@ -37,98 +38,43 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #0056b3;
-        }
-        /* 文件列表样式 */
-        .file-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .file-list li {
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; /* 文件左对齐 */
-            transition: box-shadow 0.3s; /* 添加过渡效果 */
-        }
-        .file-list li:hover {
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 鼠标悬停时添加阴影边框 */
-        }
-        .file-list a {
-            text-decoration: none;
-            color: #333;
-            font-size: 16px;
-            transition: color 0.3s;
-            margin-left: 10px;
-            position: relative;
-        }
-        .file-list a:hover {
-            color: #007bff;
-        }
-        .delete-btn {
-            display: none; /* 默认不显示删除按钮 */
-            margin-left: auto; /* 放置在最右边 */
-            cursor: pointer;
-        }
-        .delete-btn:hover {
-            color: red;
-        }
-        .file-list li:hover .delete-btn {
-            display: inline-block; /* 鼠标悬停时显示删除按钮 */
         }
 
     </style>
 </head>
 <body>
-    <div>
-        <button onclick="go_home()">返回</button>
-    </div>
     <div class="container">
-        <h2>上传视频</h2>
-        <form  enctype="multipart/form-data">
-
-            <input type="file" name="video" accept="video/*" required><br>
-            <button type="submit">上传</button>
-        </form>
+        <h2>Upload Video</h2>
+        <input type="file" id="videoFile" accept="video/*">
+        <button onclick="uploadVideo()">Upload</button>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-            var cookies = document.cookie.split("; ");
-            for (var i = 0; i < cookies.length; i++) {
-                var cookiePair = cookies[i].split("=");
-                if (cookiePair[0] === "student" && cookiePair[1]) {
-                    var data = {"username": cookiePair[1]};
-                    // alert(JSON.stringify(data));
-                    $.ajax({
-                      url: "/teacher/upload_video",
-                        type: "POST",
-                        data: JSON.stringify(data),
-                        contentType: "application/json",
-                        dataType: "json",
-                        success: function(response) {
-                            if (response.success) {
-                                var replay = response.result
+         function uploadVideo() {
+            var videoFile = document.getElementById('videoFile').files[0];
+            var formData = new FormData();
+            formData.append('video', videoFile);
 
-
-                                replay = replay.replace(/(\d+)\. /g, '$1.');
-                                replay = replay.replace(/\((\d+)\) /g, '($1)');
-                                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
-                                replay = replay.replace(/\n/g, '<br>');
-
-
-                                var outputDiv = document.getElementById("content");
-                                outputDiv.innerHTML = "<div class='"+"black-background"+"'>" + replay + "</div>";
-                                }
-                        },
-                        error: function() {
-                            alert("错误error");
-                        }
-                    });
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        console.log('Video uploaded successfully');
+                        alert(上传成功);
+                    } else {
+                        console.error('Error uploading video:', xhr.responseText);
+                        // 可以根据需求执行其他操作，比如提示用户上传失败
+                        alert(上传失败);
+                    }
                 }
-            }
+            };
+
+            xhr.open('POST', '/teacher/upload_video', true);
+            xhr.send(formData);
+        }
          function go_home(){
             var cookies = document.cookie.split("; ");
             for (var i = 0; i < cookies.length; i++) {
