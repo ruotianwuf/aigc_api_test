@@ -476,9 +476,9 @@ def upload_video():
 
         video_file.save(os.path.join(upload_dir, video_file.filename))
 
-        return jsonify({'success': True, 'message': 'Video uploaded successfully'})
+        return jsonify({'success': True, 'message': 'Video uploaded successfully'}), 200
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)})
+        return jsonify({'success': False, 'message': str(e)}), 200
 
 
 if __name__ == '__main__':

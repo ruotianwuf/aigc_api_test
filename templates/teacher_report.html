@@ -47,9 +47,9 @@
 </head>
 <body>
     <div class="container">
-        <h2>Upload Video</h2>
+        <h2>请上传需要生成报告的视频</h2>
         <input type="file" id="videoFile" accept="video/*">
-        <button onclick="uploadVideo()">Upload</button>
+        <button onclick="uploadVideo()">上传</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
@@ -63,18 +63,19 @@
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
                         console.log('Video uploaded successfully');
-                        alert(上传成功);
+                        alert('上传成功');
+                        window.location.reload();
                     } else {
                         console.error('Error uploading video:', xhr.responseText);
                         // 可以根据需求执行其他操作，比如提示用户上传失败
-                        alert(上传失败);
+                        alert('上传失败');
                     }
                 }
             };
-
             xhr.open('POST', '/teacher/upload_video', true);
             xhr.send(formData);
         }
+
          function go_home(){
             var cookies = document.cookie.split("; ");
             for (var i = 0; i < cookies.length; i++) {
