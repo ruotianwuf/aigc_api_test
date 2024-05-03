@@ -448,7 +448,7 @@ def get_file_list_pp_answer():
 #上传视频
 @app.route('/teacher/upload_video', methods=['POST'])
 def upload_video():
-    try:
+
         # 获取上传的视频文件
         video_file = request.files['video']
 
@@ -462,9 +462,8 @@ def upload_video():
         # 将视频文件保存到指定路径
         video_file.save(os.path.join(upload_dir, video_file.filename))
 
-        return render_template('teacher_report.html', upload_success=True)
-    except Exception as e:
-        return render_template('teacher_report.html', upload_error=str(e))
+        return jsonify({'success': True}), 200
+
 
 @app.route('/teacher/delete_file/course_video', methods=['DELETE'])
 def delete_file_course_video():
