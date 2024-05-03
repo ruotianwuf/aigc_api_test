@@ -32,24 +32,24 @@
      document.cookie = cookieName + "=" + cookieValue;
 
     function checkCookie(cookieName) {
-    // 获取所有的 Cookie，并以分号加空格进行分割
-    var cookies = document.cookie.split("; ");
+        // 获取所有的 Cookie，并以分号加空格进行分割
+        var cookies = document.cookie.split("; ");
 
-    // 遍历所有 Cookie
-    for (var i = 0; i < cookies.length; i++) {
-        // 分割每个 Cookie 的键值对
-        var cookiePair = cookies[i].split("=");
+        // 遍历所有 Cookie
+        for (var i = 0; i < cookies.length; i++) {
+            // 分割每个 Cookie 的键值对
+            var cookiePair = cookies[i].split("=");
 
-        // 检查当前 Cookie 是否为目标 Cookie
-        if (cookiePair[0] === cookieName && cookiePair[1] === cookieValue) {
-            // 如果找到目标 Cookie，返回 true
-            return cookieValue;
+            // 检查当前 Cookie 是否为目标 Cookie
+            if (cookiePair[0] === cookieName && cookiePair[1] === cookieValue) {
+                // 如果找到目标 Cookie，返回 true
+                return cookieValue;
+            }
         }
-    }
 
-    // 如果未找到目标 Cookie，则返回 false
-    return false;
-}
+        // 如果未找到目标 Cookie，则返回 false
+        return false;
+    }
 
 
      var myCookieValue = checkCookie("teacher");
@@ -79,7 +79,7 @@
              window.location.href="/teacher/report";
 
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/teacher";
          }
      }
@@ -91,7 +91,7 @@
              // alert(ck);
              window.location.href="/teacher/info";
          }else{
-             // alert("err");
+             alert("请先登录");
              window.location.href="/login/teacher";
          }
        }
@@ -103,7 +103,7 @@
              window.location.href="/teacher/upload";
 
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/teacher";
          }
      }
@@ -115,7 +115,7 @@
              window.location.href="/teacher/check";
 
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/teacher";
          }
      }
@@ -127,7 +127,7 @@
              window.location.href="/teacher/public";
 
          }else{
-             alert("err");
+             alert("请先登录");
              window.location.href="/login/teacher";
          }
      }
@@ -135,6 +135,16 @@
      function register(){
         window.location.href="http://127.0.0.1:5000/adduser/teacher"
     }
+
+
+    //隐藏注册按钮
+     document.addEventListener("DOMContentLoaded",function (){
+         var ck = checkCookie('teacher');
+         if (ck == cookieValue) {
+             var registerButton = document.querySelector('.Register_button');
+             registerButton.classList.add('hidden');
+         }
+     });
 </script>
 </body>
 </html>
