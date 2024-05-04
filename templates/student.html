@@ -115,10 +115,14 @@
          if(ck==cookieValue){
              // alert(ck);
          }else{
-             alert("请先登录");
+             // alert("请先登录");
              window.location.href="/login/student";
          }
      }
+
+     function register(){
+        window.location.href="http://127.0.0.1:5000/adduser/teacher"
+    }
 
      document.addEventListener("DOMContentLoaded",function (){
          var ck = checkCookie('student');

@@ -14,6 +14,7 @@
             justify-content: center; /* 将内容水平居中 */
             align-items: center;
             height: 100vh;
+            background-image: url("../static/img/student_back.jpg");
         }
 
         .container {
@@ -68,20 +69,23 @@
         <h2>User Sign in</h2>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">姓名</label>
                 <input type="text" id="username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">密码</label>
                 <input type="password" id="password" name="password" required>
             </div>
 
             <div class="form-group">
-                <label for="major">Major</label>
+                <label for="major">专业</label>
                 <input type="text" id="major" name="major" required>
             </div>
             <div class="form-group">
-                <button type="submit">Login</button>
+                <button type="submit">注册</button>
+            </div>
+            <div class="form-group">
+                <button onclick="go_home()">取消</button>
             </div>
         </form>
     </div>
@@ -129,6 +133,10 @@
                 alert("用户名和密码不能为空");
             }
         })
+
+        function go_home(){
+         window.location.href = 'http://127.0.0.1:5000/student';
+        }
 
     </script>
 </body>

@@ -14,6 +14,7 @@
             justify-content: center; /* 将内容水平居中 */
             align-items: center;
             height: 100vh;
+            background-image: url("../static/img/teacher_back.jpg");
         }
 
         .container {
@@ -25,62 +26,67 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-
-        .container h2 {
-            text-align: center;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            width: 100%; /* 让输入框和按钮充满父容器的宽度 */
-        }
+            .container h2 {
+                text-align: center;
+            }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
+            .form-group {
+                margin-bottom: 20px;
+                width: 100%; /* 让输入框和按钮充满父容器的宽度 */
+            }
 
-        .form-group input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
+            .form-group label {
+                display: block;
+                margin-bottom: 5px;
+            }
 
-        .form-group button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+            .form-group input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
 
-        .form-group button:hover {
-            background-color: #0056b3;
-        }
+            .form-group button {
+                width: 100%;
+                padding: 10px;
+                border: none;
+                background-color: #007bff;
+                color: #fff;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+
+            .form-group button:hover {
+                background-color: #0056b3;
+            }
+
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>User Sign in</h2>
+        <h2>教师注册</h2>
         <form id="loginForm">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">姓名</label>
                 <input type="text" id="username" name="username" required>
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
+                <label for="password">密码</label>
                 <input type="password" id="password" name="password" required>
             </div>
 
             <div class="form-group">
-                <label for="major">Major</label>
+                <label for="major">专业</label>
                 <input type="text" id="major" name="major" required>
             </div>
             <div class="form-group">
-                <button type="submit">Login</button>
+                <button type="submit">注册</button>
+            </div>
+            <div class="form-group">
+                <button onclick="go_home()">取消</button>
             </div>
         </form>
     </div>
@@ -128,6 +134,10 @@
                 alert("用户名和密码不能为空");
             }
         })
+
+        function go_home(){
+         window.location.href = 'http://127.0.0.1:5000/teacher';
+        }
 
     </script>
 </body>

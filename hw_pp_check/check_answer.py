@@ -23,5 +23,5 @@ def check_answer(path):
     # else:
     #     print("有错")
 
-path = '/Users/apple/PycharmProjects/aigc_api_test/hw_pp_check/地理题/地理 +手写答案_01.jpg'
-check_answer(path)
+# path = '/Users/apple/PycharmProjects/aigc_api_test/hw_pp_check/地理题/地理 +手写答案_01.jpg'
+# check_answer(path)
