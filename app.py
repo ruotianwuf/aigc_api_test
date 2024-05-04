@@ -9,6 +9,7 @@ from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
 from msg_api_test.msg_api_test import get_msg_answer
 from self_study_plan_project.get_plan_program import get_plan
+from long_video_transfer.run_bat_file import run_bat_file
 
 app = Flask(__name__)
 
@@ -287,10 +288,7 @@ def get_teacher_info():
     print(major)
     major_course = con.get_course_info_ServerStatus(major)
     get_course_info = major_course['consequence']
-
     print("course_info", get_course_info)
-
-
     if result:
         return jsonify({'success': True, 'info': info, 'course_info': get_course_info}), 200
     else:
@@ -408,12 +406,6 @@ def delete_file_pp_answer():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)})
 
-# # 用于返回文件列表
-# @app.route('/teacher/file_list', methods=['GET'])
-# def get_file_list():
-#     upload_dir = 'static/file'
-#     file_list = os.listdir(upload_dir)
-#     return jsonify(file_list)
 
 @app.route('/teacher/file_list/homework', methods=['GET'])
 def get_file_list_homework():
@@ -451,19 +443,24 @@ def get_file_list_pp_answer():
 
 @app.route('/teacher/upload_video', methods=['POST'])
 def upload_video():
-    try:
-        video_file = request.files['video']
-        upload_dir = os.path.join(app.root_path, 'long_vedio_transfer')
-        if not os.path.exists(upload_dir):
-            os.makedirs(upload_dir)
-        new_filename = 'test.wav'  # 你可以使用任何你想要的新文件名
-        video_file.save(os.path.join(upload_dir, new_filename))
-        response_data = {'success': True, 'message': 'Video uploaded successfully'}
-        # os.remove(video_file.filename)
-        return jsonify(response_data), 200
-    except Exception as e:
-        response_data = {'success': False, 'message': str(e)}
-        return jsonify(response_data), 200
+    video_file = request.files['video']
+    upload_dir = os.path.join(app.root_path, 'long_video_transfer')
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    new_filename = 'test.wav'
+    video_file.save(os.path.join(upload_dir, new_filename))
+    run_bat_file()
+    file_path = 'long_video_transfer/aigc_content.txt'
+        # 使用with语句打开文件，确保在使用完文件后正确关闭
+    with open(file_path, 'r', encoding='utf-8') as file:
+            # 使用read()方法读取文件内容
+        print("正在读取")
+        file_content = file.read()
+        print(file_content)
+    response_data = {'success': True, 'message': 'Video uploaded successfully','content': file_content}
+    # os.remove(video_file.filename)
+    return jsonify(response_data), 200
+
 
 
 if __name__ == '__main__':

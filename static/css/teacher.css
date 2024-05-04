@@ -96,3 +96,19 @@ nav ul li button:hover {
 .hidden{
     display: none;
 }
+.return-button {
+            position: fixed; /* 绝对定位 */
+            right: 130px; /* 距离页面右侧20px */
+            bottom: 60px; /* 距离页面底部20px */
+            padding: 10px 20px; /* 按钮的内边距 */
+            background-color: lawngreen; /* 按钮的背景颜色 */
+            color: white; /* 按钮的文字颜色 */
+            border: black; /* 移除边框 */
+            border-radius: 5px; /* 圆角边框 */
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            transform: scale(1.5);
+        }
+
+        .return-button:hover {
+            background-color: #005f73; /* 鼠标悬停时按钮的背景颜色 */
+        }

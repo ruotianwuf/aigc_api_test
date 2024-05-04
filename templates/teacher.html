@@ -16,13 +16,16 @@
                 <li><button onclick="go_report()">课堂报告</button></li>
                 <li><button onclick="go_courses()">信息</button></li>
                 <li><button onclick="go_upload()">上传</button></li>
-                <li><button onclick="go_check()">批改作业</button></li>
+<!--                <li><button onclick="go_check()">批改作业</button></li>-->
                 <li><button onclick="go_public()">发布成绩</button></li>
             </ul>
         </nav>
         <br>
     </div>
 
+    <div>
+        <button onclick="go_home()" class="return-button">返回</button>
+    </div>
 
 <script>
      var urlParams = new URLSearchParams(window.location.search);
@@ -145,6 +148,10 @@
              registerButton.classList.add('hidden');
          }
      });
+
+     function go_home(){
+         window.location.href = 'http://127.0.0.1:5000/';
+        }
 </script>
 </body>
 </html>

@@ -10,9 +10,10 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            background-image: url("../static/img/teacher_back.jpg");
         }
          .container {
-            max-width: 600px;
+            max-width: 80%;
             margin: 50px auto;
             padding: 20px;
             background-color: #fff;
@@ -42,15 +43,50 @@
         button:hover {
             background-color: #0056b3;
         }
+        .black-background {
+            width: 80%;
+            background-color: lightskyblue;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            margin: auto;
+            font-weight: 600;
+        }
+
+        .return-button {
+            position: fixed; /* 绝对定位 */
+            right: 130px; /* 距离页面右侧20px */
+            bottom: 60px; /* 距离页面底部20px */
+            padding: 10px 20px; /* 按钮的内边距 */
+            background-color: lawngreen; /* 按钮的背景颜色 */
+            color: white; /* 按钮的文字颜色 */
+            border: black; /* 移除边框 */
+            border-radius: 5px; /* 圆角边框 */
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            transform: scale(1.5);
+        }
+
+        .return-button:hover {
+            background-color: #005f73; /* 鼠标悬停时按钮的背景颜色 */
+        }
 
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" >
         <h2>请上传需要生成报告的视频</h2>
         <input type="file" id="videoFile" accept="video/*">
         <button onclick="uploadVideo()">上传</button>
+
     </div>
+    <div class="container" >
+
+        <h1 id="reportDisplay" style="text-align: center">课堂报告</h1>
+        <div id="content"></div>
+    </div>
+
+    <button onclick="backhome()" class="return-button">返回</button>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
          function uploadVideo() {
@@ -64,7 +100,19 @@
                     if (xhr.status === 200) {
                         console.log('Video uploaded successfully');
                         alert('上传成功');
-                        window.location.reload();
+                        var response = JSON.parse(xhr.responseText); // 解析响应
+                        // var content = response.content; // 获取 content
+                        // alert(JSON.stringify(content))
+
+                        // window.location.reload();
+                        var replay = response.content
+                        alert(replay)
+                        replay = replay.replace(/(\d+)\. /g, '$1.');
+                        replay = replay.replace(/\((\d+)\) /g, '($1)');
+                        replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                        replay = replay.replace(/\n/g, '<br>');
+                        var outputDiv = document.getElementById("content");
+                        outputDiv.innerHTML = "<div class='"+"black-background"+"'>" + replay + "</div>";
                     } else {
                         console.error('Error uploading video:', xhr.responseText);
                         // 可以根据需求执行其他操作，比如提示用户上传失败
@@ -76,7 +124,7 @@
             xhr.send(formData);
         }
 
-         function go_home(){
+         function backhome(){
             var cookies = document.cookie.split("; ");
             for (var i = 0; i < cookies.length; i++) {
                 var cookiePair = cookies[i].split("=");

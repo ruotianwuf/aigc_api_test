@@ -21,7 +21,11 @@
         </nav>
         <br>
     </div>
-</body>
+
+    <div>
+        <button onclick="go_home()" class="return-button">返回</button>
+    </div>
+
 
 <script>
      var urlParams = new URLSearchParams(window.location.search);
@@ -123,5 +127,10 @@
              registerButton.classList.add('hidden');
          }
      });
+
+     function go_home(){
+         window.location.href = 'http://127.0.0.1:5000/';
+        }
 </script>
+</body>
 </html>
