@@ -224,7 +224,10 @@ def adduser_student_info():
     con = UserServerController()
     result = con.adduser_student_ServerStatus(data)
     print(result)
-    return jsonify({'success': True}), 200
+    if result:
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': False}), 200
 
 @app.route('/adduser/teacher/1', methods=['POST'])
 def adduser_teacher_info():
@@ -234,7 +237,10 @@ def adduser_teacher_info():
     con = UserServerController()
     result = con.adduser_teacher_ServerStatus(data)
     print(result)
-    return jsonify({'success': True}), 200
+    if result:
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': False}), 200
 
 
 

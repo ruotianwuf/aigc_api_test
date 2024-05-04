@@ -24,8 +24,19 @@ class UserServerController:
 
     def adduser_student_ServerStatus(self, status_data):
         model = CommonDb('student')
-        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}' and stu_no='{status_data['stu_no']}' and major='{status_data['major']}'")
-        if consequence:
+        consequence = model.selectAll(f"username='{status_data['username']}' and password='{status_data['password']}' and stu_no='{status_data['stu_no']}' and major='{status_data['major']}'")
+        consequence2 = model.selectAll(f"username='{status_data['username']}'")
+        # print("啊？" + str(consequence2))
+        print(consequence)
+        if consequence != None:
+            flag1 = False
+        else:
+            flag1 = True
+        if consequence2 != None:
+            flag = False
+        else:
+            flag = True
+        if flag1 and not flag:
             result = False
             print('已有此用户，无法添加')
         else:
@@ -34,8 +45,19 @@ class UserServerController:
 
     def adduser_teacher_ServerStatus(self, status_data):
         model = CommonDb('teacher')
-        consequence = model.selectAll(f"name='{status_data['username']}' and password='{status_data['password']}' and teach_no='{status_data['teach_no']}' and major='{status_data['major']}'")
-        if consequence:
+        consequence = model.selectAll(f"username='{status_data['username']}' and password='{status_data['password']}' and teach_no='{status_data['teach_no']}' and major='{status_data['major']}'")
+        consequence2 = model.selectAll(f"username='{status_data['username']}'")
+        # print("啊？"+str(consequence2))
+        print(consequence)
+        if consequence != None:
+            flag1 = False
+        else:
+            flag1 = True
+        if consequence2 != None:
+            flag = False
+        else:
+            flag = True
+        if flag1 and not flag:
             result = False
             print('已有此用户，无法添加')
         else:
@@ -84,6 +106,7 @@ class UserServerController:
 
     def get_teacher_info_ServerStatus(self, status_data):
         model = CommonDb('teacher')
+
         consequence = model.selectAll(f"username='{status_data['username']}'")
         if not consequence:
             result = False
@@ -103,15 +126,6 @@ class UserServerController:
             result = True
         return {'result': result, 'consequence': consequence}
 
-    def get_student_course_now_ServerStatus(self, status_data):
-        model = CommonDb('s_course_now')
-        consequence = model.selectAll(f"stu_no='{status_data}'")
-        if not consequence:
-            result = False
-            print('无此项')
-        else:
-            result = True
-        return {'result': result, 'consequence': consequence}
 
     def get_course_info_ServerStatus(self, status_data):
         model = CommonDb('course')
