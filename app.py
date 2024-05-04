@@ -447,40 +447,23 @@ def get_file_list_pp_answer():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
-#上传视频
-# @app.route('/teacher/upload_video', methods=['POST'])
-# def upload_video():
-#
-#         # 获取上传的视频文件
-#         video_file = request.files['video']
-#
-#         # 指定上传视频保存的路径
-#         upload_dir = os.path.join(app.root_path, 'static', 'video', 'class_video_report')
-#
-#         # 如果目录不存在则创建
-#         if not os.path.exists(upload_dir):
-#             os.makedirs(upload_dir)
-#
-#         # 将视频文件保存到指定路径
-#         video_file.save(os.path.join(upload_dir, video_file.filename))
-#
-#         return jsonify({'success': True}), 200
 
 
 @app.route('/teacher/upload_video', methods=['POST'])
 def upload_video():
     try:
         video_file = request.files['video']
-
-        upload_dir = os.path.join(app.root_path, 'static', 'video', 'class_video_report')
+        upload_dir = os.path.join(app.root_path, 'long_vedio_transfer')
         if not os.path.exists(upload_dir):
             os.makedirs(upload_dir)
-
-        video_file.save(os.path.join(upload_dir, video_file.filename))
-
-        return jsonify({'success': True, 'message': 'Video uploaded successfully'}), 200
+        new_filename = 'test.wav'  # 你可以使用任何你想要的新文件名
+        video_file.save(os.path.join(upload_dir, new_filename))
+        response_data = {'success': True, 'message': 'Video uploaded successfully'}
+        # os.remove(video_file.filename)
+        return jsonify(response_data), 200
     except Exception as e:
-        return jsonify({'success': False, 'message': str(e)}), 200
+        response_data = {'success': False, 'message': str(e)}
+        return jsonify(response_data), 200
 
 
 if __name__ == '__main__':

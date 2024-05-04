@@ -1,18 +1,15 @@
 @echo off
 
+set "batch_dir=%~dp0"
 
-cd /d " E:\Python\project\Vivo_AIGC\aigc_api_test>"
-@echo off
+cd /d "%batch_dir%"
 
+call ..\.venv\Scripts\activate
 
-call .venv\Scripts\activate
+python ai_fileasr_client.py audio.conf
 
-python long_vedio_transfer/ai_fileasr_client.py long_vedio_transfer/audio.conf
+timeout /t 120 /nobreak >nul
 
-
-timeout /t 120 /nobreak  >nul
-
-
-python long_vedio_transfer\long_vedio_api_get.py
+python long_vedio_api_get.py
 
 exit

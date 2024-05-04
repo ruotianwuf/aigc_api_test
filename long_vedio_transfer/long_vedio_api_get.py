@@ -23,7 +23,7 @@ def sync_vivogpt():
     DOMAIN = 'api-ai.vivo.com.cn'
 
     # 打开文件
-    with open('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\long_vedio_transfer\\output.txt', 'r', encoding='utf-8') as f:
+    with open('output.txt', 'r', encoding='utf-8') as f:
         # 读取文件内容
         content = f.read()
         prompt = content
@@ -78,7 +78,7 @@ def sync_vivogpt():
 
 content = sync_vivogpt()
 print(content)
-with open('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\long_vedio_transfer\\aigc_content.txt', 'w', encoding='utf-8') as f:
+with open('aigc_content.txt', 'w', encoding='utf-8') as f:
     print("正在写入")
     f.write(str(content))
     print("写入完成")

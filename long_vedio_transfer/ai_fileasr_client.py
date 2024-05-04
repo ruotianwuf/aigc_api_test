@@ -214,6 +214,8 @@ def main():
     else:
         config = sys.argv[1]
 
+    print("啊？")
+
     print("start time:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
     start_time = time.time()
 
@@ -255,7 +257,7 @@ def main():
 
         # content = sync_vivogpt(task_result_result)
         # 将结果写入到文件
-        with open('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\long_vedio_transfer\\output.txt', 'w', encoding='utf-8') as f:
+        with open('output.txt', 'w', encoding='utf-8') as f:
             print("正在写入")
             f.write("内容：" + str(task_result_result))
             print("写入完成")
