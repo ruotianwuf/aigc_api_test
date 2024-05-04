@@ -116,6 +116,10 @@ def getstudent_course_get():
 def getstudent_forum():
     return render_template('student_forum.html')
 
+@app.route('/student/homework', methods=['GET'])
+def getstudent_homework():
+    return render_template('student_homework.html')
+
 @app.route('/student/forum/post', methods=['POST'])
 def getstudent_forum_submit_post():
     data = json.loads(request.get_data(as_text=True))
@@ -461,7 +465,15 @@ def upload_video():
     # os.remove(video_file.filename)
     return jsonify(response_data), 200
 
-
+@app.route('/student/upload_homework', methods=['POST'])
+def upload_student_homework():
+    homework_file = request.files['homework']
+    upload_dir = os.path.join(app.root_path, 'static/student_upload/homework')
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
+    homework_file.save(os.path.join(upload_dir, homework_file.filename))
+    response_data = {'success': True, 'message': 'Homework uploaded successfully'}
+    return jsonify(response_data), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
