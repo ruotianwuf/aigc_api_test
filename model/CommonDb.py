@@ -68,7 +68,7 @@ class CommonDb(BaseModel):
 
     def selectAll_Direct(self, wheresql, optionstr, map=False):
         print(wheresql)
-        sql = "select " + optionstr + " from " + self.table + " where 1 " + wheresql + ";"
+        sql = "select " + optionstr + " from " + self.table + " where 1 and " + wheresql + ";"
         print(sql)
         if map:
             return self.db.executeSqlMap(sql, self.table)

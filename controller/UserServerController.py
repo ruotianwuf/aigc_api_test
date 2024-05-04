@@ -114,12 +114,9 @@ class UserServerController:
         return {'result': result, 'consequence': consequence}
 
     def get_course_info_ServerStatus(self, status_data):
-        if status_data == '计算机科学':
-            model = CommonDb('cs_course')
-        elif status_data == '软件工程':
-            model = CommonDb('se_course')
+        model = CommonDb('course')
 
-        consequence = model.selectAll_Direct(f"","course")
+        consequence = model.selectAll_Direct(f"major='{status_data}'","course")
 
         if not consequence:
             result = False
@@ -134,14 +131,10 @@ class UserServerController:
     # 调用函数
 
     def delete_course_info_ServerStatus(self, status_data):
-        if status_data['major'] == '计算机科学':
-            model = CommonDb('cs_course')
-        elif status_data['major'] == '软件工程':
-            model = CommonDb('se_course')
+        model = CommonDb('course')
         course = status_data['course']
-        print(self.output_string(course))
-        course = str(self.output_string(course))
-        consequence = model.delete_where(f"course={course}")
+        course ='"' + course[0] +'"'
+        consequence = model.delete_where(f"course={course} and major='{status_data['major']}'")
         print(consequence)
         if not consequence:
             result = False
@@ -151,17 +144,18 @@ class UserServerController:
         return {'result': result, 'consequence': consequence}
 
     def add_course_info_ServerStatus(self, status_data):
-        if status_data['major'] == '计算机科学':
-            model = CommonDb('cs_course')
-        elif status_data['major'] == '软件工程':
-            model = CommonDb('se_course')
+        # if status_data['major'] == '计算机科学':
+        #     model = CommonDb('cs_course')
+        # elif status_data['major'] == '软件工程':
+        #     model = CommonDb('se_course')
+        model = CommonDb('course')
         course = status_data['course']
         consequence = model.selectAll(f"course='{course}'")
         if consequence:
             result = False
-            print('已有此用户，无法添加')
+            print('已有，无法添加')
         else:
-            result = model.add({'course': course})
+            result = model.add({'course': course, 'major': status_data['major']})
         return result
 
     def find_student_Post_ServerStatus(self,data):
