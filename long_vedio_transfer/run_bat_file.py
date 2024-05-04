@@ -19,7 +19,6 @@ def write_path_to_conf_file():
 
 def run_bat_file():
     write_path_to_conf_file()
-    # file_path='E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\long_vedio_transfer\\run_transfer.bat'
     try:
         # 使用 subprocess 调用批处理文件
         # subprocess.run(file_path, shell=True, check=True)
