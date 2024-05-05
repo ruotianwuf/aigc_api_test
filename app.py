@@ -99,13 +99,14 @@ def getstudent_course_get():
         print(content,type(content))
         course_past = content[6]
         grade = content[7]
-        if grade == '':
+        # print(grade)
+        if grade == None or grade == '':
             grade = '正在学习'
         # c_g = {'course': course_past, 'grade': grade}
         c_g = [course_past,grade]
-        print(type(c_g))
+        # print(type(c_g))
         course_grade.append(c_g)
-    print(course_grade)
+    # print(course_grade)
     if result:
         return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4]}), 200
     else:
@@ -204,13 +205,46 @@ def getteacher_check():
 def getteacher_public():
     return render_template('teacher_public.html')
 
+
+@app.route('/teacher/public/get_sinfo', methods=['POST'])
+def get_teacher_sinfo():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_teacher_info_ServerStatus(data)
+    get_info = result['consequence']
+    print(get_info)
+    info =get_info[0]
+    major = info[4]
+    print(major)
+    major_course = con.get_student_info(major)
+    if major_course:
+        return jsonify({'success': True, 'info': major_course}), 200
+    else:
+        return jsonify({'success': True}), 200
+
+@app.route('/teacher/public/addgrade', methods=['POST'])
+def add_course_grade():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.addcourse_grade(data)
+
+    if result:
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': True}), 200
+
+
+
+
 @app.route('/adduser', methods=['GET'])
 def adduser():
     return render_template('/')
 
 @app.route('/adduser/student', methods=['GET'])
 def adduser_student():
-    return render_template('')
+    return render_template('register_student.html')
 
 @app.route('/adduser/teacher', methods=['GET'])
 def adduser_teacher():

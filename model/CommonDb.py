@@ -66,6 +66,15 @@ class CommonDb(BaseModel):
         else:
             return self.db.executeSql(sql)
 
+    def select_sinfo(self,wheresql,map=False):
+        print(wheresql)
+        sql = "select username,stu_no,grade from " + self.table + " where 1 and major = " + "'"+wheresql + "'"+" group by username;"
+        print(sql)
+        if map:
+            return self.db.executeSqlMap(sql,self.table)
+        else:
+            return self.db.executeSql(sql)
+
     def selectAll_Direct(self, wheresql, optionstr, map=False):
         print(wheresql)
         sql = "select " + optionstr + " from " + self.table + " where 1 and " + wheresql + ";"
@@ -98,6 +107,11 @@ class CommonDb(BaseModel):
         for key in info.keys():
             sUpdateSql += key + "=\"" + str(info[key]) + "\","
         sql = "update " + self.table + " set " + sUpdateSql[0:-1] + " where 1 and " + wheresql;
+        print(sql)
+        return self.db.update(sql)
+
+    def add_grade(self,data):
+        sql = "update " + self.table + " set c_grade= " +"'"+ str(data['c_grade']) +"'"+ " where 1 and " + ' username= '+"'"+ str(data['username']) +"'"+ " and course=" +"'"+ str(data['course']+"'");
         print(sql)
         return self.db.update(sql)
 

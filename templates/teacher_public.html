@@ -2,9 +2,440 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher_info</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            background-image: url("../static/img/teacher_back.jpg");
+
+        }
+        #teacher_info {
+            font-size: 2em;
+            margin: 20px 0; /* 上下边距 */
+            text-align: center;
+        }
+        .centered-table {
+            width: 70%; /* 表格宽度100% */
+            max-width: none; /* 移除最大宽度限制 */
+            border-collapse: collapse;
+            table-layout: fixed; /* 固定表格布局，让最后一列有足够的空间 */
+            background: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: auto;
+            margin: auto; /* 上下自动边距实现垂直居中 */
+        }
+        .centered-table thead {
+            background: #5B69FF;
+            border: black;
+            color: #FFFFFF;
+        }
+        .centered-table th, .centered-table td {
+            text-align: center; /* 内容水平居中 */
+            padding: 20px;
+
+            font-size: 1.5em;
+            font-weight: bold;
+            border: 1px solid black;
+        }
+        .centered-table td {
+            font-weight: 800;
+            color: #333;
+        }
+        .centered-table tr:hover td {
+            background-color: #E0E0E0;
+        }
+        .centered-table th {
+            font-weight: 700;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .delete-btn {
+            background-color: #ff5252;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 auto; /* 上下自动边距实现垂直居中 */
+            display: block; /* 使按钮宽度100% */
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%; /* 按钮宽度100% */
+            transform: scale(1.5);
+        }
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 auto; /* 上下自动边距实现垂直居中 */
+            display: block; /* 使按钮宽度100% */
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%; /* 按钮宽度100% */
+        }
+        .table-style {
+            margin: auto;
+            border-collapse: collapse; /* 合并边框 */
+            width: 50%; /* 可以设置表格的宽度，这里以页面宽度的50%为例 */
+        }
+        .table-style th, .table-style td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center; /* 使单元格内的文本居中 */
+            background: whitesmoke;
+        }
+        .table-style th {
+            background-color: #f2f2f2;
+        }
+
+        .return-button {
+            position: fixed; /* 绝对定位 */
+            right: 300px; /* 距离页面右侧20px */
+            bottom: 60px; /* 距离页面底部20px */
+            padding: 10px 20px; /* 按钮的内边距 */
+            background-color: #008CBA; /* 按钮的背景颜色 */
+            color: white; /* 按钮的文字颜色 */
+            border: black; /* 移除边框 */
+            border-radius: 5px; /* 圆角边框 */
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            transform: scale(1.5);
+        }
+
+        .return-button:hover {
+            background-color: #005f73;
+        }
+
+        .select-style select {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #555;
+            font-size: 16px;
+            padding: 8px 10px;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+
+        .select-style:after {
+            content: "\25BC";
+            color: #555;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* 设置鼠标悬停时的样式 */
+        .select-style:hover select {
+            border-color: #aaa;
+        }
+
+        /* 设置下拉框被选中时的样式 */
+        .select-style select:focus {
+            border-color: #666;
+            outline: none;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
 </head>
 <body>
+    <div id="teacher_info">学生信息</div>
+        <br>
+        <div id="info"></div>
+        <br>
+        <div id="search-container" class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="输入姓名或编号进行检索">
+            <button onclick="search()" class="search-button">检索</button>
+        </div>
+        <br>
+        <div id="courseTableContainer">
+        </div>
+        <br>
+        <button onclick="backhome()" class="return-button">返回</button>
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+        var cookies = document.cookie.split("; ");
+
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    $.ajax({
+                        url: "/teacher/public/get_sinfo",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                info = response.info;
+                                createTable(info);
+                            }
+                        },
+                        error: function() {
+                            alert("错误error");
+
+                        }
+                    });
+                }
+            }
+
+
+
+       function createTable(info) {
+            var tableContainer = document.getElementById('courseTableContainer');
+            var table = document.createElement('table');
+            table.className = 'centered-table';
+
+            // 创建表头
+            var thead = table.createTHead();
+            var headerRow = thead.insertRow();
+            headerRow.innerHTML = "<th>姓名</th><th>编号</th><th>成绩</th><th>操作</th>";
+
+            var tbody = table.createTBody();
+
+            // 遍历课程数据来创建表格行
+            for (var i = 0; i < info.length; i++) {
+                var courseItem = info[i];
+                if (courseItem) {
+                    var row = tbody.insertRow();
+                    var cell1 = row.insertCell();
+                    var cell2 = row.insertCell();
+                    var cell3 = row.insertCell();
+                    var cell4 = row.insertCell();
+
+                    // 姓名
+                    cell1.textContent = courseItem[0];
+
+                    // 编号
+                    cell2.textContent = courseItem[1];
+
+                    // 成绩
+                    cell3.textContent = courseItem[2];
+
+                    // 添加查看详情按钮
+                    var viewDetailsButton = document.createElement('button');
+                    viewDetailsButton.textContent = '查看详情';
+                    viewDetailsButton.dataset.name = courseItem[0]; // 存储姓名到自定义属性中，以便在点击时获取
+                    viewDetailsButton.onclick = function() {
+                        viewDetails(this.dataset.name);
+                    };
+                    cell4.appendChild(viewDetailsButton);
+                }
+            }
+
+            // 清空容器内容并添加表格
+            tableContainer.innerHTML = '';
+            tableContainer.appendChild(table);
+        }
+
+        function viewDetails(name) {
+            var data = {"username": name};
+            $.ajax({
+                url: "/student/course/get",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    if (response.success) {
+                        var courses = response.course_grade;
+                        displayCourses(courses,name); // 在弹窗中显示课程数据
+                    }
+                },
+                error: function() {
+                    alert("错误error");
+                }
+            });
+        }
+
+
+       function displayCourses(courses,name) {
+            var modalContent = `
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <span class="close">&times;</span>
+                        <h2 style="text-align: center">${name} 的课程详情</h2>
+                        <table id="courseDetailsTable" class="centered-table">
+                            <thead>
+                                <tr>
+                                    <th>课程</th>
+                                    <th>成绩</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+        <!--                    <tfoot style="text-align: center">1111<button style="text-align: center" onclick=location.reload()>关闭</button></tfoot>-->
+                        </table>
+                        <button style="display: block;
+                            margin: 0 auto;
+                            padding: 10px 20px; /* 调整按钮内边距 */
+                            font-size: 16px; /* 调整字体大小 */
+                            background-color: yellow; /* 添加黄色背景色 */
+                            border: none;
+                            border-radius: 5px; /* 圆角边框 */
+                            cursor: pointer; /* 设置光标样式为手型 */" onclick=location.reload()>关闭</button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+            var closeButton = document.querySelector('.close');
+            closeButton.onclick = function() {
+                var modal = document.getElementById('modal');
+                modal.parentNode.removeChild(modal);
+            };
+            var tbody = document.querySelector('#courseDetailsTable tbody');
+            for (var i = 0; i < courses.length; i++) {
+            var course = courses[i];
+            var row = tbody.insertRow();
+            row.id = "row_" + i;
+            var cell1 = row.insertCell();
+            cell1.textContent = course[0];
+            var cell2 = row.insertCell();
+            if (course[1]!=='正在学习') {
+                cell2.textContent = course[1];
+            } else {
+                var gradeSelect = document.createElement('select');
+                gradeSelect.className = 'select-style';
+                gradeSelect.name = 'gradeSelect';
+                // 添加成绩选项
+                var options = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F'];
+                for (var k = 0; k < options.length; k++) {
+                    var option = document.createElement('option');
+                    option.value = options[k];
+                    option.text = options[k];
+                    gradeSelect.appendChild(option);
+                }
+                cell2.appendChild(gradeSelect);
+
+            }
+
+            // 添加发布成绩按钮
+            var publishButton = document.createElement('button');
+            publishButton.textContent = '发布成绩';
+            publishButton.onclick = function(rowIndex) {
+                return function() {
+                    // 在这里实现发布成绩的逻辑
+                    var currentRow = document.getElementById("row_" + rowIndex);
+                    var courseId = currentRow.id;
+                    var courseName = currentRow.cells[0].textContent; // 获取当前行的课程名称
+                    var grade;
+                    if (course[1]!=='正在学习') {
+                        // 如果课程有成绩，则使用该成绩
+                        grade = course[1];
+                    } else {
+                        // 如果课程没有成绩，则获取选择的成绩
+                        var gradeSelect = currentRow.cells[1].querySelector('select[name="gradeSelect"]');
+                        grade = gradeSelect.value;
+                    }
+                    addCourse_grade(courseName, name, grade);
+                };
+            }(i);
+            var cell3 = row.insertCell();
+            cell3.appendChild(publishButton);
+        }
+
+
+
+
+
+        }
+
+        function addCourse_grade(course,name,grade) {
+            var data = {'course': course, 'username': name, 'c_grade': grade};
+            $.ajax({
+                url: '/teacher/public/addgrade',
+                type: 'POST',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        alert("发布成功");
+                        location.reload()
+                    } else {
+                        alert('发布失败');
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    alert('删除请求出错');
+                }
+            });
+
+        }
+
+        function backhome() {
+                var cookies = document.cookie.split("; ");
+                for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
+                    var dataToSend = cookiePair[1];
+                    var url = "http://127.0.0.1:5000/teacher?data=" + dataToSend;
+                    window.location.href = url;
+                }
+            }
+        }
+
+        function search() {
+            var input = document.getElementById('search-input').value.toLowerCase();
+            var rows = document.querySelectorAll('#courseTableContainer table tbody tr');
+            rows.forEach(function(row) {
+                var name = row.cells[0].textContent.toLowerCase();
+                var id = row.cells[1].textContent.toLowerCase();
+                if (name.includes(input) || id.includes(input)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+
+    </script>
 </body>
 </html>

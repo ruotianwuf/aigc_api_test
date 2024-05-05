@@ -207,3 +207,14 @@ class UserServerController:
         model = CommonDb('student')
         consequence = model.select_sid(sname)
         return consequence
+
+
+    def get_student_info(self,major):
+        model = CommonDb('student')
+        consequence = model.select_sinfo(major)
+        return consequence
+
+    def addcourse_grade(self,data):
+        model = CommonDb('student')
+        consequence = model.add_grade(data)
+        return consequence

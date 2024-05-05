@@ -108,7 +108,7 @@
             var data = {'username': username, 'password': password, 'major': major};
             if (username && password) {
                 $.ajax({
-                    url: "/adduser/teacher/1",
+                    url: "/adduser/student/1",
                     type: "POST",
                     data: JSON.stringify(data),
                     contentType: "application/json",
