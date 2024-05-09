@@ -93,6 +93,15 @@ class CommonDb(BaseModel):
         else:
             return self.db.executeSql(sql)
 
+    def select_recommend_iframe(self,wheresql,map=False):
+
+        sql = "select href from " + self.table + " where 1 and "+ wheresql     +";"
+        print(sql)
+        if map:
+            return self.db.executeSqlMap(sql,self.table)
+        else:
+            return self.db.executeSql(sql)
+
     def selectAll_Direct(self, wheresql, optionstr, map=False):
         print(wheresql)
         sql = "select " + optionstr + " from " + self.table + " where 1 and " + wheresql + ";"

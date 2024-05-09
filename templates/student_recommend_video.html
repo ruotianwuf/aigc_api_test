@@ -4,20 +4,65 @@
     <meta charset="UTF-8">
     <title>student course recommend</title>
 </head>
+<style>
+    .container {
+          display: flex;
+          justify-content: center; /* 水平居中 */
+          align-items: center; /* 垂直居中 */
+          height: 100vh; /* 容器高度为视口高度 */
+          overflow: hidden; /* 防止视频超出容器 */
+    }
+    .video-container {
+          position: relative;
+          width: 80vw; /* 视频容器宽度为视口宽度的80% */
+          height: 80vh; /* 视频容器高度为视口高度的80% */
+          max-width: 100%; /* 最大宽度不超过容器宽度 */
+          max-height: 100%; /* 最大高度不超过容器高度 */
+    }
+    iframe {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%; /* 视频宽度填满容器 */
+          height: 100%; /* 视频高度填满容器 */
+          border: none; /* 移除边框 */
+    }
+
+
+</style>
 <body>
-<div id="recommend">
+    <div class="container">
+        <div class="video-container">
+            <div id="videoContainer"></div>
+        </div>
+    </div>
 
-</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-     var urlParams = new URLSearchParams(window.location.search);
-     var receivedData = urlParams.get('data');
-     var cookieName = "course";
-     var cookieValue = receivedData;
-     document.cookie = cookieName + "=" + cookieValue;
+    var urlParams = new URLSearchParams(window.location.search);
+    var receivedData = urlParams.get('data');
+    var str = receivedData.split(",")
+    var data = {"cname": str[0], "tname": str[1]};
+    alert(JSON.stringify(data))
+    $.ajax({
+        url: "/student/course/recommend/getiframe",
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        dataType: "json",
+        success: function(response) {
+            if (response.success) {
+                recommend = response.recommend;
+                alert(recommend)
+                document.getElementById('videoContainer').innerHTML="'"+recommend+"'"
+            }
+        },
+        error: function() {
+            alert("错误error");
 
-     alert(receivedData);
-     document.getElementById("recommend").innerHTML= "'"+receivedData+"'"
-
+        }
+    });
 </script>
 </body>
 </html>

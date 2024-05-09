@@ -249,12 +249,13 @@
                     cell1.textContent = courseItem[0];
                     cell2.textContent = courseItem[1];
                     var button = document.createElement('button');
-                    var dataToSend = courseItem[2];
-                    var url = "http://127.0.0.1:5000/student/recommend/video?data=" + dataToSend;
-                    alert(dataToSend);
-                    button.onclick = window.location.href=url;
-                    // link.textContent = '点击观看';
-                    // link.target = '_blank'; // 在新标签页中打开链接
+                    var dataToSend = [courseItem[0],courseItem[1]];
+                    var url = "/student/recommend/video?data=" + dataToSend;
+                    // 使用函数来处理点击事件
+                    button.onclick = function() {
+                        window.location.href = url;
+                    };
+                    button.textContent = '点击观看';
                     cell3.appendChild(button);
                 }
             }

@@ -97,6 +97,20 @@ def course_recommend_get():
         return jsonify({'success': True}), 200
 
 
+@app.route('/student/course/recommend/getiframe', methods=['POST'])
+def course_recommend_getiframe():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_course_recommend_iframe(data)
+    print(result)
+
+    if result:
+        return jsonify({'success': True, 'recommend': result}), 200
+    else:
+        return jsonify({'success': True}), 200
+
+
 
 @app.route('/student/course/get', methods=['POST'])
 def getstudent_course_get():
@@ -200,6 +214,10 @@ def getstudent_forum_post():
 @app.route('/student/recommend', methods=['GET'])
 def getstudent_recommend():
     return render_template('student_course_recommend.html')
+
+@app.route('/student/recommend/video', methods=['GET'])
+def get_Recommend_Video():
+    return render_template('student_recommend_video.html')
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():
@@ -530,9 +548,7 @@ def upload_student_homework():
     response_data = {'success': True, 'message': 'Homework uploaded successfully'}
     return jsonify(response_data), 200
 
-@app.route('/student/recommend/video', methods=['GET'])
-def get_Recommend_Video():
-    return render_template('student_recommend_video.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
