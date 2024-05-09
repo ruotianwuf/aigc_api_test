@@ -83,6 +83,21 @@ def getstudent_advice():
 def getstudent_course():
     return render_template('student_course.html')
 
+@app.route('/student/course/recommend', methods=['POST'])
+def course_recommend_get():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_course_recommend()
+    print(result)
+
+    if result:
+        return jsonify({'success': True, 'recommend': result}), 200
+    else:
+        return jsonify({'success': True}), 200
+
+
+
 @app.route('/student/course/get', methods=['POST'])
 def getstudent_course_get():
     data = json.loads(request.get_data(as_text=True))
