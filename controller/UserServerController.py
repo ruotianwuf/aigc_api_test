@@ -126,6 +126,15 @@ class UserServerController:
             result = True
         return {'result': result, 'consequence': consequence}
 
+    def get_recommend_info_ServerStatus(self, status_data):
+        model = CommonDb('recommend')
+        consequence = model.select_recommend()
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return {'result': result, 'consequence': consequence}
 
     def get_course_info_ServerStatus(self, status_data):
         model = CommonDb('course')

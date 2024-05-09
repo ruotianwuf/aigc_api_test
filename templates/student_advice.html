@@ -7,7 +7,7 @@
      <style>
 
         body {
-            background-image: url("../static/img/student_back.jpg");
+            background-image: url("../static/img/background.jpg");
             color: black;
             background-size: cover;
             background-repeat: no-repeat;
@@ -28,7 +28,6 @@
     word-wrap: break-word;
     align-items: flex-start;
     width: fit-content;
-    max-width: 50%;
 }
 
 
@@ -37,7 +36,6 @@
     background-color: white;
     color: black;
     margin-left: auto;
-    margin-right: 200px;
     margin-top: 10px;
     border: 1px solid #ddd;
     align-items: flex-end;
@@ -49,7 +47,6 @@
     background-color: #3333cc;
     color: white;
     margin-right: auto;
-    margin-left: 200px;
     border: 1px solid #ddd;
     align-items: flex-start;
 }
@@ -75,48 +72,21 @@
 }
 
 .black-background {
-    width: 80%;
-    background-color: lightskyblue;
-    color: black;
+    background-color: black;
+    color: white;
     padding: 10px;
     border-radius: 5px;
-    margin: auto;
-    font-weight: 600;
 }
 
 .chat-box{
     margin-top: 15px;
-    text-align: center;
-}
-.page-title {
-    text-align: center; /* 文本居中对齐 */
-    font-size: 60px; /* 字体大小 */
-    font-weight: 1000; /* 字体加粗 */
-    margin-bottom: 20px; /* 底部边距 */
 }
 
-.return-button {
-            position: fixed; /* 绝对定位 */
-            right: 130px; /* 距离页面右侧20px */
-            bottom: 60px; /* 距离页面底部20px */
-            padding: 10px 20px; /* 按钮的内边距 */
-            background-color: lawngreen; /* 按钮的背景颜色 */
-            color: white; /* 按钮的文字颜色 */
-            border: black; /* 移除边框 */
-            border-radius: 5px; /* 圆角边框 */
-            cursor: pointer; /* 鼠标悬停时显示手形图标 */
-            transform: scale(1.5);
-        }
-
-        .return-button:hover {
-            background-color: #005f73; /* 鼠标悬停时按钮的背景颜色 */
-        }
 
     </style>
 
 </head>
 <body>
-<h1 class="page-title">个人学业助手</h1>
 
 <div class="content-box" id="content">
 
@@ -133,7 +103,6 @@
     <div class="text"></div>
 </div>
 
-    <button onclick="backhome()" class="return-button">返回</button>
 
 <div class="chat-box">
     <input id="questionInput" ty  pe="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
@@ -209,7 +178,7 @@
                                        "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
                                        "<div>" +
                                          "<div class='name'>You</div>" +
-                                         "<div class='text'>" +  data.question + "</div>" +
+                                         "<div class='text'>" + "You: " + data.question + "</div>" +
                                        "</div>" +
                                        "</div>";
                     var answerHTML = "<div class='message ai-message' style='display: flex;'>" +
@@ -233,53 +202,6 @@
         alert("问题不能为空。");
     }
 }
-
-function backhome() {
-                var cookies = document.cookie.split("; ");
-                for (var i = 0; i < cookies.length; i++) {
-                var cookiePair = cookies[i].split("=");
-                if (cookiePair[0] === "student" && cookiePair[1]) {
-                    var dataToSend = cookiePair[1];
-                    var url = "http://127.0.0.1:5000/student?data=" + dataToSend;
-                    window.location.href = url;
-                }
-            }
-        }
-
-
-// 获取页面上一次滚动的位置
-var lastScrollPosition = window.scrollY;
-
-// 设置定时器，每隔一定时间调用一次 scrollToBottom 函数
-var scrollInterval = setInterval(scrollToBottom, 1000); // 每秒钟调用一次，可以根据需要调整时间间隔
-
-// 监听滚动事件
-window.addEventListener('scroll', function() {
-    // 获取当前页面滚动的位置
-    var currentScrollPosition = window.scrollY;
-
-    // 判断用户是向下滚动还是向上滚动
-    if (currentScrollPosition < lastScrollPosition) {
-        // 向下滚动，清除定时器
-        clearInterval(scrollInterval);
-
-        // 设置一个延时，之后重新开始自动滚动
-        setTimeout(function() {
-            // 重新启动定时器
-            scrollInterval = setInterval(scrollToBottom, 1000); // 重新启动定时器
-        }, 200000); // 停止滚动 3 秒后重新开始
-    }
-
-    // 更新上一次滚动的位置
-    lastScrollPosition = currentScrollPosition;
-});
-
-// 将页面滚动到底部
-function scrollToBottom() {
-    window.scrollTo(0, document.body.scrollHeight);
-}
-
-
 
 </script>
 </html>
