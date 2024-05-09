@@ -248,19 +248,23 @@
                     var cell3 = row.insertCell();
                     cell1.textContent = courseItem[0];
                     cell2.textContent = courseItem[1];
-                    var link = document.createElement('a');
-                    link.href = courseItem[2];
-                    link.textContent = '点击观看';
-                    link.target = '_blank'; // 在新标签页中打开链接
-                    cell3.appendChild(link);
+                    var button = document.createElement('button');
+                    var dataToSend = courseItem[2];
+                    var url = "http://127.0.0.1:5000/student/recommend/video?data=" + dataToSend;
+                    alert(dataToSend);
+                    button.onclick = window.location.href=url;
+                    // link.textContent = '点击观看';
+                    // link.target = '_blank'; // 在新标签页中打开链接
+                    cell3.appendChild(button);
                 }
             }
             tableContainer.innerHTML = '';
             tableContainer.appendChild(table);
         }
         window.onload = function() {
-            createTable(coursesData);
+                createTable(coursesData);
         }
+
 
 
         function backhome() {

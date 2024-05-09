@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>student course recommend</title>
+</head>
+<body>
+<div id="recommend">
+
+</div>
+<script>
+     var urlParams = new URLSearchParams(window.location.search);
+     var receivedData = urlParams.get('data');
+     var cookieName = "course";
+     var cookieValue = receivedData;
+     document.cookie = cookieName + "=" + cookieValue;
+
+     alert(receivedData);
+     document.getElementById("recommend").innerHTML= "'"+receivedData+"'"
+
+</script>
+</body>
+</html>

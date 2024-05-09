@@ -197,9 +197,9 @@ def getstudent_forum_post():
     else:
         return jsonify({'success': False}), 200
 
-@app.route('/student/grades', methods=['GET'])
-def getstudent_grades():
-    return render_template('student_grades.html')
+@app.route('/student/recommend', methods=['GET'])
+def getstudent_recommend():
+    return render_template('student_course_recommend.html')
 
 @app.route('/teacher', methods=['GET'])
 def getteacher():
@@ -530,5 +530,10 @@ def upload_student_homework():
     response_data = {'success': True, 'message': 'Homework uploaded successfully'}
     return jsonify(response_data), 200
 
+@app.route('/student/recommend/video', methods=['GET'])
+def get_Recommend_Video():
+    return render_template('student_recommend_video.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
+
