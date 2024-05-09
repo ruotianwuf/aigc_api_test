@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Recommend</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            background-image: url("../static/img/teacher_back.jpg");
+
+        }
+        #teacher_info {
+            font-size: 2em;
+            margin: 20px 0; /* 上下边距 */
+            text-align: center;
+        }
+        .centered-table {
+            width: 70%; /* 表格宽度100% */
+            max-width: none; /* 移除最大宽度限制 */
+            border-collapse: collapse;
+            table-layout: fixed; /* 固定表格布局，让最后一列有足够的空间 */
+            background: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: auto;
+            margin: auto; /* 上下自动边距实现垂直居中 */
+        }
+        .centered-table thead {
+            background: #5B69FF;
+            border: black;
+            color: #FFFFFF;
+        }
+        .centered-table th, .centered-table td {
+            text-align: center; /* 内容水平居中 */
+            padding: 20px;
+
+            font-size: 1.5em;
+            font-weight: bold;
+            border: 1px solid black;
+        }
+        .centered-table td {
+            font-weight: 800;
+            color: #333;
+        }
+        .centered-table tr:hover td {
+            background-color: #E0E0E0;
+        }
+        .centered-table th {
+            font-weight: 700;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .delete-btn {
+            background-color: #ff5252;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 auto; /* 上下自动边距实现垂直居中 */
+            display: block; /* 使按钮宽度100% */
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%; /* 按钮宽度100% */
+            transform: scale(1.5);
+        }
+        .add-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin: 0 auto; /* 上下自动边距实现垂直居中 */
+            display: block; /* 使按钮宽度100% */
+            border-radius: 5px;
+            cursor: pointer;
+            width: 20%; /* 按钮宽度100% */
+        }
+        .table-style {
+            margin: auto;
+            border-collapse: collapse; /* 合并边框 */
+            width: 50%; /* 可以设置表格的宽度，这里以页面宽度的50%为例 */
+        }
+        .table-style th, .table-style td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: center; /* 使单元格内的文本居中 */
+            background: whitesmoke;
+        }
+        .table-style th {
+            background-color: #f2f2f2;
+        }
+
+        .return-button {
+            position: fixed; /* 绝对定位 */
+            right: 300px; /* 距离页面右侧20px */
+            bottom: 60px; /* 距离页面底部20px */
+            padding: 10px 20px; /* 按钮的内边距 */
+            background-color: #008CBA; /* 按钮的背景颜色 */
+            color: white; /* 按钮的文字颜色 */
+            border: black; /* 移除边框 */
+            border-radius: 5px; /* 圆角边框 */
+            cursor: pointer; /* 鼠标悬停时显示手形图标 */
+            transform: scale(1.5);
+        }
+
+        .return-button:hover {
+            background-color: #005f73;
+        }
+
+        .select-style select {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            color: #555;
+            font-size: 16px;
+            padding: 8px 10px;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+
+        .select-style:after {
+            content: "\25BC";
+            color: #555;
+            font-size: 12px;
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        /* 设置鼠标悬停时的样式 */
+        .select-style:hover select {
+            border-color: #aaa;
+        }
+
+        /* 设置下拉框被选中时的样式 */
+        .select-style select:focus {
+            border-color: #666;
+            outline: none;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .search-input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            outline: none;
+        }
+
+        .search-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="teacher_info">课程推荐</div>
+        <br>
+        <div id="info"></div>
+        <br>
+        <div id="search-container" class="search-container">
+            <input type="text" id="search-input" class="search-input" placeholder="输入教师姓名或课程名称进行检索">
+            <button onclick="search()" class="search-button">检索</button>
+        </div>
+        <br>
+        <div id="courseTableContainer">
+        </div>
+        <br>
+        <button onclick="backhome()" class="return-button">返回</button>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+        var cookies = document.cookie.split("; ");
+
+
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "student" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    $.ajax({
+                        url: "/student/course/recommend",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(response) {
+                            if (response.success) {
+                                recommend = response.recommend;
+                                createTable(recommend);
+                            }
+                        },
+                        error: function() {
+                            alert("错误error");
+
+                        }
+                    });
+                }
+            }
+
+
+
+       function createTable(info) {
+            var tableContainer = document.getElementById('courseTableContainer');
+            var table = document.createElement('table');
+            table.className = 'centered-table';
+
+            // 创建表头
+            var thead = table.createTHead();
+            var headerRow = thead.insertRow();
+            headerRow.innerHTML = "<th>课程名称</th><th>授课教师</th><th>视频链接</th>";
+
+            var tbody = table.createTBody();
+
+            // 遍历课程数据来创建表格行
+            for (var i = 0; i < info.length; i++) {
+                var courseItem = info[i];
+                if (courseItem) {
+                    var row = tbody.insertRow();
+                    var cell1 = row.insertCell();
+                    var cell2 = row.insertCell();
+                    var cell3 = row.insertCell();
+                    cell1.textContent = courseItem[0];
+                    cell2.textContent = courseItem[1];
+                    var button = document.createElement('button');
+                    var dataToSend = [courseItem[0],courseItem[1]];
+                    var url = "/student/recommend/video?data=" + dataToSend;
+                    // 使用函数来处理点击事件
+                    button.onclick = function() {
+                        window.location.href = url;
+                    };
+                    button.textContent = '点击观看';
+                    cell3.appendChild(button);
+                }
+            }
+            tableContainer.innerHTML = '';
+            tableContainer.appendChild(table);
+        }
+        window.onload = function() {
+                createTable(coursesData);
+        }
+
+
+
+        function backhome() {
+                var cookies = document.cookie.split("; ");
+                for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "student" && cookiePair[1]) {
+                    var dataToSend = cookiePair[1];
+                    var url = "http://127.0.0.1:5000/student?data=" + dataToSend;
+                    window.location.href = url;
+                }
+            }
+        }
+
+        function search() {
+            var input = document.getElementById('search-input').value.toLowerCase();
+            var rows = document.querySelectorAll('#courseTableContainer table tbody tr');
+            rows.forEach(function(row) {
+                var name = row.cells[0].textContent.toLowerCase();
+                var id = row.cells[1].textContent.toLowerCase();
+                if (name.includes(input) || id.includes(input)) {
+                    row.style.display = 'table-row';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+
+    </script>
+</body>
+</html>

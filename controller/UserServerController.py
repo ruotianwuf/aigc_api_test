@@ -223,6 +223,16 @@ class UserServerController:
         consequence = model.select_sinfo(major)
         return consequence
 
+    def get_course_recommend(self):
+        model = CommonDb('recommend')
+        consequence = model.select_recommend()
+        return consequence
+
+    def get_course_recommend_iframe(self,data):
+        model = CommonDb('recommend')
+        consequence = model.select_recommend_iframe(f"cname='{data['cname']}' and tname ='{data['tname']}'")
+        return consequence
+
     def addcourse_grade(self,data):
         model = CommonDb('student')
         consequence = model.add_grade(data)

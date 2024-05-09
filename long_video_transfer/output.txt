@@ -1,1 +1,1 @@
-内容：{"desc": "no available audio", "data": "", "sid": "fa355e0c-fb73-4450-92c6-ef709bc538d4", "action": "error", "code": 10403}
+内容：{"desc": "server internal exception", "data": "", "sid": "92b4a589-15cd-4730-af9d-668d8e51f688", "action": "error", "code": 10402}

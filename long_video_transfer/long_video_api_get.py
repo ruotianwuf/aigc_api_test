@@ -15,7 +15,11 @@ def extract_chinese_with_punctuation(string):
     chinese_text = ''.join(chinese_text)
     return chinese_text
 
-def sync_vivogpt():
+
+
+
+def sync_vivogpt_class():
+    message = []
 
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
@@ -32,7 +36,7 @@ def sync_vivogpt():
     #
     prompt = extract_chinese_with_punctuation(str(prompt))
     print("筛选后的内容："+prompt)
-
+    message.append({"content": '根据以下文字内容分析课堂的上课情况和互动情况，并给出具体详细的课堂报告：'+prompt, "role": "user"})
     METHOD = 'POST'
 
     params = {
@@ -41,7 +45,7 @@ def sync_vivogpt():
     print('requestId:', params['requestId'])
 
     data = {
-        'prompt': '根据以下文字内容分析课堂的上课情况和互动情况，并给出具体详细的课堂报告：'+ prompt,
+        'messages':message,
 
         'model': 'vivo-BlueLM-TB',
         'sessionId': str(uuid.uuid4()),
@@ -76,7 +80,7 @@ def sync_vivogpt():
 
 
 
-content = sync_vivogpt()
+content = sync_vivogpt_class()
 print(content)
 with open('aigc_content.txt', 'w', encoding='utf-8') as f:
     print("正在写入")

@@ -16,7 +16,7 @@
                 <li><button onclick="go_advice()">建议</button></li>
                 <li><button onclick="go_courses()">课程</button></li>
                 <li><button onclick="go_forum()">论坛</button></li>
-                <li><button onclick="go_grades()">成绩</button></li>
+                <li><button onclick="go_recommend()">课程推荐</button></li>
                 <li><button onclick="go_homework()">作业</button></li>
             </ul>
         </nav>
@@ -99,12 +99,12 @@
              window.location.href="/login/student";
          }
      }
-     function go_grades(){
+     function go_recommend(){
          var ck=checkCookie('student');
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/grades";
+             window.location.href="/student/recommend";
          }else{
              alert("请先登录");
              window.location.href="/login/student";
