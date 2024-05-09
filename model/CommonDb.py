@@ -66,6 +66,15 @@ class CommonDb(BaseModel):
         else:
             return self.db.executeSql(sql)
 
+    def select_recommend(self,  map=False):
+
+        sql = "select c_name,t_name,href from "+ self.table + " where 1  " + ";"
+        print(sql)
+        if map:
+            return self.db.executeSqlMap(sql, self.table)
+        else:
+            return self.db.executeSql(sql)
+
     def select_sinfo(self,wheresql,map=False):
         print(wheresql)
         sql = "select username,stu_no,grade from " + self.table + " where 1 and major = " + "'"+wheresql + "'"+" group by username;"
