@@ -4,23 +4,69 @@
     <meta charset="UTF-8">
     <title>TEACHER</title>
     <link rel="stylesheet" href="/static/css/teacher.css">
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>一体化在线教育社区系统_教师端</h1>
-        <button class="Register_button" onclick="register()">注册</button>
-        <button class="Login_button" onclick="login()" id="teacher_login">登录</button>
-        <nav>
-            <ul>
-                <li><button onclick="go_report()">课堂报告</button></li>
-                <li><button onclick="go_courses()">信息</button></li>
-                <li><button onclick="go_upload()">上传</button></li>
-<!--                <li><button onclick="go_check()">批改作业</button></li>-->
-                <li><button onclick="go_public()">发布成绩</button></li>
-            </ul>
-        </nav>
-        <br>
+<!--        <button class="Register_button" onclick="register()">注册</button>-->
+<!--        <button class="Login_button" onclick="login()" id="teacher_login">登录</button>-->
+        <div class="wrapper">
+            <button class="custom-button" onclick="register()">
+                <span class="material-icons">draw</span>
+                <span>注册</span>
+            </button>
+
+            <button class="custom-button" onclick="login()" >
+                <span class="material-icons">login</span>
+                <span id="teacher_login">登录</span>
+            </button>
+        </div>
+
+        <section>
+          <div class="menu">
+
+            <div>
+              <button onclick="go_report()">
+                <span class="material-icons">
+                  assignment
+                </span>
+                <h3>课堂报告</h3>
+                <p>上传课堂视频，即时生成ai视频报告</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_courses()">
+                <span class="material-icons">
+                  chrome_reader_mode
+                </span>
+                <h3>课程信息</h3>
+                <p>查看、添加、删除课程信息</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_upload()">
+                <span class="material-icons">
+                  publish
+                </span>
+                <h3>上传</h3>
+                <p>上传课件、作业、试卷、答案等</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_public()">
+                <span class="material-icons">
+                  thumbs_up_down
+                </span>
+                <h3>发布成绩</h3>
+                <p>学生的命运掌握在你手中</p>
+              </button>
+            </div>
+          </div>
+        </section>
     </div>
 
     <div>
@@ -55,14 +101,14 @@
     }
 
 
-     var myCookieValue = checkCookie("teacher");
-     if (myCookieValue){
-         // alert(myCookieValue);
-         var cookieString ='<div>'+'欢迎你,'+myCookieValue+'</div>';
-         // alert(cookieString);
-         document.getElementById("teacher_login").innerHTML = cookieString;
-
-     }
+    var myCookieValue = checkCookie("teacher");
+    if (myCookieValue){
+        var buttonContent = '<span class="material-icons">person</span>'; // 替换图标部分
+        buttonContent += '<span>欢迎你,' + myCookieValue + '</span>'; // 添加欢迎消息
+        var loginButton = document.querySelector(".wrapper .custom-button:nth-child(2)"); // 选择第二个按钮
+        loginButton.innerHTML = buttonContent; // 替换按钮内容
+        loginButton.classList.add("hovered"); // 添加 hover 类
+    }
      function login(){
          var ck=checkCookie('teacher');
          // alert(cookieValue);
@@ -141,13 +187,13 @@
 
 
     //隐藏注册按钮
-     document.addEventListener("DOMContentLoaded",function (){
-         var ck = checkCookie('teacher');
-         if (ck == cookieValue) {
-             var registerButton = document.querySelector('.Register_button');
-             registerButton.classList.add('hidden');
-         }
-     });
+     document.addEventListener("DOMContentLoaded", function () {
+        var ck = checkCookie('teacher');
+        if (ck == cookieValue) {
+            var registerButton = document.querySelector('.wrapper .custom-button:nth-child(1)'); // 选择注册按钮
+            registerButton.classList.add('hidden');
+        }
+    });
 
      function go_home(){
          window.location.href = 'http://127.0.0.1:5000/';
