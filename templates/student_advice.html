@@ -16,103 +16,128 @@
             font-family: 'SimSun', 'Songti SC', 'serif';
             padding: 20px;
         }
+             /* 公共样式 */
+        .message {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            word-wrap: break-word;
+            align-items: flex-start;
+            width: fit-content;
+        }
 
 
-     /* 公共样式 */
-.message {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    border-radius: 20px;
-    margin-bottom: 10px;
-    word-wrap: break-word;
-    align-items: flex-start;
-    width: fit-content;
-}
+        .user-message {
+            display: none;
+            background-color: white;
+            color: black;
+            margin-left: auto;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            align-items: flex-end;
+        }
 
 
-.user-message {
-    display: none;
-    background-color: white;
-    color: black;
-    margin-left: auto;
-    margin-top: 10px;
-    border: 1px solid #ddd;
-    align-items: flex-end;
-}
+        .ai-message {
+            display: none;
+            background-color: #3333cc;
+            color: white;
+            margin-right: auto;
+            border: 1px solid #ddd;
+            align-items: flex-start;
+        }
 
 
-.ai-message {
-    display: none;
-    background-color: #3333cc;
-    color: white;
-    margin-right: auto;
-    border: 1px solid #ddd;
-    align-items: flex-start;
-}
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-bottom: 5px;
+        }
 
 
-.avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-bottom: 5px;
-}
+        .name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
 
 
-.name {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+        .text {
+            max-width: 100%;
+            margin: 0;
+        }
 
+        .report-background {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 5px;
+            min-height: 100%;
+            justify-content: center;
+            padding: 5em;
+            box-sizing: border-box;
+            border: 3px solid #656565;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .report-background h1 {
+           text-align: center;
+           margin-top: 0;
+        }
 
-.text {
-    max-width: 100%;
-    margin: 0;
-}
-
-.black-background {
-    background-color: black;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-.chat-box{
-    margin-top: 15px;
-}
-
-
+        .chat-box{
+            width: 80%;
+            margin: 15px auto;
+        }
+        .loading-container {
+        display: flex;
+        align-items: center; /* Align items vertically */
+        justify-content: center; /* Align items horizontally */
+        text-align: center; /* Center text */
+    }
+        .loading {
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            border: 5px solid rgba(0, 0, 0, 0.44);
+            border-bottom-color: #ff0000;
+            border-radius: 50%;
+            animation: rotation 1s linear infinite;
+        }
+        .loading-text{
+            font-size: 30px;
+        }
+        @keyframes rotation {
+          0% {
+            transform: rotate(0deg);
+          }
+          100% {
+            transform: rotate(360deg);
+          }
+        }
     </style>
 
 </head>
 <body>
 
-<div class="content-box" id="content">
-
-</div>
-
-<div class="message user-message" id="questionDisplay">
-    <img src="../static/img/student.png" alt="User Avatar" class="avatar">
-    <div class="name">You</div>
-    <div class="text"></div>
-</div>
-<div class="message ai-message" id="answerDisplay">
-    <img src="../static/img/AI%20UI.png" alt="AI Avatar" class="avatar">
-    <div class="name">Assistant</div>
-    <div class="text"></div>
-</div>
-
-
+<div class="content-box" id="content"></div>
 <div class="chat-box">
-    <input id="questionInput" ty  pe="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
-    <button onclick="question()" style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;">发送</button>
+    <input id="questionInput" type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
+    <button onclick="question()" style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;cursor: pointer;">发送</button>
 </div>
 
 </body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
+    var reportDiv = document.getElementById("content");
+    reportDiv.innerHTML = "<div class='report-background loading-container'>"+
+        "<span class='loading'></span>"+
+        "<div class='loading-text'>正在生成报告，请稍后...</div>" +
+        "</div>";
     var cookies = document.cookie.split("; ");
             for (var i = 0; i < cookies.length; i++) {
                 var cookiePair = cookies[i].split("=");
@@ -136,8 +161,8 @@
                                 replay = replay.replace(/\n/g, '<br>');
 
 
-                                var outputDiv = document.getElementById("content");
-                                outputDiv.innerHTML = "<div class='"+"black-background"+"'>" + replay + "</div>";
+                                var reportDiv = document.getElementById("content");
+                                reportDiv.innerHTML = "<div class='report-background'>" + "<h1>学业报告与建议</h1>" +replay + "</div>";
                                 }
                         },
                         error: function() {
@@ -160,6 +185,16 @@
     var questionText = questionInput.value.trim();
     if (questionText) {
         var data = { 'question': questionText };
+        var outputDiv = document.getElementById("content");
+        var questionHTML = "<div class='message user-message' style='display: flex;'>" +
+                                       "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
+                                       "<div>" +
+                                         "<div class='name'>You</div>" +
+                                         "<div class='text'>" + "You: " + data.question + "</div>" +
+                                       "</div>" +
+                                       "</div>";
+        outputDiv.innerHTML += questionHTML;
+        questionInput.value = "";
         $.ajax({
             url: "/answer_msg",
             type: "POST",
@@ -173,23 +208,18 @@
                     formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');
                     formattedAnswer = formattedAnswer.replace(/(①|②|③|④|⑤|⑥) /g, '$1 ');
                     formattedAnswer = formattedAnswer.replace(/\n/g, '<br>');
-                    var outputDiv = document.getElementById("content");
-                    var questionHTML = "<div class='message user-message' style='display: flex;'>" +
-                                       "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
-                                       "<div>" +
-                                         "<div class='name'>You</div>" +
-                                         "<div class='text'>" + "You: " + data.question + "</div>" +
-                                       "</div>" +
-                                       "</div>";
                     var answerHTML = "<div class='message ai-message' style='display: flex;'>" +
                                      "<img src='../static/img/AI UI.png' alt='AI Avatar' class='avatar'>" +
                                      "<div>" +
                                        "<div class='name'>Assistant</div>" +
-                                       "<div class='text'>" + formattedAnswer + "</div>" +
+                                       "<div class='text'></div>" +
                                      "</div>" +
                                      "</div>";
-                    outputDiv.innerHTML += questionHTML + answerHTML;
-                    questionInput.value = "";
+                    outputDiv.innerHTML += answerHTML;
+
+                   // Display AI response character by character
+                    var outputText = outputDiv.querySelector(".ai-message:last-child .text");
+                    displayAnswerOneByOne(formattedAnswer, outputText);
                 } else {
                     alert("未能获取到答案。");
                 }
@@ -201,6 +231,17 @@
     } else {
         alert("问题不能为空。");
     }
+}
+function displayAnswerOneByOne(answer, outputText) {
+    var index = 0;
+    var interval = setInterval(function() {
+        var char = answer.charAt(index);
+        outputText.innerHTML += char;
+        index++;
+        if (index === answer.length) {
+            clearInterval(interval);
+        }
+    }, 50); // Adjust the delay between characters if needed
 }
 
 </script>
