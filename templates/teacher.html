@@ -9,8 +9,6 @@
 <body>
     <div class="container">
         <h1>一体化在线教育社区系统_教师端</h1>
-<!--        <button class="Register_button" onclick="register()">注册</button>-->
-<!--        <button class="Login_button" onclick="login()" id="teacher_login">登录</button>-->
         <div class="wrapper">
             <button class="custom-button" onclick="register()">
                 <span class="material-icons">draw</span>
@@ -109,6 +107,14 @@
         loginButton.innerHTML = buttonContent; // 替换按钮内容
         loginButton.classList.add("hovered"); // 添加 hover 类
     }
+    //隐藏注册按钮
+     document.addEventListener("DOMContentLoaded", function () {
+        var ck = checkCookie('teacher');
+        if (ck == cookieValue) {
+            var registerButton = document.querySelector('.wrapper .custom-button:nth-child(1)'); // 选择注册按钮
+            registerButton.classList.add('hidden');
+        }
+    });
      function login(){
          var ck=checkCookie('teacher');
          // alert(cookieValue);
@@ -186,14 +192,7 @@
     }
 
 
-    //隐藏注册按钮
-     document.addEventListener("DOMContentLoaded", function () {
-        var ck = checkCookie('teacher');
-        if (ck == cookieValue) {
-            var registerButton = document.querySelector('.wrapper .custom-button:nth-child(1)'); // 选择注册按钮
-            registerButton.classList.add('hidden');
-        }
-    });
+
 
      function go_home(){
          window.location.href = 'http://127.0.0.1:5000/';

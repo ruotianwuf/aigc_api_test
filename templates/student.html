@@ -5,26 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STUDENT</title>
     <link rel="stylesheet" href="../static/css/student.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <h1>一体化在线教育社区系统_学生端</h1>
-        <button class="Register_button" onclick="register()">注册</button>
-        <button class="Login_button" onclick="login()" id="student_login">登录</button>
-        <nav>
-            <ul>
-                <li><button onclick="go_advice()">建议</button></li>
-                <li><button onclick="go_courses()">课程</button></li>
-                <li><button onclick="go_forum()">论坛</button></li>
-                <li><button onclick="go_recommend()">课程推荐</button></li>
-                <li><button onclick="go_homework()">作业</button></li>
-            </ul>
-        </nav>
-        <br>
+<!--        <button class="Register_button" onclick="register()">注册</button>-->
+<!--        <button class="Login_button" onclick="login()" id="student_login">登录</button>-->
+        <div class="wrapper">
+            <button class="custom-button" onclick="register()">
+                <span class="material-icons">draw</span>
+                <span>注册</span>
+            </button>
+
+            <button class="custom-button" onclick="login()" >
+                <span class="material-icons">login</span>
+                <span id="student_login">登录</span>
+            </button>
+        </div>
+
+        <section>
+          <div class="menu">
+            <div>
+              <button onclick="go_courses()">
+                <span class="material-icons">
+                  menu_book
+                </span>
+                <h3>课程信息</h3>
+                <p>查看正在学习的课程和成绩</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_courses()">
+                <span class="material-icons">
+                  tips_and_updates
+                </span>
+                <h3>学习建议</h3>
+                <p>查看由ai生成的学习报告，体验与ai学习交流</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_homework()">
+                <span class="material-icons">
+                  cloud_upload
+                </span>
+                <h3>上传作业</h3>
+                <p>上传完成的作业，体验ai批改作业</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_recommend()">
+                <span class="material-icons">
+                  thumb_up
+                </span>
+                <h3>课程推荐</h3>
+                <p>体验我们精选的优质网络课程</p>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_forum()">
+                <span class="material-icons">
+                  groups
+                </span>
+                <h3>交流论坛</h3>
+                <p>自由交流天地，互助学习进步</p>
+              </button>
+            </div>
+
+            <div>
+              <button >
+                <span class="material-icons">
+                  local_cafe
+                </span>
+                <h3>更多功能</h3>
+                <p>正在开发中，敬请期待</p>
+              </button>
+            </div>
+          </div>
+        </section>
+<!--        <nav>-->
+<!--            <ul>-->
+<!--                <li><button onclick="go_advice()">建议</button></li>-->
+<!--                <li><button onclick="go_courses()">课程</button></li>-->
+<!--                <li><button onclick="go_recommend()">课程推荐</button></li>-->
+<!--                <li><button onclick="go_homework()">作业</button></li>-->
+<!--                <li><button onclick="go_forum()">论坛</button></li>-->
+<!--            </ul>-->
+<!--        </nav>-->
     </div>
 
-    <div>
-        <button onclick="go_home()" class="return-button">返回</button>
+    <div class="center">
+        <button onclick="go_home()" class="return"><i></i><span>返回主页</span></button>
     </div>
 
 
@@ -50,21 +125,24 @@
             return cookieValue;
         }
     }
-
-    // 如果未找到目标 Cookie，则返回 false
     return false;
 }
-
-
-     var myCookieValue = checkCookie("student");
-     if (myCookieValue){
-         // alert(myCookieValue);
-         var cookieString ='<div>'+'欢迎你,'+myCookieValue+'</div>';
-         // alert(cookieString);
-         document.getElementById("student_login").innerHTML = cookieString;
-
-     }
-
+    var myCookieValue = checkCookie("teacher");
+    if (myCookieValue){
+        var buttonContent = '<span class="material-icons">person</span>'; // 替换图标部分
+        buttonContent += '<span>欢迎你,' + myCookieValue + '</span>';
+        var loginButton = document.querySelector(".wrapper .custom-button:nth-child(2)"); // 选择第二个按钮
+        loginButton.innerHTML = buttonContent;
+        loginButton.classList.add("hovered"); // 添加 hover 类
+    }
+        //隐藏注册按钮
+     document.addEventListener("DOMContentLoaded", function () {
+        var ck = checkCookie('teacher');
+        if (ck == cookieValue) {
+            var registerButton = document.querySelector('.wrapper .custom-button:nth-child(1)'); // 选择注册按钮
+            registerButton.classList.add('hidden');
+        }
+    });
      function go_advice(){
          var ck=checkCookie('student');
          // alert(cookieValue);
@@ -136,13 +214,7 @@
         window.location.href="http://127.0.0.1:5000/adduser/student"
     }
 
-     document.addEventListener("DOMContentLoaded",function (){
-         var ck = checkCookie('student');
-         if (ck == cookieValue) {
-             var registerButton = document.querySelector('.Register_button');
-             registerButton.classList.add('hidden');
-         }
-     });
+
 
      function go_home(){
          window.location.href = 'http://127.0.0.1:5000/';

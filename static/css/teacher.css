@@ -15,20 +15,6 @@ h1{
     padding-top: 30px;
 }
 
-
-.content {
-    margin-top: 50px;
-}
-.course {
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-}
-.course h2 {
-    margin-top: 0;
-}
 .hidden{
     display: none;
 }
