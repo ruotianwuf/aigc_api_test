@@ -12,7 +12,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            background-image: url("../static/img/teacher_back.jpg");
+            background-size: cover;
+            background-image: url("../static/img/Teacher_bg2.jpg");
 
         }
         #teacher_info {
@@ -293,6 +294,13 @@
             });
         }
 
+        function clearPreviousTable() {
+    // 查找并移除之前创建的模态框，如果存在的话
+            var previousModal = document.getElementById('modal');
+            if (previousModal) {
+                previousModal.parentNode.removeChild(previousModal);
+            }
+        }
 
        function displayCourses(courses,name) {
             var modalContent = `
@@ -300,7 +308,7 @@
                     <div class="modal-content">
                         <span class="close">&times;</span>
                         <h2 style="text-align: center">${name} 的课程详情</h2>
-                        <table id="courseDetailsTable" class="centered-table">
+                        <table id="courseDetailsTable${name}" class="centered-table">
                             <thead>
                                 <tr>
                                     <th>课程</th>
@@ -328,7 +336,7 @@
                 var modal = document.getElementById('modal');
                 modal.parentNode.removeChild(modal);
             };
-            var tbody = document.querySelector('#courseDetailsTable tbody');
+            var tbody = document.querySelector('#courseDetailsTable'+name+' tbody');
             for (var i = 0; i < courses.length; i++) {
             var course = courses[i];
             var row = tbody.insertRow();
@@ -379,11 +387,7 @@
             cell3.appendChild(publishButton);
         }
 
-
-
-
-
-        }
+       }
 
         function addCourse_grade(course,name,grade) {
             var data = {'course': course, 'username': name, 'c_grade': grade};
