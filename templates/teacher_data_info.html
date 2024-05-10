@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teacher_info</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body, html {
             height: 100%;
@@ -94,29 +95,78 @@
             background-color: #f2f2f2;
         }
 
-        .return-button {
-            position: fixed; /* 绝对定位 */
-            right: 300px; /* 距离页面右侧20px */
-            bottom: 60px; /* 距离页面底部20px */
-            padding: 10px 20px; /* 按钮的内边距 */
-            background-color: #008CBA; /* 按钮的背景颜色 */
-            color: white; /* 按钮的文字颜色 */
-            border: black; /* 移除边框 */
-            border-radius: 5px; /* 圆角边框 */
-            cursor: pointer; /* 鼠标悬停时显示手形图标 */
-            transform: scale(1.5);
+        .return {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgb(20, 20, 20);
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
+            cursor: pointer;
+            transition-duration: 0.3s;
+            overflow: hidden;
+            position: relative;
         }
 
-        .return-button:hover {
-            background-color: #005f73; /* 鼠标悬停时按钮的背景颜色 */
+        .Icon {
+            width: 12px;
+            transition-duration: 0.3s;
+            color: #fff;
+            padding-right: 17px;
+        }
+        .return:hover {
+            width: 140px;
+            border-radius: 50px;
+            transition-duration: 0.3s;
+            background-color: rgb(161, 131, 255);
+            align-items: center;
         }
 
+        .return:hover .Icon {
+            /* width: 20px; */
+            transition-duration: 0.3s;
+            transform: translateX(-150%);
+        }
+
+        .return::before {
+            position: absolute;
+            bottom: -20px;
+            content: "返回";
+            color: white;
+            padding-left: 20px;
+            /* transition-duration: .3s; */
+            font-size: 0px;
+        }
+
+        .return:hover::before {
+            font-size: 20px;
+            opacity: 1;
+            bottom: unset;
+            /* transform: translateY(-30px); */
+            transition-duration: 0.3s;
+        }
+        .b_container{
+            position: relative;
+            bottom: 30px;
+            left: 200px;
+        }
     </style>
 </head>
 <body>
     <div id="teacher_info">教师信息</div>
     <br>
     <div id="info"></div>
+    <div class="b_container" onclick="backhome()">
+         <button class="return">
+            <span class="material-icons Icon">
+                arrow_back
+            </span>
+        </button>
+    </div>
     <br>
     <br>
 
@@ -124,7 +174,7 @@
         <!-- 表格将通过JavaScript动态生成 -->
     </div><br><br>
     <button onclick="getCookie()" class="add-btn" style="transform: scale(1.5)">添加课程</button>
-    <button onclick="backhome()" class="return-button">返回</button>
+<!--    <button onclick="backhome()" class="return-button">返回</button>-->
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>

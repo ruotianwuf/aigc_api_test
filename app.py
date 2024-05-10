@@ -552,7 +552,6 @@ def upload_student_homework():
     return jsonify(response_data), 200
 
 
-
 if __name__ == '__main__':
     app.run(debug=True)
 
