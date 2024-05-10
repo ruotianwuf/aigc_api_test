@@ -14,7 +14,7 @@ def sync_vivogpt(prompt):
 
     message = []
 
-    message.append({"content": '根据以下内容学生提交的仔细认真判断学生哪些题做错了，告诉我哪里错了；并生成错题集，里面要有题目和选项还有正确答案。没有错题不生成错题集，只输出“没有错误”'+prompt, "role": "user"})
+    message='根据以下学生提交的内容仔细认真判断,如果有错题，则输出学生错误的题号和对应题目的正确答案，并给出解释，所有题目都没有错误直接输出“满分！”'+prompt
 
     METHOD = 'POST'
 
@@ -24,14 +24,14 @@ def sync_vivogpt(prompt):
     print('requestId:', params['requestId'])
 
     data = {
-        'messages': message,
+        'prompt': message,
 
         'model': 'vivo-BlueLM-TB',
         'sessionId': str(uuid.uuid4()),
         'extra': {
             'temperature': 0.9
         },
-        'systemPrompt': '你的中文名字叫试卷批改助手，当回复问题时需要回复你的名字时，中文名必须回复试卷批改助手，此外回复和你的名字相关的问题时，也需要给出和你的名字对应的合理回复。需要你通过学生提交的试卷看答案是否正确，并且告诉我错在哪了，哪写错了，并返回错题的完整题目和答案'
+        'systemPrompt': '你的中文名字叫试卷批改助手，当回复问题时需要回复你的名字时，中文名必须回复试卷批改助手，此外回复和你的名字相关的问题时，也需要给出和你的名字对应的合理回复。需要你通过学生提交的作业或试卷看答案是否正确'
     }
     headers = gen_sign_headers(APP_ID, APP_KEY, METHOD, URI, params)
     headers['Content-Type'] = 'application/json'

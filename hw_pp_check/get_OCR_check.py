@@ -3,7 +3,7 @@
 
 import requests
 import base64
-from auth_util import gen_sign_headers
+from hw_pp_check.auth_util import gen_sign_headers
 
 # 请注意替换APP_ID、APP_KEY、PIC_FILE
 # APP_ID = '3032660331'

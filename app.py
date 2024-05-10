@@ -4,6 +4,7 @@ import random
 import datetime
 from flask import Flask, request, jsonify, render_template
 
+from hw_pp_check.check_answer import check_answer
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
@@ -545,7 +546,9 @@ def upload_student_homework():
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
     homework_file.save(os.path.join(upload_dir, homework_file.filename))
-    response_data = {'success': True, 'message': 'Homework uploaded successfully'}
+    print("上传完成")
+    check_result = check_answer(upload_dir+'/'+homework_file.filename)
+    response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
 
 
