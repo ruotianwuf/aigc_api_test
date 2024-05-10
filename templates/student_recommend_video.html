@@ -44,7 +44,7 @@
     var receivedData = urlParams.get('data');
     var str = receivedData.split(",")
     var data = {"cname": str[0], "tname": str[1]};
-    alert(JSON.stringify(data))
+    // alert(JSON.stringify(data))
     $.ajax({
         url: "/student/course/recommend/getiframe",
         type: "POST",
@@ -54,7 +54,7 @@
         success: function(response) {
             if (response.success) {
                 recommend = response.recommend;
-                alert(recommend)
+                // alert(recommend)
                 document.getElementById('videoContainer').innerHTML="'"+recommend+"'"
             }
         },
