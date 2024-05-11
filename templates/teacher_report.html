@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>课堂报告</title>
     <style>
         body {
@@ -14,7 +15,7 @@
             background-image: url("../static/img/Teacher_bg2.jpg");
         }
          .container {
-            max-width: 80%;
+            max-width: 50%;
             margin: 50px auto;
             padding: 20px;
             background-color: #fff;
@@ -30,7 +31,41 @@
             margin: 20px auto;
         }
 
-        button {
+
+        .black-background {
+            width: 80%;
+            background-color: lightskyblue;
+            color: black;
+            padding: 10px;
+            border-radius: 5px;
+            margin: auto;
+            font-weight: 600;
+        }
+
+          .return {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgb(20, 20, 20);
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
+            cursor: pointer;
+            transition-duration: 0.3s;
+            overflow: hidden;
+            position: relative;
+        }
+             .Icon {
+            width: 12px;
+            transition-duration: 0.3s;
+            color: #fff;
+            padding-right: 17px;
+        }
+
+   button {
             display: block;
             margin: 0 auto;
             padding: 10px 20px;
@@ -44,31 +79,42 @@
         button:hover {
             background-color: #0056b3;
         }
-        .black-background {
-            width: 80%;
-            background-color: lightskyblue;
-            color: black;
-            padding: 10px;
-            border-radius: 5px;
-            margin: auto;
-            font-weight: 600;
+
+           .return:hover {
+            width: 140px;
+            border-radius: 50px;
+            transition-duration: 0.3s;
+            background-color: rgb(161, 131, 255);
+            align-items: center;
         }
 
-        .return-button {
-            position: fixed; /* 绝对定位 */
-            right: 130px; /* 距离页面右侧20px */
-            bottom: 60px; /* 距离页面底部20px */
-            padding: 10px 20px; /* 按钮的内边距 */
-            background-color: lawngreen; /* 按钮的背景颜色 */
-            color: white; /* 按钮的文字颜色 */
-            border: black; /* 移除边框 */
-            border-radius: 5px; /* 圆角边框 */
-            cursor: pointer; /* 鼠标悬停时显示手形图标 */
-            transform: scale(1.5);
+        .return:hover .Icon {
+            /* width: 20px; */
+            transition-duration: 0.3s;
+            transform: translateX(-150%);
         }
 
-        .return-button:hover {
-            background-color: #005f73; /* 鼠标悬停时按钮的背景颜色 */
+        .return::before {
+            position: absolute;
+            bottom: -20px;
+            content: "返回";
+            color: white;
+            padding-left: 20px;
+            /* transition-duration: .3s; */
+            font-size: 0px;
+        }
+
+        .return:hover::before {
+            font-size: 20px;
+            opacity: 1;
+            bottom: unset;
+            /* transform: translateY(-30px); */
+            transition-duration: 0.3s;
+        }
+        .b_container{
+            position: fixed;
+            top: 10%;
+            left:10%;
         }
 
     </style>
@@ -86,7 +132,13 @@
         <div id="content"></div>
     </div>
 
-    <button onclick="backhome()" class="return-button">返回</button>
+   <div class="b_container" >
+         <button class="return" onclick=backhome()>
+            <span class="material-icons Icon">
+                arrow_back
+            </span>
+        </button>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
