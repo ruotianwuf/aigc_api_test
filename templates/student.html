@@ -10,8 +10,6 @@
 <body>
     <div class="container">
         <h1>一体化在线教育社区系统_学生端</h1>
-<!--        <button class="Register_button" onclick="register()">注册</button>-->
-<!--        <button class="Login_button" onclick="login()" id="student_login">登录</button>-->
         <div class="wrapper">
             <button class="custom-button" onclick="register()">
                 <span class="material-icons">draw</span>
@@ -87,15 +85,6 @@
             </div>
           </div>
         </section>
-<!--        <nav>-->
-<!--            <ul>-->
-<!--                <li><button onclick="go_advice()">建议</button></li>-->
-<!--                <li><button onclick="go_courses()">课程</button></li>-->
-<!--                <li><button onclick="go_recommend()">课程推荐</button></li>-->
-<!--                <li><button onclick="go_homework()">作业</button></li>-->
-<!--                <li><button onclick="go_forum()">论坛</button></li>-->
-<!--            </ul>-->
-<!--        </nav>-->
     </div>
 
     <div class="center">
@@ -127,7 +116,7 @@
     }
     return false;
 }
-    var myCookieValue = checkCookie("teacher");
+    var myCookieValue = checkCookie("student");
     if (myCookieValue){
         var buttonContent = '<span class="material-icons">person</span>'; // 替换图标部分
         buttonContent += '<span>欢迎你,' + myCookieValue + '</span>';
@@ -137,7 +126,7 @@
     }
         //隐藏注册按钮
      document.addEventListener("DOMContentLoaded", function () {
-        var ck = checkCookie('teacher');
+        var ck = checkCookie('student');
         if (ck == cookieValue) {
             var registerButton = document.querySelector('.wrapper .custom-button:nth-child(1)'); // 选择注册按钮
             registerButton.classList.add('hidden');
