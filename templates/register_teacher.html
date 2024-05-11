@@ -120,10 +120,10 @@
                         if(response.success){
                              alert("注册成功");
 
-                            window.location.href = "http://127.0.0.1:5000/login/teacher";
+                            window.location.href = "/login/teacher";
                         }else{
                             alert("用户名重复");
-                            window.location.href="http://127.0.0.1:5000/adduser/teacher";
+                            window.location.href="/adduser/teacher";
                         }
 
             // 重定向到接收页面
@@ -138,7 +138,7 @@
         })
 
         function go_home(){
-         window.location.href = 'http://127.0.0.1:5000/teacher';
+         window.location.href = '/teacher';
         }
 
     </script>

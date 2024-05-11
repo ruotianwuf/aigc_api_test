@@ -398,7 +398,7 @@
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var dataToSend = cookiePair[1];
-                    var url = "http://127.0.0.1:5000/student?data=" + dataToSend;
+                    var url = "/student?data=" + dataToSend;
                     window.location.href = url;
                 }
             }
