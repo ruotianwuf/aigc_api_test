@@ -4,13 +4,15 @@ import random
 import datetime
 from flask import Flask, request, jsonify, render_template
 
-from hw_pp_check.check_answer import check_answer
+
+
+from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
 from msg_api_test.msg_api_test import get_msg_answer
 from self_study_plan_project.get_plan_program import get_plan
-from long_video_transfer.run_bat_file import run_bat_file
+from long_video_transfer.run_bat import run_bat_file
 
 app = Flask(__name__)
 
@@ -46,7 +48,7 @@ def getanswer_msg():
         data = json.loads(request.get_data(as_text=True))
         data = data['question']
         result = sync_vivogpt_msg(data)
-        print(result)
+        print(type(result))
         if result != None:
             return jsonify({'success': True, 'result': result}), 200
         else:
@@ -56,6 +58,7 @@ def getanswer_msg():
 def getanswer_advice_msg():
         data = json.loads(request.get_data(as_text=True))
         result = get_plan(data)
+        print(type(result))
         print('内容:'+result)
         if result != None:
             return jsonify({'success': True, 'result': result}), 200
@@ -497,7 +500,6 @@ def get_file_list_hw_answer():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
-
 @app.route('/teacher/file_list/courseware', methods=['GET'])
 def get_file_list_courseware():
     upload_dir = 'static/file/courseware'
@@ -510,14 +512,11 @@ def get_file_list_paper():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
-
 @app.route('/teacher/file_list/pp_answer', methods=['GET'])
 def get_file_list_pp_answer():
     upload_dir = 'static/file/pp_answer'
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
-
-
 
 @app.route('/teacher/upload_video', methods=['POST'])
 def upload_video():
@@ -547,11 +546,10 @@ def upload_student_homework():
         os.makedirs(upload_dir)
     homework_file.save(os.path.join(upload_dir, homework_file.filename))
     print("上传完成")
-    check_result = check_answer(upload_dir+'/'+homework_file.filename)
+    check_result = get_correct_check(upload_dir+'/'+homework_file.filename)
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
 
-
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
 

@@ -2,7 +2,6 @@
 import uuid
 import time
 import requests
-import app
 from api_project_get.auth_util import gen_sign_headers
 
 message = []
