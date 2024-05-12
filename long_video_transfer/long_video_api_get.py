@@ -2,7 +2,6 @@
 import uuid
 import time
 import requests
-import app
 from auth_util import gen_sign_headers
 
 

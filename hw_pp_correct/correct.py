@@ -1,9 +1,10 @@
-from hw_pp_check.get_OCR_check import ocr_test
-from hw_pp_check.ai_check_answer import sync_vivogpt
+
+from hw_pp_correct.get_OCR_check import ocr_test
+from hw_pp_correct.ai_check_answer import sync_vivogpt
 
 
 
-def check_answer(path):
+def get_correct_check(path):
 
     handwriting_result = ocr_test(path)
 

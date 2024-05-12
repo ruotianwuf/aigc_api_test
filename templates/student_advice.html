@@ -88,7 +88,7 @@
         }
 
         .chat-box{
-            width: 80%;
+            width: 70%;
             margin: 15px auto;
         }
         .loading-container {
@@ -121,6 +121,11 @@
           }
         }
 
+        .content-box {
+            width: 70%;
+            margin: 15px auto;
+        }
+
 
     </style>
 
@@ -129,7 +134,7 @@
 
 <div class="content-box" id="content"></div>
 <div class="chat-box">
-    <input id="questionInput" type="text" placeholder="输入消息..." style="width: 80%; padding: 8px; border: none; border-radius: 5px;">
+    <input id="questionInput" type="text" placeholder="输入消息..." style="width: 90%; padding: 8px; border: none; border-radius: 5px;">
     <button onclick="question()" style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;cursor: pointer;">发送</button>
     <button onclick="go_home()" style="padding: 8px 16px; background-color: #555; color: white; border: none; border-radius: 5px;cursor: pointer;">返回</button>
 </div>
@@ -261,7 +266,7 @@ function go_home(){
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    window.location.href = 'http://127.0.0.1:5000/student?data='+data.username;
+                    window.location.href = '/student?data='+data.username;
                 }
             }
         }
