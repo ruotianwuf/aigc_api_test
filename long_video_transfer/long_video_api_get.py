@@ -44,7 +44,7 @@ def sync_vivogpt_class():
     print('requestId:', params['requestId'])
 
     data = {
-        'messages':message,
+        'messages': message,
 
         'model': 'vivo-BlueLM-TB',
         'sessionId': str(uuid.uuid4()),
