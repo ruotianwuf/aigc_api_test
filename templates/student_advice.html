@@ -259,7 +259,7 @@ function go_home(){
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    window.location.href = 'http://127.0.0.1:5000/student?data='+data.username;
+                    window.location.href = '/student?data='+data.username;
                 }
             }
         }
