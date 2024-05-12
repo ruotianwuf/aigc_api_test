@@ -14,7 +14,7 @@
             background-size: cover;
         }
         header {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.4);
             color: #fff;
             padding: 10px 20px;
             text-align: center;
@@ -22,8 +22,8 @@
         .introduction {
             text-align: center;
             padding: 20px;
-            font-size: 1.2em;
-            color: #fff;
+            font-size: 1.7em;
+            color: #000000;
         }
         .button-container {
             padding: 50px;
@@ -68,7 +68,6 @@
             height: auto;
             border-radius: 10px;
         }
-        /* 添加一些响应式设计的样式 */
         @media (max-width: 768px) {
             .nav-button {
                 padding: 10px 20px;
@@ -80,12 +79,13 @@
         }
 
         .small-image {
-            max-width: 10%;
+            max-width: 15%;
             height: auto;
         }
         /*展开效果*/
         .title_a {
-	    animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
+            font-size: 5em;
+            animation: tracking-in-expand 0.7s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
         }
         @keyframes tracking-in-expand {
           0% {
@@ -99,29 +99,35 @@
             opacity: 1;
           }
         }
+
     </style>
 </head>
 <body>
     <header>
-        <img src="../static/img/logo.png" alt="Logo" class="small-image">
-        <h1 class="title_a" style="font-size: 5em">一体化在线教育社区系统</h1>
+        <img src="../static/img/logo2.png" alt="Logo" class="small-image">
+        <h1 class="title_a">一体化在线教育社区系统</h1>
+
+
+        <div class="button-container">
+            <button class="nav-button nav-button-teacher" onclick="goToTeacherPage()">进入教师端</button>
+            <button class="nav-button nav-button-student" onclick="goToStudentPage()">进入学生端</button>
+        </div>
+
+        <div class="introduction">
+            <p>欢迎来到我们的在线教育平台，这里汇聚了丰富的教学资源和便捷的学习工具。无论您是教师还是学生，都能在这里找到适合自己的学习方式。</p>
+        </div>
     </header>
-
-    <div class="button-container">
-        <button class="nav-button nav-button-teacher" onclick="goToTeacherPage()">进入教师端</button>
-        <button class="nav-button nav-button-student" onclick="goToStudentPage()">进入学生端</button>
-    </div>
-
-    <div class="introduction">
-        <p>欢迎来到我们的在线教育平台，这里汇聚了丰富的教学资源和便捷的学习工具。无论您是教师还是学生，都能在这里找到适合自己的学习方式。</p>
-    </div>
-
 
 
     <footer>
-        <p>&copy; 2024 一体化在线教育社区系统. All rights reserved.</p>
-    </footer>
+        <p style="display: inline-block;">&copy; 2024 一体化在线教育社区系统. All rights reserved.</p>
+        <div>
+            <svg onclick="goToGithub()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+            </svg>
+        </div>
 
+    </footer>
     <script>
         function goToTeacherPage() {
             // alert('即将导航到教师端页面！');
@@ -131,6 +137,10 @@
         function goToStudentPage() {
             // alert('即将导航到学生端页面！');
             window.location.href = '/student'; // 实际使用时取消注释并替换为正确的路径
+        }
+
+        function goToGithub(){
+            window.location.href = 'https://github.com/ruotianwuf/aigc_api_test';
         }
     </script>
 </body>
