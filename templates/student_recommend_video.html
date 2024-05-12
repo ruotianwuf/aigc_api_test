@@ -3,46 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <title>student course recommend</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <style>
-    body {
-        background-image: url("/static/img/Student_bg1.jpg");
-        background-size: cover;
-    }
-    .container {
-          display: flex;
-          justify-content: center; /* 水平居中 */
-          align-items: center; /* 垂直居中 */
-          height: 100vh; /* 容器高度为视口高度 */
-          overflow: hidden; /* 防止视频超出容器 */
-    }
-    .video-container {
-          position: relative;
-          width: 80vw; /* 视频容器宽度为视口宽度的80% */
-          height: 90vh; /* 视频容器高度为视口高度的80% */
-          max-width: 100%; /* 最大宽度不超过容器宽度 */
-          max-height: 100%; /* 最大高度不超过容器高度 */
-    }
-    iframe {
+body, html {
+    height: 100%; /* 确保整个页面高度 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* 主轴方向为垂直方向 */
+    align-items: center; /* 子项水平居中 */
+    justify-content: center; /* 子项垂直居中 */
+    background-image: url('/static/img/Student_bg1.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* 调整为页面宽度的100% */
+    height: 100vh; /* 调整为视窗高度的100% */
+}
+
+
+iframe {
           position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%; /* 视频宽度填满容器 */
-          height: 100%; /* 视频高度填满容器 */
+          top: 200px;
+          left:300px;
+          width:   70%; /* 视频宽度填满容器 */
+          height:  70%; /* 视频高度填满容器 */
           border: none; /* 移除边框 */
     }
 
 
-</style>
+
+        .return {
+            top:10px;
+            left:10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgb(20, 20, 20);
+            border: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0px 0px 0px 4px rgba(180, 160, 255, 0.253);
+            cursor: pointer;
+            transition-duration: 0.3s;
+            overflow: hidden;
+            position: absolute;
+        }
+
+        .Icon {
+            width: 12px;
+            transition-duration: 0.3s;
+            color: #fff;
+            padding-right: 17px;
+        }
+
+        .return:hover {
+            width: 140px;
+            border-radius: 50px;
+            transition-duration: 0.3s;
+            background-color: rgb(161, 131, 255);
+            align-items: center;
+        }
+
+        .return:hover .Icon {
+            transition-duration: 0.3s;
+            transform: translateX(-150%);
+        }
+
+        .return::before {
+            position: absolute;
+            bottom: -20px;
+            content: "返回";
+            color: white;
+            padding-left: 20px;
+            font-size: 0px;
+        }
+
+        .return:hover::before {
+            font-size: 20px;
+            opacity: 1;
+            bottom: unset;
+            transition-duration: 0.3s;
+        }
+
+        .b_container {
+            position: fixed;
+            top: 10%;
+            left: 10%;
+        }
+
+    </style>
 <body>
 
-        <h1 style="margin: auto; text-align: center; font-size: 4em" id="info"></h1>
 
-    <div class="container">
-        <div class="video-container">
-            <div id="videoContainer"></div>
-        </div>
+
+<div class="container">
+    <div id="titleContainer"></div>  <!-- 标题容器 -->
+    <div class="video-container">
+        <div id="videoContainer"></div>  <!-- 视频容器 -->
     </div>
+</div>
+
+
+
+
+
+ <div class="b_container" onclick="go_home()">
+         <button class="return">
+            <span class="material-icons Icon">
+                arrow_back
+            </span>
+        </button>
+         </div>
+
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -51,6 +135,11 @@
     var receivedData = urlParams.get('data');
     var str = receivedData.split(",")
     var data = {"cname": str[0], "tname": str[1]};
+        // 在页面加载时设置标题
+    // document.addEventListener('DOMContentLoaded', function() {
+    //     var titleHTML = `<h1>${data.cname}</h1><h2>${data.tname}</h2>`; // 创建标题的 HTML 结构
+    //     document.getElementById('titleContainer').innerHTML = titleHTML; // 将标题插入到 titleContainer 中
+    // });
     // alert(JSON.stringify(data))
     $.ajax({
         url: "/student/course/recommend/getiframe",
@@ -63,8 +152,6 @@
                 recommend = response.recommend;
                 // alert(recommend)
                 document.getElementById('videoContainer').innerHTML="'"+recommend+"'"
-                document.getElementById('info').innerHTML=str[0]+'    '+str[1]
-
             }
         },
         error: function() {
@@ -72,5 +159,7 @@
         }
     });
 </script>
+
+
 </body>
 </html>
