@@ -4,8 +4,6 @@ import random
 import datetime
 from flask import Flask, request, jsonify, render_template
 
-
-
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
@@ -48,7 +46,7 @@ def getanswer_msg():
         data = json.loads(request.get_data(as_text=True))
         data = data['question']
         result = sync_vivogpt_msg(data)
-        print(type(result))
+        print(result)
         if result != None:
             return jsonify({'success': True, 'result': result}), 200
         else:
@@ -58,7 +56,6 @@ def getanswer_msg():
 def getanswer_advice_msg():
         data = json.loads(request.get_data(as_text=True))
         result = get_plan(data)
-        print(type(result))
         print('内容:'+result)
         if result != None:
             return jsonify({'success': True, 'result': result}), 200
@@ -500,6 +497,7 @@ def get_file_list_hw_answer():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
+
 @app.route('/teacher/file_list/courseware', methods=['GET'])
 def get_file_list_courseware():
     upload_dir = 'static/file/courseware'
@@ -512,11 +510,14 @@ def get_file_list_paper():
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
 
+
 @app.route('/teacher/file_list/pp_answer', methods=['GET'])
 def get_file_list_pp_answer():
     upload_dir = 'static/file/pp_answer'
     file_list = os.listdir(upload_dir)
     return jsonify(file_list)
+
+
 
 @app.route('/teacher/upload_video', methods=['POST'])
 def upload_video():
@@ -550,6 +551,9 @@ def upload_student_homework():
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
 
+
 if __name__ == '__main__':
-    app.run(debug=False)
+   # app.run(debug=False)
+    app.run(debug=False, host='10.6.0.12', port=8000)
+#
 

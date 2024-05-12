@@ -6,7 +6,7 @@
 </head>
 <style>
     body {
-        background-image: url("../static/img/Student_bg1.jpg");
+        background-image: url("/static/img/Student_bg1.jpg");
         background-size: cover;
     }
     .container {
@@ -19,7 +19,7 @@
     .video-container {
           position: relative;
           width: 80vw; /* 视频容器宽度为视口宽度的80% */
-          height: 80vh; /* 视频容器高度为视口高度的80% */
+          height: 90vh; /* 视频容器高度为视口高度的80% */
           max-width: 100%; /* 最大宽度不超过容器宽度 */
           max-height: 100%; /* 最大高度不超过容器高度 */
     }
@@ -35,6 +35,9 @@
 
 </style>
 <body>
+
+        <h1 style="margin: auto; text-align: center; font-size: 4em" id="info"></h1>
+
     <div class="container">
         <div class="video-container">
             <div id="videoContainer"></div>
@@ -60,6 +63,8 @@
                 recommend = response.recommend;
                 // alert(recommend)
                 document.getElementById('videoContainer').innerHTML="'"+recommend+"'"
+                document.getElementById('info').innerHTML=str[0]+'    '+str[1]
+
             }
         },
         error: function() {

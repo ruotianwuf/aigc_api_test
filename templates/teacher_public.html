@@ -314,6 +314,7 @@
                     viewDetailsButton.dataset.name = courseItem[0]; // 存储姓名到自定义属性中，以便在点击时获取
                     viewDetailsButton.onclick = function() {
                         viewDetails(this.dataset.name);
+                        this.disabled = true; // 禁用按钮
                     };
                     cell4.appendChild(viewDetailsButton);
                 }
