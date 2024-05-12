@@ -213,7 +213,7 @@
                     formattedAnswer = formattedAnswer.replace(/(\d+)\. /g, '$1. ');
                     formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');
                     formattedAnswer = formattedAnswer.replace(/(①|②|③|④|⑤|⑥) /g, '$1 ');
-                    formattedAnswer = formattedAnswer.replace(/\n/g, '<br>');
+                    formattedAnswer = formattedAnswer.replace(/\\n/g, '<br>');
                     var answerHTML = "<div class='message ai-message' style='display: flex;'>" +
                                      "<img src='../static/img/AI UI.png' alt='AI Avatar' class='avatar'>" +
                                      "<div>" +
@@ -242,7 +242,12 @@ function displayAnswerOneByOne(answer, outputText) {
     var index = 0;
     var interval = setInterval(function() {
         var char = answer.charAt(index);
-        outputText.innerHTML += char;
+        // Check if the character is a newline character
+        if (char === '\n') {
+            outputText.innerHTML += '<br>';
+        } else {
+            outputText.innerHTML += char;
+        }
         index++;
         if (index === answer.length) {
             clearInterval(interval);
