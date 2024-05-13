@@ -25,31 +25,8 @@
             font-size: 1.7em;
             color: #000000;
         }
-        .button-container {
-            padding: 50px;
-            text-align: center;
-        }
-        .nav-button {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px 30px;
-            font-size: 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .nav-button-teacher {
-            background-color: sandybrown;
-            color: white;
-        }
-        .nav-button-student {
-            background-color: rosybrown;
-            color: white;
-        }
-        .nav-button:hover {
-            filter: brightness(0.9);
-        }
+
+
         footer {
             background: #333;
             color: #fff;
@@ -59,20 +36,8 @@
             bottom: 0;
             width: 100%;
         }
-        .logo-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
+
         @media (max-width: 768px) {
-            .nav-button {
-                padding: 10px 20px;
-                font-size: 18px;
-            }
             .introduction {
                 font-size: 1em;
             }
@@ -100,32 +65,130 @@
           }
         }
 
+        .card-client {
+              background: #2cb5a0;
+              width: 13rem;
+              padding-top: 25px;
+              padding-bottom: 25px;
+              padding-left: 20px;
+              padding-right: 20px;
+              border: 4px solid #7cdacc;
+              box-shadow: 0 6px 10px rgb(70, 69, 69);
+              border-radius: 10px;
+              text-align: center;
+              color: #fff;
+              font-family: "Poppins", sans-serif;
+              transition: all 0.3s ease;
+              margin-top: 20px; /* 上方间距 */
+        }
+
+        .card-client:hover {
+          transform: translateY(-10px);
+        }
+
+        .user-picture {
+          overflow: hidden;
+          object-fit: cover;
+          width: 5rem;
+          height: 5rem;
+          border: 4px solid #7cdacc;
+          border-radius: 999px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: auto;
+        }
+
+        .user-picture svg {
+          width: 2.5rem;
+          fill: currentColor;
+        }
+
+        .name-client {
+          margin: 0;
+          margin-top: 20px;
+          font-weight: 600;
+          font-size: 18px;
+        }
+
+        .name-client span {
+          display: block;
+          font-weight: 200;
+          font-size: 16px;
+        }
+
+        .social-media a {
+          position: relative;
+          margin-right: 15px;
+          text-decoration: none;
+          color: inherit;
+        }
+
+        .social-media a:last-child {
+          margin-right: 0;
+        }
+
+        .social-media a svg {
+          width: 1.1rem;
+          fill: currentColor;
+        }
+
+        /*-- Tooltip Social Media --*/
+
+        .social-media a .tooltip-social:after {
+          border-top-color: #262626;
+        }
+
+        .social-media a:hover {
+          opacity: 1;
+          transform: translate(-50%, -130%);
+        }
+
+        .card-position {
+            display: flex; /* 将卡片容器设置为弹性容器 */
+            justify-content: center; /* 水平居中 */
+
+        }
     </style>
 </head>
 <body>
     <header>
         <img src="../static/img/logo2.png" alt="Logo" class="small-image">
         <h1 class="title_a">VIVO·智学</h1>
-
-
-        <div class="button-container">
-            <button class="nav-button nav-button-teacher" onclick="goToTeacherPage()">进入教师端</button>
-            <button class="nav-button nav-button-student" onclick="goToStudentPage()">进入学生端</button>
+        <div class="card-position">
+        <div class="card-client">
+            <div class="user-picture">
+                <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"></path>
+                </svg>
+            </div>
+            <p class="name-client"> 我是学生
+                <span>进入系统
+                </span>
+            </p>
         </div>
-
+        <div class="card-client">
+            <div class="user-picture">
+                <svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M224 256c70.7 0 128-57.31 128-128s-57.3-128-128-128C153.3 0 96 57.31 96 128S153.3 256 224 256zM274.7 304H173.3C77.61 304 0 381.6 0 477.3c0 19.14 15.52 34.67 34.66 34.67h378.7C432.5 512 448 496.5 448 477.3C448 381.6 370.4 304 274.7 304z"></path>
+                </svg>
+            </div>
+            <p class="name-client"> 我是老师
+                <span>进入系统
+                </span>
+            </p>
+        </div>
+    </div>
         <div class="introduction">
             <p>欢迎来到我们的在线教育平台，这里汇聚了丰富的教学资源和便捷的学习工具。无论您是教师还是学生，都能在这里找到适合自己的学习方式。</p>
         </div>
     </header>
 
-
     <footer>
         <p style="display: inline-block;">&copy; 2024 一体化在线教育社区系统 VIVO·智学. All rights reserved.</p>
-
-            <svg onclick="goToGithub()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-            </svg>
-
+        <svg onclick="goToGithub()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
     </footer>
     <script>
         function goToTeacherPage() {
