@@ -158,6 +158,12 @@
             </div>
             <br>
             <div class="field">
+                <input required type="password" id="Rpassword" class="input">
+                <span class="material-icons">lock</span>
+                <label class="label">确认密码</label>
+            </div>
+            <br>
+            <div class="field">
                 <input required type="text" id="major" class="input">
                 <span class="material-icons">bar_chart</span>
                 <label class="label">专业</label>
@@ -184,11 +190,12 @@
             // 获取用户名和密码输入框的值
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
+            const Rpassword = document.getElementById('Rpassword').value;
             const major = document.getElementById('major').value;
 
             // 创建一个FormData对象，用于将表单数据发送给后端
             var data = {'username': username, 'password': password, 'major': major};
-            if (username && password) {
+            if (username && password && password===Rpassword) {
                 $.ajax({
                     url: "/adduser/teacher/1",
                     type: "POST",
@@ -211,7 +218,11 @@
                         alert("错误error");
                     }
                 });
-            } else {
+            }
+            else if(password !== Rpassword){
+                alert("密码不一致");
+            }
+            else {
                 alert("用户名和密码不能为空");
             }
         })
