@@ -210,8 +210,8 @@
             success: function(response) {
                 if (response.success) {
                     var formattedAnswer = response.result;
-                    formattedAnswer = formattedAnswer.replace(/\n\n/g, '<br><br>');
-                    formattedAnswer = formattedAnswer.replace(/\n/g, '<br>');
+//formattedAnswer = formattedAnswer.replace(/\n\n/g, '<br><br>');
+                    formattedAnswer = formattedAnswer.replace(/\\n/g, '<br>');
                     formattedAnswer = formattedAnswer.replace(/(\d+)\. /g, '$1. ');
                     formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');
                     formattedAnswer = formattedAnswer.replace(/(①|②|③|④|⑤|⑥) /g, '$1 ');
@@ -245,7 +245,12 @@ function displayAnswerOneByOne(answer, outputText) {
     var index = 0;
     var interval = setInterval(function() {
         var char = answer.charAt(index);
-        outputText.innerHTML += char;
+        if (char === '\n') {
+            outputText.innerHTML += '<br>';
+        } else {
+            outputText.innerHTML += char;
+        }
+
         index++;
         if (index === answer.length) {
             clearInterval(interval);
@@ -253,10 +258,10 @@ function displayAnswerOneByOne(answer, outputText) {
     }, 30); // Adjust the delay between characters if needed
 }
 
-function go_home(){
-            var cookies = document.cookie.split("; ");
-            for (var i = 0; i < cookies.length; i++) {
-                var cookiePair = cookies[i].split("=");
+    function go_home() {
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
                     window.location.href = '/student?data='+data.username;
