@@ -410,7 +410,7 @@
             postElement.append(`<h2 id = "${post[6]}">${post[3]}</h2>`);
 
             postElement.append(`<p>发布日期: ${post[4]}</p>`);
-            postElement.append(`<p>喜欢: ${post[5]}</p>`);
+            postElement.append(`<p id="like">喜欢: ${post[5]}</p>`);
             postElement.append(`<button onclick="like('${post[6]}','${post[5]}')" id="likeid">点赞</button>&ensp;`);
             postElement.append(`<button onclick="openCommentForm('${post[6]}','${post[1]}')">评论</button>`);
 
@@ -448,7 +448,7 @@
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
-                        location.reload();
+                        location.reload()
                     } else {
                         console.error("Failed");
                     }
