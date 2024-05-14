@@ -154,7 +154,7 @@ def getstudent_homework():
 @app.route('/student/forum/post', methods=['POST'])
 def getstudent_forum_submit_post():
     data = json.loads(request.get_data(as_text=True))
-    sname = data['sname']
+    sname = "'"+str(data['sname'])+"'"
     con = UserServerController()
     sid = con.get_sid(sname)
     print("sid"+str(sid))
