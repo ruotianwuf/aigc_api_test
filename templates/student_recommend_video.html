@@ -161,6 +161,7 @@ iframe {
         },
         error: function() {
             alert("错误error");
+
         }
     });
 
@@ -171,7 +172,7 @@ iframe {
             var cookiePair = cookies[i].split("=");
             if (cookiePair[0] === "student" && cookiePair[1]) {
                 var data = {"username": cookiePair[1]};
-                window.location.href = '/student/recommend';
+                window.location.href = '/smartlearn/student/recommend';
             }
         }
     }

@@ -15,7 +15,7 @@
             justify-content: center; /* 将内容水平居中 */
             align-items: center;
             height: 100vh;
-            background-image: url("../static/img/Student_bg1.jpg");
+            background-image: url("/static/img/Student_bg1.jpg");
             background-size: cover;
         }
         .content {
@@ -203,10 +203,10 @@
                         if(response.success){
                              alert("注册成功");
 
-                            window.location.href = "/login/student";
+                            window.location.href = "/smartlearn/login/student";
                         }else{
                             alert("用户名重复");
-                            window.location.href="/adduser/student";
+                            window.location.href="/smartlearn/adduser/student";
                         }
 
             // 重定向到接收页面
@@ -225,10 +225,10 @@
         })
 
         function go_home(){
-         window.location.href = '/student';
+         window.location.href = '/smartlearn/student';
         }
         function go_signin(){
-            window.location.href = '/login/student';
+            window.location.href = '/smartlearn/login/student';
         }
     </script>
 </body>

@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-             background-image: url("../static/img/Student_bg1.jpg");
+             background-image: url("/static/img/Student_bg1.jpg");
             background-size: cover;
         }
          .container {
@@ -152,7 +152,7 @@
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    window.location.href = '/student?data='+data.username;
+                    window.location.href = '/smartlearn/student?data='+data.username;
                 }
             }
         }

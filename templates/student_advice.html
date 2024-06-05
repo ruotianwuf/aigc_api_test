@@ -8,7 +8,7 @@
      <style>
 
         body {
-            background-image: url("../static/img/Student_bg1.jpg");
+            background-image: url("/static/img/Student_bg1.jpg");
             color: black;
             background-size: cover;
             background-repeat: no-repeat;
@@ -264,7 +264,7 @@ function displayAnswerOneByOne(answer, outputText) {
             var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    window.location.href = '/student?data='+data.username;
+                    window.location.href = '/smartlearn/student?data='+data.username;
                 }
             }
         }

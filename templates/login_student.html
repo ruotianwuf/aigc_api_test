@@ -9,7 +9,7 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            background-image: url("../static/img/Student_bg1.jpg");
+            background-image: url("/static/img/Student_bg1.jpg");
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -191,11 +191,11 @@
                          if(response.success){
                              alert("登录成功");
                              var dataToSend = username;
-                             var url = "/student?data=" + dataToSend;
+                             var url = "/smartlearn/student?data=" + dataToSend;
                              window.location.href = url;
                         }else{
                             alert("账号或密码错误");
-                            window.location.href="/login/student";
+                            window.location.href="/smartlearn/login/student";
                         }
                     },
                     error: function () {
@@ -208,10 +208,10 @@
         })
 
         function go_home(){
-            window.location.href = '/student';
+            window.location.href = '/smartlearn/student';
         }
         function go_signup(){
-            window.location.href = "/adduser/student";
+            window.location.href = "/smartlearn/adduser/student";
         }
     </script>
 </body>

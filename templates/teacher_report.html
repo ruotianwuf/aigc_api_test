@@ -12,7 +12,7 @@
             padding: 0;
             background-color: #f4f4f4;
             background-size: cover;
-            background-image: url("../static/img/Teacher_bg2.jpg");
+            background-image: url("/static/img/Teacher_bg2.jpg");
         }
          .container {
             max-width: 50%;
@@ -183,7 +183,7 @@
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "teacher" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    window.location.href = '/teacher?data='+data.username;
+                    window.location.href = '/smartlearn/teacher?data='+data.username;
                 }
             }
         }

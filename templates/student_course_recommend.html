@@ -13,7 +13,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            background-image: url("../static/img/Student_bg1.jpg");
+            background-image: url("/static/img/Student_bg1.jpg");
             background-size: cover;
 
         }
@@ -304,7 +304,7 @@
              cell2.textContent = courseItem[1];
              var button = document.createElement('button');
              var dataToSend = [courseItem[0],courseItem[1]];
-             var url = "/student/recommend/video?data=" + dataToSend;
+             var url = "/smartlearn/student/recommend/video?data=" + dataToSend;
              // 使用函数来处理点击事件
              button.onclick = function() {
                  window.location.href = url;
@@ -328,7 +328,7 @@
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var dataToSend = cookiePair[1];
-                    var url = "/student?data=" + dataToSend;
+                    var url = "/smartlearn/student?data=" + dataToSend;
                     window.location.href = url;
                 }
             }

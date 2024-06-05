@@ -13,7 +13,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
-            background-image: url("../static/img/Student_bg1.jpg");
+            background-image: url("/static/img/Student_bg1.jpg");
             background-size: cover;
         }
         #teacher_info {
@@ -275,7 +275,7 @@
                 var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var dataToSend = cookiePair[1];
-                    var url = "/student?data=" + dataToSend;
+                    var url = "/smartlearn/student?data=" + dataToSend;
                     window.location.href = url;
                 }
             }

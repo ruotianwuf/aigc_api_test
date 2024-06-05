@@ -74,6 +74,16 @@
               </button>
             </div>
 
+              <div>
+              <button onclick="go_chatgroup()">
+                <span class="material-icons">
+                  groups
+                </span>
+                <h3>聊天室</h3>
+                <p>同专业学生分享聊天</p>
+              </button>
+            </div>
+
             <div>
               <button >
                 <span class="material-icons">
@@ -137,11 +147,11 @@
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/advice";
+             window.location.href="/smartlearn/student/advice";
 
          }else{
              alert("请先登录");
-             window.location.href="/login/student";
+             window.location.href="/smartlearn/login/student";
          }
      }
      function go_courses(){
@@ -149,10 +159,10 @@
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/course";
+             window.location.href="/smartlearn/student/course";
          }else{
              alert("请先登录");
-             window.location.href="/login/student";
+             window.location.href="/smartlearn/login/student";
          }
      }
      function go_forum(){
@@ -160,10 +170,10 @@
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/forum";
+             window.location.href="/smartlearn/student/forum";
          }else{
              alert("请先登录");
-             window.location.href="/login/student";
+             window.location.href="/smartlearn/login/student";
          }
      }
      function go_recommend(){
@@ -171,10 +181,10 @@
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/recommend";
+             window.location.href="/smartlearn/student/recommend";
          }else{
              alert("请先登录");
-             window.location.href="/login/student";
+             window.location.href="/smartlearn/login/student";
          }
      }
 
@@ -183,10 +193,22 @@
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/student/homework";
+             window.location.href="/smartlearn/student/homework";
          }else{
              //alert("请先登录");
-             window.location.href="/login/student";
+             window.location.href="/smartlearn/login/student";
+         }
+     }
+
+     function go_chatgroup(){
+         var ck=checkCookie('student');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+             window.location.href="/smartlearn/student/group?data="+"ck";
+         }else{
+             //alert("请先登录");
+             window.location.href="/smartlearn/login/student";
          }
      }
      function login(){
@@ -195,18 +217,18 @@
          if(ck==cookieValue){
              // alert(ck);
          }else{
-             window.location.href="/login/student";
+             window.location.href="/smartlearn/login/student";
          }
      }
 
      function register(){
-        window.location.href="/adduser/student"
+        window.location.href="/smartlearn/adduser/student"
     }
 
 
 
      function go_home(){
-         window.location.href = '/';
+         window.location.href = '/smartlearn';
         }
 </script>
 </body>

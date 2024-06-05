@@ -11,34 +11,49 @@ from controller.UserServerController import UserServerController
 from msg_api_test.msg_api_test import get_msg_answer
 from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
+from flask import Flask, render_template, request, session, redirect, url_for
+from flask_socketio import SocketIO, join_room, leave_room
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'jjj'
+
+socketio = SocketIO()
+socketio.init_app(app)
+
 
 # 处理根路径请求，返回欢迎页面
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
-@app.route('/file/upload/', methods=['POST', 'GET'])
-def upload():
-    try:
-        # get 请求返回上传页面
-        if request.method == 'GET':
-            return render_template('get_file_test.html')
-        if request.method == 'POST':
-            f = request.files['file']
-            paths = os.path.join('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\static\\file')
-            da = os.path.exists(paths)
-            if da:
-                ...
-            else:
-                os.makedirs(paths)
-            upload_path = os.path.join(paths, f.filename)
-            f.save(upload_path)
-            return "上传成功"
-    except Exception as e:
-        print(e)
-        return {'code': 0, 'msg': f'{e}'}
+@app.route('/smartlearn/', methods=['GET'])
+def samartlenar():
+    return render_template('smartlearn.html')
+
+@app.route('/smartlife/', methods=['GET'])
+def samartlife():
+    return render_template('smartlife.html')
+
+# @app.route('/file/upload/', methods=['POST', 'GET'])
+# def upload():
+#     try:
+#         # get 请求返回上传页面
+#         if request.method == 'GET':
+#             return render_template('get_file_test.html')
+#         if request.method == 'POST':
+#             f = request.files['file']
+#             paths = os.path.join('E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\static\\file')
+#             da = os.path.exists(paths)
+#             if da:
+#                 ...
+#             else:
+#                 os.makedirs(paths)
+#             upload_path = os.path.join(paths, f.filename)
+#             f.save(upload_path)
+#             return "上传成功"
+#     except Exception as e:
+#         print(e)
+#         return {'code': 0, 'msg': f'{e}'}
 
 
 @app.route('/answer_msg', methods=['POST'])
@@ -72,15 +87,19 @@ def getanswer():
     else:
         return jsonify({'success': False}), 200
 
-@app.route('/student', methods=['GET'])
+@app.route('/smartlearn/student', methods=['GET'])
 def getstudent():
     return render_template('student.html')
 
-@app.route('/student/advice', methods=['GET'])
+
+online_user = []
+room_user = {}
+
+@app.route('/smartlearn/student/advice', methods=['GET'])
 def getstudent_advice():
     return render_template('student_advice.html')
 
-@app.route('/student/course', methods=['GET'])
+@app.route('/smartlearn/student/course', methods=['GET'])
 def getstudent_course():
     return render_template('student_course.html')
 
@@ -143,11 +162,11 @@ def getstudent_course_get():
         return jsonify({'success': True}), 200
 
 
-@app.route('/student/forum', methods=['GET'])
+@app.route('/smartlearn/student/forum', methods=['GET'])
 def getstudent_forum():
     return render_template('student_forum.html')
 
-@app.route('/student/homework', methods=['GET'])
+@app.route('/smartlearn/student/homework', methods=['GET'])
 def getstudent_homework():
     return render_template('student_homework.html')
 
@@ -212,30 +231,30 @@ def getstudent_forum_post():
     else:
         return jsonify({'success': False}), 200
 
-@app.route('/student/recommend', methods=['GET'])
+@app.route('/smartlearn/student/recommend', methods=['GET'])
 def getstudent_recommend():
     return render_template('student_course_recommend.html')
 
-@app.route('/student/recommend/video', methods=['GET'])
+@app.route('/smartlearn/student/recommend/video', methods=['GET'])
 def get_Recommend_Video():
     return render_template('student_recommend_video.html')
 
-@app.route('/teacher', methods=['GET'])
+@app.route('/smartlearn/teacher', methods=['GET'])
 def getteacher():
     return render_template('teacher.html')
-@app.route('/teacher/report', methods=['GET'])
+@app.route('/smartlearn/teacher/report', methods=['GET'])
 def getteacher_report():
     return render_template('teacher_report.html')
 
-@app.route('/teacher/upload', methods=['GET'])
+@app.route('/smartlearn/teacher/upload', methods=['GET'])
 def getteacher_upload():
     return render_template('teacher_upload.html')
 
-@app.route('/teacher/check', methods=['GET'])
+@app.route('/smartlearn/teacher/check', methods=['GET'])
 def getteacher_check():
     return render_template('teacher_check.html')
 
-@app.route('/teacher/public', methods=['GET'])
+@app.route('/smartlearn/teacher/public', methods=['GET'])
 def getteacher_public():
     return render_template('teacher_public.html')
 
@@ -272,15 +291,15 @@ def add_course_grade():
 
 
 
-@app.route('/adduser', methods=['GET'])
+@app.route('/smartlearn/adduser', methods=['GET'])
 def adduser():
     return render_template('/')
 
-@app.route('/adduser/student', methods=['GET'])
+@app.route('/smartlearn/adduser/student', methods=['GET'])
 def adduser_student():
     return render_template('register_student.html')
 
-@app.route('/adduser/teacher', methods=['GET'])
+@app.route('/smartlearn/adduser/teacher', methods=['GET'])
 def adduser_teacher():
     return render_template('register_teacher.html')
 
@@ -312,15 +331,15 @@ def adduser_teacher_info():
 
 
 
-@app.route('/login', methods=['GET'])
+@app.route('/smartlearn/login', methods=['GET'])
 def getlogin():
     return render_template('/')
 
-@app.route('/login/student', methods=['GET'])
+@app.route('/smartlearn/login/student', methods=['GET'])
 def getlogin_student():
     return render_template('login_student.html')
 
-@app.route('/login/teacher', methods=['GET'])
+@app.route('/smartlearn/login/teacher', methods=['GET'])
 def getlogin_teacher():
     return render_template('login_teacher.html')
 
@@ -348,7 +367,7 @@ def getlogin_student_info():
 
 
 
-@app.route('/teacher/info', methods=['GET'])
+@app.route('/smartlearn/teacher/info', methods=['GET'])
 def teacher_info():
     return render_template('teacher_data_info.html')
 
@@ -395,7 +414,7 @@ def add_teacher_c_info():
 
 
 # 老师上传作业页面路由
-@app.route('/teacher/upload_homework', methods=['GET', 'POST'])
+@app.route('/smartlearn/teacher/upload_homework', methods=['GET', 'POST'])
 def upload_homework():
     if request.method == 'GET':
         return render_template('teacher_upload_homework.html')
@@ -553,7 +572,7 @@ def upload_student_homework():
 
 
 if __name__ == '__main__':
-   # app.run(debug=False)
-    app.run(debug=False, host='10.6.0.12', port=8000)
+   app.run(debug=False)
+   # app.run(debug=False, host='10.6.0.12', port=443, ssl_context=('ruotianjoy.icu_bundle.pem','ruotianjoy.icu.key'))
 #
 
