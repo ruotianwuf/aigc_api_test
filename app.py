@@ -13,6 +13,7 @@ from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
+from api_project_get.get_career_api import sync_vivogpt_careeradvice
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
@@ -27,7 +28,7 @@ def index():
     return render_template('index.html')
 
 @app.route('/smartlearn/', methods=['GET'])
-def samartlenar():
+def samartlearn():
     return render_template('smartlearn.html')
 
 @app.route('/smartlife/', methods=['GET'])
@@ -76,6 +77,16 @@ def getanswer_advice_msg():
             return jsonify({'success': True, 'result': result}), 200
         else:
             return jsonify({'success': False}), 200
+
+@app.route('/answer_msg/career_advice', methods=['POST'])
+def getanswer_careeradvice_msg():
+    data = json.loads(request.get_data(as_text=True))
+    data = data['question']
+    result = sync_vivogpt_careeradvice(data)
+    if result != None:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
 
 @app.route('/answer', methods=['POST'])
 def getanswer():
@@ -258,6 +269,9 @@ def getteacher_check():
 def getteacher_public():
     return render_template('teacher_public.html')
 
+@app.route('/smartlife/career/advice', methods=['GET'])
+def getcareer_advice():
+    return render_template('career_advice.html')
 
 @app.route('/teacher/public/get_sinfo', methods=['POST'])
 def get_teacher_sinfo():

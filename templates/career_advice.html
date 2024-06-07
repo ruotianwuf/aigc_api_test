@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Career_Advice</title>
+    <style>
+        body {
+            background-image: url("/static/img/Student_bg1.jpg");
+            color: black;
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-attachment: fixed;
+            font-family: 'SimSun', 'Songti SC', 'serif';
+            padding: 20px;
+        }
+        .popup {
+            position: relative;
+            margin: auto;
+            width: 70%;
+            height: fit-content;
+            background: #FFFFFF;
+            border-radius: 13px;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 20px;
+            gap: 20px;
+        }
+        .note {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .title {
+            font-style: normal;
+            font-weight: 700;
+            font-size: 17px;
+            line-height: 24px;
+            color: #2B2B2F;
+        }
+
+        .subtitle {
+            font-style: normal;
+            font-weight: 600;
+            font-size: 13px;
+            line-height: 18px;
+            color: #5F5D6B;
+        }
+
+        .input_field {
+            width: 100%;
+            height: 42px;
+            padding: 0 0 0 9px;
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid #e5e5e5;
+            filter: drop-shadow(0px 1px 0px #efefef)
+            drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+            transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+        }
+
+        .input_field:focus {
+            border: 1px solid transparent;
+            box-shadow: 0px 0px 0px 1px #2B2B2F;
+            background-color: transparent;
+        }
+
+        .select_field {
+            width: 35%;
+            height: 42px;
+            padding: 0;
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid #e5e5e5;
+            filter: drop-shadow(0px 1px 0px #efefef)
+            drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+            transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+        }
+        .select_field:focus {
+            border: 1px solid transparent;
+            box-shadow: 0px 0px 0px 1px #2B2B2F;
+            background-color: transparent;
+        }
+
+       .submit {
+            display: flex;
+            margin: auto;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            gap: 10px;
+            width: 40%;
+            height: 42px;
+            background: linear-gradient(180deg, #8f44ff 0%, #9e11fc 50%, #ed05ce 100%);
+            box-shadow: 0px 0.5px 0.5px #EFEFEF, 0px 1px 0.5px rgba(239, 239, 239, 0.5);
+            border-radius: 5px;
+            border: 0;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 12px;
+            line-height: 15px;
+            color: #ffffff;
+        }
+        .report-background {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 5px;
+            min-height: 100%;
+            width: 100%;
+            justify-content: center;
+            padding: 7em;
+            font-size: 20px;
+            box-sizing: border-box;
+            border: 3px solid #656565;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+        }
+        .report-background h1 {
+           text-align: center;
+           margin-top: 0;
+        }
+        .select{
+            display: inline;
+            width: 100%;
+        }
+        ::placeholder {
+            color: #000000;
+            font-weight: 400;
+        }
+        .loader {
+            width: 44.8px;
+            height: 44.8px;
+            color: #7365ea;
+            position: relative;
+            background: radial-gradient(11.2px,currentColor 94%,#0000);
+        }
+
+        .loader:before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: radial-gradient(10.08px at bottom right,#0000 94%,currentColor) top    left,
+                  radial-gradient(10.08px at bottom left ,#0000 94%,currentColor) top    right,
+                  radial-gradient(10.08px at top    right,#0000 94%,currentColor) bottom left,
+                  radial-gradient(10.08px at top    left ,#0000 94%,currentColor) bottom right;
+            background-size: 22.4px 22.4px;
+            background-repeat: no-repeat;
+            animation: loader 1.5s infinite cubic-bezier(0.3,1,0,1);
+        }
+
+        @keyframes loader {
+            33% {
+                inset: -11.2px;
+                transform: rotate(0deg);
+            }
+            66% {
+                inset: -11.2px;
+                transform: rotate(90deg);
+            }
+
+            100% {
+                inset: 0;
+                transform: rotate(90deg);
+            }
+        }
+        .loading-text{
+
+        }
+        .loading-container {
+            align-items: center;
+            justify-content: center; /* Align items horizontally */
+            text-align: center; /* Center text */
+        }
+    </style>
+</head>
+<body>
+    <div class="popup">
+        <form class="form">
+            <div class="note">
+                <label class="title">职业推荐</label>
+                <span class="subtitle">填写个人信息，给出ai建议</span>
+            </div>
+            <input id="major" placeholder="专业"  name="major" type="text" class="input_field">
+            <div class="select">
+                <select id="degree" class="select_field" type="select" required="true">
+                    <option disabled selected hidden>学历</option>
+                    <option>初中及以下</option>
+                    <option>中专</option>
+                    <option>高中</option>
+                    <option>大专</option>
+                    <option>本科</option>
+                    <option>硕士</option>
+                    <option>博士及以上</option>
+                </select>
+                <select id="gender" class="select_field"  type="select" required="true">
+                    <option disabled selected hidden>性别</option>
+                    <option>男</option>
+                    <option>女</option>
+                    <option>其他</option>
+                    <option>暂不透露</option>
+                </select>
+                <input id="age" placeholder="年龄" name="age" type="number" style="width: 20%" class="input_field" min="0" max="99">
+            </div>
+            <input id="expectation" placeholder="就业意向"  name="expectation" type="text" class="input_field">
+        </form>
+        <button class="submit" onclick="question()">生成报告</button><br>
+    </div>
+    <br>
+    <div id="content" class="report"></div>
+
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+function question() {
+    var majorText = document.getElementById("major");
+    var degreeText = document.getElementById("degree");
+    var genderText = document.getElementById("gender");
+    var ageText = document.getElementById("age");
+    var expectationText = document.getElementById("expectation");
+    var careerText = '专业：'+majorText.value.trim()+'；学历：'+degreeText.value.trim()+'；性别：'+genderText.value.trim()+'；年龄'+ageText.value.trim()+'；就业意向：'+expectationText.value.trim();
+    if (careerText) {
+        var reportDiv = document.getElementById("content");
+        reportDiv.innerHTML = "<div class='report-background' >"+
+        "<div class='loader'></div>"+
+        "</div>";
+        var data = { 'question': careerText };
+        alert(careerText);
+        $.ajax({
+            url: "/answer_msg/career_advice",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            dataType: "json",
+            success: function(response) {
+                if (response.success) {
+                    var replay = response.result
+                    replay = replay.replace(/(\d+)\. /g, '$1.');
+                    replay = replay.replace(/\((\d+)\) /g, '($1)');
+                    replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                    replay = replay.replace(/\n/g, '<br>');
+                    var report = document.getElementById("content");
+                    report.innerHTML = "<div class='report-background'>" + "<h1>职业建议</h1>" +replay + "</div>";
+                    alert('success');
+                }
+            }, error: function(xhr, status, error) {
+                alert("发生错误，请稍后重试。");
+            }
+        });
+    }
+}
+</script>
+</html>
