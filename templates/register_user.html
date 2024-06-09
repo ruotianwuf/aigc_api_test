@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Register</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* 将内容水平居中 */
+            align-items: center;
+            height: 100vh;
+            background-image: url("/static/img/Teacher_bg2.jpg");
+            background-size: cover;
+
+        }
+        .content {
+            width: 330px;
+            padding: 40px 30px;
+            background: #dde1e7;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(94, 104, 121, 0.288);
+        }
+
+        .content .text {
+            font-size: 33px;
+            font-weight: 600;
+            margin-bottom: 35px;
+            color: #595959;
+        }
+
+        .field {
+            height: 50px;
+            width: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        .field:nth-child(2) {
+            margin-top: 20px;
+        }
+
+        .field .input {
+            height: 100%;
+            width: 100%;
+            padding-left: 45px;
+            outline: none;
+            border: none;
+            font-size: 18px;
+            background: #dde1e7;
+            color: #595959;
+            border-radius: 25px;
+            box-shadow: inset 2px 2px 5px #BABECC, inset -5px -5px 10px #ffffff73;
+        }
+
+        .field .input:focus {
+            box-shadow: inset 1px 1px 2px #BABECC,
+                inset -1px -1px 2px #ffffff73;
+        }
+
+        .field span {
+            position: absolute;
+            color: #595959;
+            width: 50px;
+            margin-left: 16px;
+            line-height: 55px;
+        }
+
+        .field .label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 45px;
+            pointer-events: none;
+            color: #666666;
+        }
+
+        .field .input:valid~label {
+            opacity: 0;
+        }
+
+        .forgot-pass {
+            text-align: left;
+            margin: 10px 0 10px 5px;
+        }
+
+        .forgot-pass a {
+            font-size: 16px;
+            color: #666666;
+            text-decoration: none;
+        }
+
+        .forgot-pass:hover a {
+            text-decoration: underline;
+        }
+
+        .button {
+            margin: 15px 0;
+            width: 100%;
+            height: 50px;
+            font-size: 18px;
+            line-height: 50px;
+            font-weight: 600;
+            background: #dde1e7;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            color: #595959;
+            box-shadow: 2px 2px 5px #BABECC, -5px -5px 10px #ffffff73;
+        }
+
+        .button:focus {
+            color: #3498db;
+            box-shadow: inset 2px 2px 5px #BABECC,
+                inset -5px -5px 10px #ffffff73;
+        }
+
+        .sign-up {
+            margin: 10px 0;
+            color: #595959;
+            font-size: 16px;
+        }
+
+        .sign-up a {
+            color: #3498db;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .sign-up a:hover {
+            text-decoration: underline;
+        }
+
+
+    </style>
+</head>
+<body>
+     <div class="content">
+        <div class="text">
+            教师注册
+        </div>
+        <form id="loginForm">
+            <div class="field">
+                <input required type="text" id="username" name="username" class="input">
+                <span class="material-icons">person</span>
+                <label class="label">姓名</label>
+            </div>
+            <div class="field">
+                <input required type="password" id="password" class="input">
+                <span class="material-icons">lock</span>
+                <label class="label">密码</label>
+            </div>
+            <br>
+            <div class="field">
+                <input required type="password" id="Rpassword" class="input">
+                <span class="material-icons">lock</span>
+                <label class="label">确认密码</label>
+            </div>
+            <br>
+            <div class="field">
+                <input required type="text" id="email" class="input">
+                <span class="material-icons">email</span>
+                <label class="label">邮箱</label>
+            </div>
+            <br>
+            <div class="field">
+                <input required type="text" id="phone" class="input">
+                <span class="material-icons">phone</span>
+                <label class="label">电话</label>
+            </div>
+            <br>
+            <button class="button" type="submit">注册</button>
+            <button class="button" onclick="go_home()">取消</button>
+            <div class="sign-up">
+                已经有账号？
+                <a onclick="go_signin()">立即登录</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        // 获取登录表单元素
+        const loginForm = document.getElementById('loginForm');
+
+        // 添加表单提交事件监听器
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止表单默认提交行为
+
+            // 获取用户名和密码输入框的值
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const Rpassword = document.getElementById('Rpassword').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+
+
+
+            // 创建一个FormData对象，用于将表单数据发送给后端
+            var data = {'username': username, 'password': password, 'email': email, 'phone': phone};
+            if (username && password && password===Rpassword) {
+                $.ajax({
+                    url: "/adduser/user/1",
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        if(response.success){
+                             alert("注册成功");
+
+                            window.location.href = "/smartlife/login/user";
+                        }else{
+                            alert("用户名重复");
+                            window.location.href="/smartlife/adduser/user";
+                        }
+
+            // 重定向到接收页面
+                    },
+                    error: function () {
+                        alert("错误error");
+                    }
+                });
+            }
+            else if(password !== Rpassword){
+                alert("密码不一致");
+            }
+            else {
+                alert("用户名和密码不能为空");
+            }
+        })
+
+        function go_home(){
+         window.location.href = '/smartlife/user';
+        }
+         function go_signin(){
+            window.location.href = '/smartlife/login/user';
+        }
+    </script>
+</body>
+</html>

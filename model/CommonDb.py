@@ -167,3 +167,9 @@ class CommonDb(BaseModel):
         sql = "insert into " + self.table + "(course) values(" + info[1] + ");"
         print(sql)
         return self.db.add(sql)
+
+    def select_blob(self, data):
+
+        sql = "select photo from " + self.table + " where username = " +"'"+ str(data['username']) +"'"+ " and phone = " + "'"+str(data['phone'])+ "'"+" and password = " + "'"+ str(data['password']) + "'"+ ";"
+        print(sql)
+        return self.db.executeSql(sql)

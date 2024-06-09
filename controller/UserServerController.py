@@ -237,3 +237,40 @@ class UserServerController:
         model = CommonDb('student')
         consequence = model.add_grade(data)
         return consequence
+
+    def findlogin_user_ServerStatus(self, data):
+        model = CommonDb('user')
+        consequence = model.selectAll(f"username='{data['username']}' and password='{data['password']}' and phone='{data['phone']}'")
+        if not consequence:
+            result = False
+            print('无此项')
+        else:
+            result = True
+        return result
+
+    def adduser_user_ServerStatus(self, status_data):
+        model = CommonDb('user')
+        consequence = model.selectAll(
+            f"username='{status_data['username']}' and password='{status_data['password']}' and userid='{status_data['userid']}' and phone='{status_data['phone']}' and email='{status_data['email']}'")
+        consequence2 = model.selectAll(f"username='{status_data['username']}'")
+        # print("啊？"+str(consequence2))
+        print(consequence)
+        if consequence != None:
+            flag1 = False
+        else:
+            flag1 = True
+        if consequence2 != None:
+            flag = False
+        else:
+            flag = True
+        if flag1 and not flag:
+            result = False
+            print('已有此用户，无法添加')
+        else:
+            result = model.add(status_data)
+        return result
+
+    def find_blob_ServerStatus(self, data):
+        model = CommonDb('user')
+        consequence = model.select_blob(data)
+        return consequence

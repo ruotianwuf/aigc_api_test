@@ -1,8 +1,17 @@
+import io
 import json
 import os
 import random
 import datetime
+import re
+
 from flask import Flask, request, jsonify, render_template
+import requests
+
+from PIL import Image
+import base64
+
+from werkzeug.utils import secure_filename
 
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
@@ -34,6 +43,8 @@ def samartlearn():
 @app.route('/smartlife/', methods=['GET'])
 def samartlife():
     return render_template('smartlife.html')
+
+
 
 # @app.route('/file/upload/', methods=['POST', 'GET'])
 # def upload():
@@ -317,6 +328,10 @@ def adduser_student():
 def adduser_teacher():
     return render_template('register_teacher.html')
 
+@app.route('/smartlife/adduser/user', methods=['GET'])
+def adduser_user():
+    return render_template('register_user.html')
+
 @app.route('/adduser/student/1', methods=['POST'])
 def adduser_student_info():
     data = json.loads(request.get_data(as_text=True))
@@ -343,11 +358,26 @@ def adduser_teacher_info():
     else:
         return jsonify({'success': False}), 200
 
+@app.route('/adduser/user/1', methods=['POST'])
+def adduser_user_info():
+    data = json.loads(request.get_data(as_text=True))
+    data["userid"] = "u" + str(random.randint(100000 - 1, 1000000 - 1))
+    print(data)
+    con = UserServerController()
+    result = con.adduser_user_ServerStatus(data)
+    print(result)
+    if result:
+        return jsonify({'success': True}), 200
+    else:
+        return jsonify({'success': False}), 200
+
 
 
 @app.route('/smartlearn/login', methods=['GET'])
 def getlogin():
     return render_template('/')
+
+
 
 @app.route('/smartlearn/login/student', methods=['GET'])
 def getlogin_student():
@@ -356,6 +386,10 @@ def getlogin_student():
 @app.route('/smartlearn/login/teacher', methods=['GET'])
 def getlogin_teacher():
     return render_template('login_teacher.html')
+
+@app.route('/smartlife/login/user', methods=['GET'])
+def getlogin_user():
+    return render_template('login_user.html')
 
 @app.route('/login/teacher/1', methods=['POST'])
 def getlogin_teacher_info():
@@ -379,6 +413,116 @@ def getlogin_student_info():
     else:
         return jsonify({'success': False}), 200
 
+
+def image_to_base64(image_path):
+    # 打开图片文件
+    with Image.open(image_path) as img:
+        # 创建一个字节流对象
+        img_byte_arr = io.BytesIO()
+        # 将图片保存到字节流中，这里使用PNG格式以保留透明度
+        if img.mode == 'RGBA':
+            img = img.convert('RGBA')  # 确保图像是RGBA模式
+            img.save(img_byte_arr, format='PNG')
+        else:
+            img.save(img_byte_arr, format='PNG')
+
+        # 重置字节流对象的位置指针到开始位置
+        img_byte_arr.seek(0)
+
+        # 获取字节流中的二进制数据
+        img_byte_arr = img_byte_arr.getvalue()
+
+        # 使用base64库将二进制数据编码为Base64格式
+        base64_image = base64.b64encode(img_byte_arr).decode('utf-8')
+
+    return base64_image
+
+
+UPLOAD_FOLDER = 'static/humanphoto'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+
+
+@app.route('/login/user/1', methods=['POST'])
+def getlogin_user_info():
+    if 'screenshot' not in request.files:
+        return jsonify(success=False, message="没有文件部分")
+
+    file = request.files['screenshot']
+    print(file.mode)
+    # 如果用户没有选择文件，浏览器也会提交一个没有文件名的空部分
+    if file.filename == '':
+        return jsonify(success=False, message="没有选择文件")
+
+
+    filename = 'test.png'
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    username = request.form.get('username')
+    password = request.form.get('password')
+    phone = request.form.get('phone')
+
+    data = {'username': username, 'password': password, 'phone': phone}
+
+    # print(base64_image2)
+    request_url = "https://aip.baidubce.com/rest/2.0/face/v3/match"
+
+    image_path1 = 'static/humanphoto/'+str(username)+str(phone)+'.png'
+    base64_image1 = image_to_base64(image_path1)
+
+    con = UserServerController()
+    # base64_image1 = con.find_blob_ServerStatus(data)
+    # base64_image1 = base64_image1[0][0]
+    # base64_image1 = base64_image1.decode('utf-8')
+    # print(base64_image1)
+
+    image_path2 = 'static/humanphoto/test.png'
+    base64_image2 = image_to_base64(image_path2)
+
+
+
+    params_str = [
+                    {
+                        "image": base64_image1,
+                        "image_type": "BASE64",
+                        "face_type": "LIVE",
+                        "quality_control": "LOW"
+                    },
+                    {
+                        "image": base64_image2,
+                        "image_type": "BASE64",
+                        "face_type": "LIVE",
+                        "quality_control": "LOW"
+                    }
+                ]
+    print(type(params_str))
+
+    # params_str = json.dumps(params_str, ensure_ascii=True)
+    # print(type(params_str))
+
+    host = 'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=n6MEdq40kQfFINA5J0cC4rLu&client_secret=Hz91ksY1oVVob4MAis9QycbfXR1IfKzJ'
+    response = requests.get(host)
+    if response:
+        print(type(response.json()))
+    at = response.json()
+    access_token = at['access_token']
+    request_url = request_url + "?access_token=" + access_token
+    print(request_url)
+    headers = {'content-type': 'application/json'}
+    response = requests.post(request_url, json=params_str, headers=headers)
+    if response:
+        result = response.json()
+        print(result['result']['score'])
+        num = int(result['result']['score'])
+
+
+    print(data)
+
+    result = con.findlogin_user_ServerStatus(data)
+    if result and num >= 80:
+        return jsonify({'success': True, 'data': result}), 200
+    else:
+        return jsonify({'success': False}), 200
 
 
 @app.route('/smartlearn/teacher/info', methods=['GET'])

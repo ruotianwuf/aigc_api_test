@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Login</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            background-image: url("/static/img/Student_bg1.jpg");
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center; /* 将内容水平居中 */
+            align-items: center;
+            height: 100vh;
+        }
+
+
+         .content {
+            width: 330px;
+            padding: 40px 30px;
+            background: #dde1e7;
+            border-radius: 10px;
+            box-shadow: 2px 2px 5px rgba(94, 104, 121, 0.288);
+        }
+
+        .content .text {
+            font-size: 33px;
+            font-weight: 600;
+            margin-bottom: 35px;
+            color: #595959;
+        }
+
+        .field {
+            height: 50px;
+            width: 100%;
+            display: flex;
+            position: relative;
+        }
+
+        .field:nth-child(2) {
+            margin-top: 20px;
+        }
+
+        .field .input {
+            height: 100%;
+            width: 100%;
+            padding-left: 45px;
+            outline: none;
+            border: none;
+            font-size: 18px;
+            background: #dde1e7;
+            color: #595959;
+            border-radius: 25px;
+            box-shadow: inset 2px 2px 5px #BABECC, inset -5px -5px 10px #ffffff73;
+        }
+
+        .field .input:focus {
+            box-shadow: inset 1px 1px 2px #BABECC,
+                inset -1px -1px 2px #ffffff73;
+        }
+
+        .field span {
+            position: absolute;
+            color: #595959;
+            width: 50px;
+            margin-left: 16px;
+            line-height: 55px;
+        }
+
+        .field .label {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: 45px;
+            pointer-events: none;
+            color: #666666;
+        }
+
+        .field .input:valid~label {
+            opacity: 0;
+        }
+
+        .forgot-pass {
+            text-align: left;
+            margin: 10px 0 10px 5px;
+        }
+
+        .forgot-pass a {
+            font-size: 16px;
+            color: #666666;
+            text-decoration: none;
+        }
+
+        .forgot-pass:hover a {
+            text-decoration: underline;
+        }
+
+        .button {
+            margin: 15px 0;
+            width: 100%;
+            height: 50px;
+            font-size: 18px;
+            line-height: 50px;
+            font-weight: 600;
+            background: #dde1e7;
+            border-radius: 25px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            color: #595959;
+            box-shadow: 2px 2px 5px #BABECC, -5px -5px 10px #ffffff73;
+        }
+
+        .button:focus {
+            color: #3498db;
+            box-shadow: inset 2px 2px 5px #BABECC,
+                inset -5px -5px 10px #ffffff73;
+        }
+
+        .sign-up {
+            margin: 10px 0;
+            color: #595959;
+            font-size: 16px;
+        }
+
+        .sign-up a {
+            color: #3498db;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .sign-up a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+     <div class="content">
+        <div class="text">
+            用户登录
+        </div>
+        <form id="loginForm">
+            <div class="field">
+                <input required type="text" id="username" name="username" class="input">
+                <span class="material-icons">person</span>
+                <label class="label">姓名</label>
+            </div>
+            <br>
+            <div class="field">
+                <input required type="password" id="password" class="input">
+                <span class="material-icons">lock</span>
+                <label class="label">密码</label>
+            </div>
+<!--            <div class="field">-->
+<!--                <input required type="text" id="email" class="input">-->
+<!--                <span class="material-icons">lock</span>-->
+<!--                <label class="label">邮箱</label>-->
+<!--            </div>-->
+            <br>
+            <div class="field">
+                <input required type="text" id="phone" class="input">
+                <span class="material-icons">phone</span>
+                <label class="label">电话</label>
+            </div>
+            <div id="vedio"></div>
+<!--            <video id="video" width="360" height="480" autoplay></video>-->
+            <button class="button" type="submit">登录</button>
+            <button class="button" onclick="go_home()">取消</button>
+            <div class="sign-up">
+                还没有账号？
+                <a onclick="go_signup()">立即注册</a>
+            </div>
+            <canvas id="canvas" style="display: none;"></canvas>
+        </form>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+
+        let stream; // 用于存储MediaStream对象
+        let imgData
+
+         function takeSnapshot() {
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            const video = document.getElementById('video');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 将canvas转换为图片Blob
+            canvas.toBlob(function(blob) {
+                imgData = blob;
+                // 截图完成后的操作
+                closeCameraAndSubmitForm();
+            }, 'image/png');
+        }
+
+        function closeCameraAndSubmitForm() {
+            closeCamera(); // 关闭摄像头
+            // 这里执行提交表单的操作
+            submitFormWithImage();
+        }
+
+        function closeCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        }
+
+        function submitFormWithImage() {
+            // 假设imgData是已经赋值的图片Blob
+            if (imgData) {
+                // 创建FormData对象
+                var formData = new FormData();
+
+                // 获取其他表单数据
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                const phone = document.getElementById('phone').value;
+
+                // 添加其他表单数据到FormData
+                formData.append('username', username);
+                formData.append('password', password);
+                formData.append('phone', phone);
+
+                // 添加图片文件到FormData
+                var imgBlob = new File([imgData], "screenshot.png", { type: "image/png" });
+                formData.append('screenshot', imgBlob);
+
+                // 使用jQuery的ajax发送FormData
+                $.ajax({
+                    url: "/login/user/1",
+                    type: "POST",
+                    data: formData,
+                    contentType: false, // 告诉jQuery不要设置内容类型为application/json
+                    processData: false, // 告诉jQuery不要处理数据
+                    success: function (response) {
+                        // 登录成功的处理
+                        if(response.success){
+                            alert("登录成功");
+                            // 跳转到相应页面
+                            var url = "/smartlife?data=" + username;
+                            window.location.href = url;
+                        } else {
+                            // 登录失败的处理
+                            alert("账号或密码错误");
+                            window.location.href="/smartlife/login/user";
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 错误处理
+                        alert("登录失败: " + error);
+                    }
+                });
+            } else {
+                // 图片数据为空的处理
+                alert("未获取到截图，请重试。");
+            }
+        }
+
+// 监听表单提交事件
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+        document.getElementById('vedio').innerHTML='<video id="video" width="340" height="360" autoplay></video>'
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({video: true})
+                .then(function (mediaStream) {
+                    stream = mediaStream;
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+
+                    // 5秒后对视频进行截图
+                    setTimeout(takeSnapshot, 5000);
+                    // document.getElementById('vedio').innerHTML='<div id="vedio"></div>'
+                })
+                .catch(function (error) {
+                    console.error("Something went wrong!", error);
+                    alert("无法访问摄像头，请检查权限设置。");
+                });
+        } else {
+            alert("您的浏览器不支持访问摄像头。");
+        }
+    })
+
+        function go_home(){
+            window.location.href = '/smartlife';
+        }
+        function go_signup(){
+            window.location.href = "/smartlife/adduser/user";
+        }
+    </script>
+</body>
+</html>

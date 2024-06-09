@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user</title>
+    <link rel="stylesheet" href="../static/css/student.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>VIVO·智慧生活</h1>
+        <div class="wrapper">
+            <button class="custom-button" onclick="register()">
+                <span class="material-icons">draw</span>
+                <span>注册</span>
+            </button>
+
+            <button class="custom-button" onclick="login()" >
+                <span class="material-icons">login</span>
+                <span id="user_login">登录</span>
+            </button>
+        </div>
+
+        <section>
+          <div class="menu">
+            <div>
+              <button onclick="go_courses()">
+                <span class="material-icons">
+                  menu_book
+                </span>
+                <h3>旅游</h3>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_advice()">
+                <span class="material-icons">
+                  tips_and_updates
+                </span>
+                <h3>健康</h3>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_homework()">
+                <span class="material-icons">
+                  cloud_upload
+                </span>
+                <h3>职业</h3>
+              </button>
+            </div>
+
+            <div>
+              <button onclick="go_recommend()">
+                <span class="material-icons">
+                  thumb_up
+                </span>
+                <h3>社交</h3>
+              </button>
+            </div>
+
+            <div>
+              <button >
+                <span class="material-icons">
+                  local_cafe
+                </span>
+                <h3>更多功能</h3>
+                <p>正在开发中，敬请期待</p>
+              </button>
+            </div>
+          </div>
+        </section>
+    </div>
+
+    <div class="center">
+        <button onclick="go_home()" class="return"><i></i><span>返回主页</span></button>
+    </div>
+
+
+<script>
+     var urlParams = new URLSearchParams(window.location.search);
+     var receivedData = urlParams.get('data');
+     var cookieName = "user";
+     var cookieValue = receivedData;
+     document.cookie = cookieName + "=" + cookieValue;
+
+    function checkCookie(cookieName) {
+    // 获取所有的 Cookie，并以分号加空格进行分割
+    var cookies = document.cookie.split("; ");
+
+    // 遍历所有 Cookie
+    for (var i = 0; i < cookies.length; i++) {
+        // 分割每个 Cookie 的键值对
+        var cookiePair = cookies[i].split("=");
+
+        // 检查当前 Cookie 是否为目标 Cookie
+        if (cookiePair[0] === cookieName && cookiePair[1] === cookieValue) {
+            // 如果找到目标 Cookie，返回 true
+            return cookieValue;
+        }
+    }
+    return false;
+}
+    var myCookieValue = checkCookie("user");
+    if (myCookieValue){
+        var buttonContent = '<span class="material-icons">person</span>'; // 替换图标部分
+        buttonContent += '<span>欢迎你,' + myCookieValue + '</span>';
+        var loginButton = document.querySelector(".wrapper .custom-button:nth-child(2)"); // 选择第二个按钮
+        loginButton.innerHTML = buttonContent;
+        loginButton.classList.add("hovered"); // 添加 hover 类
+    }
+        //隐藏注册按钮
+     document.addEventListener("DOMContentLoaded", function () {
+        var ck = checkCookie('user');
+        if (ck == cookieValue) {
+            var registerButton = document.querySelector('.wrapper .custom-button:nth-child(1)'); // 选择注册按钮
+            registerButton.classList.add('hidden');
+        }
+    });
+     function go_travel(){
+         var ck=checkCookie('user');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+             window.location.href="/smartlife/travel";
+
+         }else{
+             alert("请先登录");
+             window.location.href="/smartlife/login/user";
+         }
+     }
+     function go_health(){
+         var ck=checkCookie('user');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+             window.location.href="/smartlife/health";
+         }else{
+             alert("请先登录");
+             window.location.href="/smartlife/login/user";
+         }
+     }
+
+
+     function go_work(){
+         var ck=checkCookie('user');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+             window.location.href="/smartlife/work";
+         }else{
+             //alert("请先登录");
+             window.location.href="/smartlife/login/user";
+         }
+     }
+     
+     function go_communit(){
+         var ck=checkCookie('user');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+             window.location.href="/smartlife/communit";
+         }else{
+             //alert("请先登录");
+             window.location.href="/smartlife/login/user";
+         }
+     }
+
+
+     function login(){
+         var ck=checkCookie('user');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+         }else{
+             window.location.href="/smartlife/login/user";
+         }
+     }
+
+     function register(){
+        window.location.href="/smartlife/adduser/user"
+    }
+
+
+
+     function go_home(){
+         window.location.href = '/';
+        }
+</script>
+</body>
+</html>
