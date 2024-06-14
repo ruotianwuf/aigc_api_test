@@ -192,12 +192,12 @@
         var data = { 'question': questionText };
         var outputDiv = document.getElementById("content");
         var questionHTML = "<div class='message user-message' style='display: flex;'>" +
-                                       "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
-                                       "<div>" +
-                                         "<div class='name'>You</div>" +
-                                         "<div class='text'>" + "You: " + data.question + "</div>" +
-                                       "</div>" +
-                                       "</div>";
+                           "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
+                           "<div>" +
+                            "<div class='name'>You</div>" +
+                            "<div class='text'>" + "You: " + data.question + "</div>" +
+                           "</div>" +
+                           "</div>";
         outputDiv.innerHTML += questionHTML;
         questionInput.value = "";
         $.ajax({
@@ -209,7 +209,7 @@
             success: function(response) {
                 if (response.success) {
                     var formattedAnswer = response.result;
-//formattedAnswer = formattedAnswer.replace(/\n\n/g, '<br><br>');
+                //formattedAnswer = formattedAnswer.replace(/\n\n/g, '<br><br>');
                     formattedAnswer = formattedAnswer.replace(/\\n/g, '<br>');
                     formattedAnswer = formattedAnswer.replace(/(\d+)\. /g, '$1. ');
                     formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');
@@ -217,7 +217,7 @@
 
 
                     var answerHTML = "<div class='message ai-message' style='display: flex;'>" +
-                                     "<img src='../static/img/AI UI.png' alt='AI Avatar' class='avatar'>" +
+                                     "<img src='../static/img/AI%20UI.png' alt='AI Avatar' class='avatar'>" +
                                      "<div>" +
                                        "<div class='name'>Assistant</div>" +
                                        "<div class='text'></div>" +

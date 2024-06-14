@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-<<<<<<< HEAD
-    <data-source source="LOCAL" name="localhost" uuid="5fda4e6f-4b17-488f-98bc-695264cd6cde">
-=======
-    <data-source source="LOCAL" name="localhost" uuid="fb139ebd-b178-4d6d-b55e-7260ed384359">
->>>>>>> origin/master
+    <data-source source="LOCAL" name="api_vivo_project@localhost" uuid="7a13ce6c-f4ab-4682-a6e0-48df8265365d">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/api_vivo_project</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

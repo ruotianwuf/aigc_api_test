@@ -22,7 +22,7 @@ from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
-from api_project_get.get_career_api import sync_vivogpt_careeradvice
+from api_project_get.get_api_careeradvice import sync_vivogpt_careeradvice
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
@@ -280,9 +280,16 @@ def getteacher_check():
 def getteacher_public():
     return render_template('teacher_public.html')
 
-@app.route('/smartlife/career/advice', methods=['GET'])
+@app.route('/smartlife/work', methods=['GET'])
+def getwork():
+    return render_template('work.html')
+@app.route('/smartlife/work/career_advice', methods=['GET'])
 def getcareer_advice():
     return render_template('career_advice.html')
+
+@app.route('/smartlife/work/interview', methods=['GET'])
+def getinterview():
+    return render_template('interview.html')
 
 @app.route('/teacher/public/get_sinfo', methods=['POST'])
 def get_teacher_sinfo():
@@ -331,6 +338,7 @@ def adduser_teacher():
 @app.route('/smartlife/adduser/user', methods=['GET'])
 def adduser_user():
     return render_template('register_user.html')
+
 
 @app.route('/adduser/student/1', methods=['POST'])
 def adduser_student_info():
