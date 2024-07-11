@@ -23,6 +23,7 @@ from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from api_project_get.get_api_careeradvice import sync_vivogpt_careeradvice
+from api_project_get.get_api_travelpoi import get_explanation, get_poi
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
@@ -113,7 +114,6 @@ def getanswer():
 def getstudent():
     return render_template('student.html')
 
-
 online_user = []
 room_user = {}
 
@@ -153,7 +153,6 @@ def course_recommend_getiframe():
         return jsonify({'success': True}), 200
 
 
-
 @app.route('/student/course/get', methods=['POST'])
 def getstudent_course_get():
     data = json.loads(request.get_data(as_text=True))
@@ -182,7 +181,6 @@ def getstudent_course_get():
         return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4]}), 200
     else:
         return jsonify({'success': True}), 200
-
 
 @app.route('/smartlearn/student/forum', methods=['GET'])
 def getstudent_forum():
@@ -280,16 +278,6 @@ def getteacher_check():
 def getteacher_public():
     return render_template('teacher_public.html')
 
-@app.route('/smartlife/work', methods=['GET'])
-def getwork():
-    return render_template('work.html')
-@app.route('/smartlife/work/career_advice', methods=['GET'])
-def getcareer_advice():
-    return render_template('career_advice.html')
-
-@app.route('/smartlife/work/interview', methods=['GET'])
-def getinterview():
-    return render_template('interview.html')
 
 @app.route('/teacher/public/get_sinfo', methods=['POST'])
 def get_teacher_sinfo():
@@ -314,15 +302,10 @@ def add_course_grade():
     print(data)
     con = UserServerController()
     result = con.addcourse_grade(data)
-
     if result:
         return jsonify({'success': True}), 200
     else:
         return jsonify({'success': True}), 200
-
-
-
-
 @app.route('/smartlearn/adduser', methods=['GET'])
 def adduser():
     return render_template('/')
@@ -334,10 +317,6 @@ def adduser_student():
 @app.route('/smartlearn/adduser/teacher', methods=['GET'])
 def adduser_teacher():
     return render_template('register_teacher.html')
-
-@app.route('/smartlife/adduser/user', methods=['GET'])
-def adduser_user():
-    return render_template('register_user.html')
 
 
 @app.route('/adduser/student/1', methods=['POST'])
@@ -385,8 +364,6 @@ def adduser_user_info():
 def getlogin():
     return render_template('/')
 
-
-
 @app.route('/smartlearn/login/student', methods=['GET'])
 def getlogin_student():
     return render_template('login_student.html')
@@ -395,9 +372,7 @@ def getlogin_student():
 def getlogin_teacher():
     return render_template('login_teacher.html')
 
-@app.route('/smartlife/login/user', methods=['GET'])
-def getlogin_user():
-    return render_template('login_user.html')
+
 
 @app.route('/login/teacher/1', methods=['POST'])
 def getlogin_teacher_info():
@@ -463,7 +438,7 @@ def getlogin_user_info():
         return jsonify(success=False, message="没有选择文件")
 
 
-    filename = 'test.png'
+    filename = '123123.png'
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     username = request.form.get('username')
@@ -484,7 +459,7 @@ def getlogin_user_info():
     # base64_image1 = base64_image1.decode('utf-8')
     # print(base64_image1)
 
-    image_path2 = 'static/humanphoto/test.png'
+    image_path2 = 'static/humanphoto/123123.png'
     base64_image2 = image_to_base64(image_path2)
 
 
@@ -735,6 +710,52 @@ def upload_student_homework():
     check_result = get_correct_check(upload_dir+'/'+homework_file.filename)
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
+
+
+
+
+
+
+@app.route('/smartlife/work', methods=['GET'])
+def getwork():
+    return render_template('work.html')
+
+@app.route('/smartlife/work/career_advice', methods=['GET'])
+def getcareer_advice():
+    return render_template('career_advice.html')
+
+@app.route('/smartlife/work/interview', methods=['GET'])
+def getinterview():
+    return render_template('interview.html')
+
+@app.route('/smartlife/adduser/user', methods=['GET'])
+def adduser_user():
+    return render_template('register_user.html')
+
+@app.route('/smartlife/login/user', methods=['GET'])
+def getlogin_user():
+    return render_template('login_user.html')
+
+@app.route('/smartlife/travel', methods=['GET'])
+def gettavel():
+    return render_template('travel.html')
+
+@app.route('/smartlife/travel/get_traveluser_location', methods=['GET','POST'])
+def get_traveluser_location():
+    lat = request.form['lat']
+    lon = request.form['lon']
+    # 假设此时已经获取到了用户的位置信息
+    return jsonify({'lat': lat, 'lon': lon})
+
+@app.route('/smartlife/travel/get_sight_info', methods=['GET', 'POST'])
+def get_sight_info():
+    lat = request.form['lat']
+    lon = request.form['lon']
+    # 调用Vivo API获取景点信息（假设已经封装好函数）
+    poi_info = get_poi(lat, lon)
+    # 调用Vivo的chat模型获取景点讲解（假设已经封装好函数）
+    explanation = get_explanation(poi_info['name'])
+    return jsonify({'poi_info': poi_info, 'explanation': explanation})
 
 
 if __name__ == '__main__':
