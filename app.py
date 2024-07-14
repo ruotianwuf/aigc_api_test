@@ -3,7 +3,10 @@ import json
 import os
 import random
 import datetime
+import re
+import pyautogui
 
+from flask import Flask, request, jsonify, render_template, Response
 from flask import jsonify,send_file
 import requests
 
@@ -16,6 +19,10 @@ from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
 from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
+from flask import Flask, render_template, request, session, redirect, url_for
+from flask_socketio import SocketIO, join_room, leave_room
+from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
+from healthtable.get_api import sync_vivogpt_ht
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
@@ -43,8 +50,86 @@ def samartlearn():
 def samartlife():
     return render_template('smartlife.html')
 
+@app.route('/smartlife/health', methods=['GET'])
+def samartlife_health():
+    return render_template('health.html')
+
+@app.route('/smartlife/health/healthtable', methods=['GET'])
+def samartlife_healthtable():
+    return render_template('healthy_table.html')
+
+@app.route('/smartlife/health/healthtest', methods=['GET'])
+def samartlife_healthtest():
+    return render_template('healthy_test.html')
 
 
+
+
+@app.route('/health_answer', methods=['POST'])
+def gethealthanswer_msg():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        data = data['data']
+        # data['love_sports'] = text_translate_c_to_e(data['love_sports'])
+        # data = json.dumps(data)
+        print(data)
+        # data_need = json.dumps(data)
+        con = UserServerController()
+        res = con.insert_info(name,data)
+        result = sync_vivogpt_ht(str(data))
+
+        if result is not None and res:
+            return jsonify({'success': True, 'result': result}), 200
+        else:
+            return jsonify({'success': False}), 200
+
+@app.route('/health_info_get', methods=['POST'])
+def gethealth_info():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        con = UserServerController()
+        res = con.get_healthy_info(name)
+
+        if res[0][0] is not None:
+            res = json.loads(res[0][0])
+            # res['love_sports'] = text_translate_e_to_c(res['love_sports'])
+            res = res
+        else:
+            res = 1
+        if res:
+            return jsonify({'success': True, 'result': res}), 200
+        else :
+            return jsonify({'success': True}), 200
+
+@app.route('/table_commit', methods=['POST'])
+def gettable_commit():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        tdata = data['data']
+        con = UserServerController()
+        res = con.get_table_commit(name, tdata)
+
+        if res:
+            return jsonify({'success': True, 'result': res}), 200
+        else :
+            return jsonify({'success': True}), 200
+
+@app.route('/table_get', methods=['POST'])
+def gettable_get():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        con = UserServerController()
+        res = con.get_table_get(name)
+        print(type(res))
+
+        if res[0][0] is not None:
+            res = json.loads(res[0][0])
+        else:
+            res = 1
+        if res:
+            return jsonify({'success': True, 'result': res}), 200
+        else:
+            return jsonify({'success': True}), 200
 # @app.route('/file/upload/', methods=['POST', 'GET'])
 # def upload():
 #     try:
@@ -303,6 +388,39 @@ def getstudent_forum_post():
     else:
         return jsonify({'success': False}), 200
 
+
+@app.route('/smartlearn/student/live', methods=['GET'])
+def get_student_live():
+    return render_template('student_live.html')
+
+@app.route('/pointer')
+def pointer():
+    x = int(float(request.args["xrate"]) * 1920)
+    y = int(float(request.args["yrate"]) * 1080)
+    # 执行点击操作
+    pyautogui.click(x, y)
+    return "success"
+
+
+
+def gen():
+    while True:
+        screenShotImg = pyautogui.screenshot()
+
+        imgByteArr = io.BytesIO()
+        screenShotImg.save(imgByteArr, format='JPEG')
+        imgByteArr = imgByteArr.getvalue()
+        frame = imgByteArr
+        yield (b'--frame\r\n Content-Type: image/jpeg\r\n\r\n' + frame)
+
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+
+
 @app.route('/smartlearn/student/recommend', methods=['GET'])
 def getstudent_recommend():
     return render_template('student_course_recommend.html')
@@ -427,14 +545,43 @@ def adduser_teacher_info():
 
 @app.route('/adduser/user/1', methods=['POST'])
 def adduser_user_info():
-    data = json.loads(request.get_data(as_text=True))
+
+
+    if 'screenshot' not in request.files:
+        return jsonify(success=False, message="没有文件部分")
+
+    file = request.files['screenshot']
+    print(file.mode)
+    # 如果用户没有选择文件，浏览器也会提交一个没有文件名的空部分
+    if file.filename == '':
+        return jsonify(success=False, message="没有选择文件")
+
+    filename = 'test2.png'
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    username = request.form.get('username')
+    password = request.form.get('password')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+
+    data = {'username': username, 'password': password, 'phone': phone, 'email': email}
     data["userid"] = "u" + str(random.randint(100000 - 1, 1000000 - 1))
-    print(data)
     con = UserServerController()
     result = con.adduser_user_ServerStatus(data)
-    print(result)
-    if result:
-        return jsonify({'success': True}), 200
+
+    image_path1 = 'static/humanphoto/test2.png'
+    # base64_image1 = image_to_base64(image_path1)
+    base64_image1 = image_to_base64(image_path1)
+    img = {'blob': base64_image1}
+
+    res = con.insert_blob_ServerStatus(username, img)
+    print(res)
+
+    print(data)
+
+
+    if result and res:
+        return jsonify({'success': True, 'data': result}), 200
     else:
         return jsonify({'success': False}), 200
 
@@ -479,6 +626,9 @@ def getlogin_student_info():
         return jsonify({'success': True, 'data': result}), 200
     else:
         return jsonify({'success': False}), 200
+
+
+
 
 
 def image_to_base64(image_path):
@@ -534,14 +684,15 @@ def getlogin_user_info():
     # print(base64_image2)
     request_url = "https://aip.baidubce.com/rest/2.0/face/v3/match"
 
-    image_path1 = 'static/humanphoto/'+str(username)+str(phone)+'.png'
-    base64_image1 = image_to_base64(image_path1)
+    # image_path1 = 'static/humanphoto/'+str(username)+str(phone)+'.png'
+    # base64_image1 = image_to_base64(image_path1)
 
     con = UserServerController()
-    # base64_image1 = con.find_blob_ServerStatus(data)
-    # base64_image1 = base64_image1[0][0]
+    base64_image1 = con.find_blob_ServerStatus(data)
+    base64_image1 = json.loads(base64_image1[0][0])
+    base64_image1 = base64_image1['blob']
     # base64_image1 = base64_image1.decode('utf-8')
-    # print(base64_image1)
+    print(base64_image1)
 
     image_path2 = 'static/humanphoto/test.png'
     base64_image2 = image_to_base64(image_path2)
@@ -618,12 +769,9 @@ def get_teacher_info():
 
 @app.route('/teacher/info/c_delete', methods=['POST'])
 def delete_teacher_c_info():
-
     data = json.loads(request.get_data(as_text=True))
     print(data)
-
     con = UserServerController()
-
     result = con.delete_course_info_ServerStatus(data)
     if result:
         return jsonify({'success': True}), 200

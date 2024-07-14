@@ -1,5 +1,6 @@
 from model.BaseModel import *
 import datetime
+import json
 
 class CommonDb(BaseModel):
     def __init__(self,tablename,dbname=""):
@@ -171,5 +172,37 @@ class CommonDb(BaseModel):
     def select_blob(self, data):
 
         sql = "select photo from " + self.table + " where username = " +"'"+ str(data['username']) +"'"+ " and phone = " + "'"+str(data['phone'])+ "'"+" and password = " + "'"+ str(data['password']) + "'"+ ";"
+        print(sql)
+        return self.db.executeSql(sql)
+
+    def select_blob2(self):
+
+        sql = "select photo from " + self.table + " where username = 'ljy'"+";"
+        print(sql)
+        return self.db.executeSql(sql)
+
+    def insert_blob(self, name, data):
+        sql = "update " + self.table + " set photo= " + "'" + json.dumps(data) + "'" + " where 1 and " + ' username= ' + "'" + str(name) + "'" + ";"
+        print(sql)
+        return self.db.update(sql)
+
+    def insert_info(self,name,info):
+        print(type(json.dumps(info)))
+        sql = "update " + self.table + " set info= " + "'"+ json.dumps(info,ensure_ascii=False) +"'"+ " where 1 and " + ' username= ' + "'" + str(name) + "'" + ";"
+        print(sql)
+        return self.db.update(sql)
+
+    def get_info(self,name):
+        sql = "select info from " + self.table + " where 1 and " + ' username= ' + "'" + str(name) + "'" + ";"
+        print(sql)
+        return self.db.executeSql(sql)
+
+    def get_table_commit(self,name,data):
+        sql = "update " + self.table + " set htable= " + "'" + json.dumps(data,ensure_ascii=False) + "'" + " where 1 and " + ' username= ' + "'" + str(name) + "'" + ";"
+        print(sql)
+        return self.db.update(sql)
+
+    def get_table_get(self,name):
+        sql = "select htable from " + self.table + " where 1 and " + ' username= ' + "'" + str(name) + "'" + ";"
         print(sql)
         return self.db.executeSql(sql)

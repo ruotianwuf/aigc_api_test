@@ -273,4 +273,32 @@ class UserServerController:
     def find_blob_ServerStatus(self, data):
         model = CommonDb('user')
         consequence = model.select_blob(data)
+        # consequence = model.select_blob2()
+
+        return consequence
+
+
+    def insert_blob_ServerStatus(self, name, data):
+        model = CommonDb('user')
+        consequence = model.insert_blob(name, data)
+        return consequence
+
+    def insert_info(self,name,info):
+        model = CommonDb('user')
+        consequence = model.insert_info(name,info)
+        return consequence
+
+    def get_healthy_info(self,name):
+        model = CommonDb('user')
+        consequence = model.get_info(name)
+        return consequence
+
+    def get_table_commit(self,name, data):
+        model = CommonDb('user')
+        consequence = model.get_table_commit(name, data)
+        return consequence
+
+    def get_table_get(self,name):
+        model = CommonDb('user')
+        consequence = model.get_table_get(name)
         return consequence

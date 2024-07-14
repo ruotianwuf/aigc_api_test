@@ -10,7 +10,7 @@ class Config:
         sys_platform = platform.platform().lower()
         print(sys_platform)
         if "windows" in sys_platform:
-            cfgpath = "E:\\Python\\project\\Vivo_AIGC\\aigc_api_test\\configs\\machine.ini"
+            cfgpath = "configs\machine.ini"
         else:
             cfgpath = "/root/python/code/config/userserver_config.ini"
 
