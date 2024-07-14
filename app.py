@@ -3,26 +3,25 @@ import json
 import os
 import random
 import datetime
-import re
 
-from flask import Flask, request, jsonify, render_template
+from flask import jsonify,send_file
 import requests
 
 from PIL import Image
 import base64
 
-from werkzeug.utils import secure_filename
-
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
-from msg_api_test.msg_api_test import get_msg_answer
 from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
-from flask import Flask, render_template, request, session, redirect, url_for
-from flask_socketio import SocketIO, join_room, leave_room
-from api_project_get.get_api_careeradvice import sync_vivogpt_careeradvice
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO
+from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
+from work_interview.get_interview_api import sync_vivogpt_interview_writting,sync_vivogpt_interview_writting_answers
+from work_interview.get_TTS_api import get_tts_instance, AueType, pcm2wav, TTS
+from work_interview.get_interview_chat import sync_vivogpt_interview_chat
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
@@ -92,12 +91,63 @@ def getanswer_advice_msg():
 @app.route('/answer_msg/career_advice', methods=['POST'])
 def getanswer_careeradvice_msg():
     data = json.loads(request.get_data(as_text=True))
-    data = data['question']
-    result = sync_vivogpt_careeradvice(data)
+    questions = data['questions']
+    result = sync_vivogpt_careeradvice(questions)
     if result != None:
         return jsonify({'success': True, 'result': result}), 200
     else:
         return jsonify({'success': False}), 200
+@app.route('/answer_msg/interview', methods=['POST'])
+def getanswer_interview_msg():
+    data = json.loads(request.get_data(as_text=True))
+    question = data['question']
+    result = sync_vivogpt_interview_writting(question)
+    print(question)
+    if result is not None:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
+@app.route('/answer_msg/interview/answer', methods=['POST'])
+def getanswer_interview_answer():
+    data = request.json
+    questions = data['questions']
+    result = sync_vivogpt_interview_writting_answers(questions)
+    if result is not None:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+
+@app.route('/answer_msg/interview/TTS', methods=['POST'])
+def text_to_speech():
+    data = request.json
+    text = data.get('text', '你好')
+    voice_type = data.get('voice_type', 'vivoHelper')#更改语音
+    engine_id = data.get('engine_id', 'short_audio_synthesis_jovi')
+
+    tts = get_tts_instance(engine_id)
+    tts.open()
+    pcm_buffer = tts.gen_radio(aue=AueType.PCM, vcn=voice_type, text=text)
+    if pcm_buffer:
+        wav_io = pcm2wav(pcm_buffer)
+        return send_file(
+            wav_io,
+            mimetype='audio/wav',
+            as_attachment=True,
+            download_name='output.wav'
+        )
+    else:
+        return jsonify({'error': 'TTS generation failed'}), 500
+
+@app.route('/answer_msg/interview/chat', methods=['POST'])
+def getanswer_interview_chat():
+    data = request.json
+    questions = data['questions']
+    result = sync_vivogpt_interview_chat(questions)
+    if result:
+        return jsonify({'success': True, 'recommend': result}), 200
+    else:
+        return jsonify({'success': True}), 200
 
 @app.route('/answer', methods=['POST'])
 def getanswer():
@@ -290,6 +340,15 @@ def getcareer_advice():
 @app.route('/smartlife/work/interview', methods=['GET'])
 def getinterview():
     return render_template('interview.html')
+
+@app.route('/smartlife/work/interview_question',methods=['GET'])
+def getinterview_question():
+    return render_template('interview_question.html')
+
+@app.route('/test',methods=['GET'])
+def gettest():
+    return render_template('A-test.html')
+
 
 @app.route('/teacher/public/get_sinfo', methods=['POST'])
 def get_teacher_sinfo():

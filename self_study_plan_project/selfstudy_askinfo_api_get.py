@@ -2,7 +2,7 @@
 import uuid
 import time
 import requests
-from api_project_get.auth_util import gen_sign_headers
+from work_careeradvice.auth_util import gen_sign_headers
 
 def sync_vivogpt_selfplan(prompt):
 

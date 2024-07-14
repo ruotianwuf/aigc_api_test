@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>AI Voice Assistant</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            width: 80%;
+            height: 80%;
+            text-align: center;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .ai-image img {
+            width: 200px;
+            height: auto;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .titlecontainer{
+            width: 70%;
+            height: auto;
+            background-color: rgb(37, 201, 217);
+            display: flex;
+            justify-content: center;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+
+        }
+
+        .input-area {
+            position: relative;
+        }
+
+        #mic-button {
+            width: 200px;
+            height: 60px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #mic-button:hover{
+            background-color: #3494fc;
+            box-shadow:inset 0px 0px 5px 1px #444444;
+        }
+        #mic-button.active{
+            background-color: #48a4fd;
+
+        }
+
+        .material-icons {
+            font-size: 36px;
+            color: #ffffff;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="ai-image">
+            <img src="/static/img/AI%20UI.png" alt="AI Image">
+        </div>
+        <div class="titlecontainer">
+            <div class="subtitle" id="aispeak">
+                AI's question or response will appear here.
+            </div>
+        </div>
+        <div class="subtitle" id="userspeak">
+            Your response will appear here.
+        </div>
+        <div class="input-area">
+            <button id="mic-button">
+                <span class="material-icons Icon" id="Icon">mic</span>
+            </button>
+        </div>
+        <audio id="audio-output" controls style="display: none"></audio>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let recognition;
+        document.getElementById('mic-button').addEventListener('mousedown', () => {
+            startSpeechRecognition();
+        });
+
+        document.getElementById('mic-button').addEventListener('mouseup', () => {
+            stopSpeechRecognition();
+        });
+
+        document.getElementById('mic-button').addEventListener('mouseleave', () => {
+            stopSpeechRecognition();
+        });
+
+        function startSpeechRecognition() {
+            if (!('webkitSpeechRecognition' in window)) {
+                alert('Sorry, your browser does not support speech recognition.');
+                return;
+            }
+
+            recognition = new window.webkitSpeechRecognition();
+            // recognition.lang = 'en-US';
+            recognition.lang = 'zh-CN'//中文识别
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                document.getElementById('userspeak').innerText = `You said: ${speechResult}`;
+                console.log(speechResult);
+                sendSpeechToServer(speechResult);
+            };
+
+            recognition.onerror = (event) => {
+                console.error(event.error);
+            };
+
+            recognition.onend = () => {
+                document.getElementById('Icon').classList.remove('active');
+            };
+
+            recognition.start();
+            document.getElementById('Icon').classList.add('active');
+        }
+
+        function stopSpeechRecognition() {
+            if (recognition) {
+                recognition.stop();
+            }
+        }
+        function sendSpeechToServer(speechText) {
+            $.ajax({
+                url: "/answer_msg/interview/chat",
+                type: "POST",
+                data: JSON.stringify({ questions: speechText }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    console.log('答案已提交：', response);
+                    if (response.success) {
+                        const textToSpeak = response.recommend || 'No recommendation available.';
+                        document.getElementById('aispeak').innerText = textToSpeak;
+                        convertTextToSpeech(textToSpeak);
+                    } else {
+                        alert('提交失败，请稍后重试。');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('提交答案失败：', error);
+                    alert("提交答案时发生错误，请稍后重试。");
+                }
+            });
+        }
+        function convertTextToSpeech(text) {
+            $.ajax({
+                url: "/answer_msg/interview/TTS",
+                type: "POST",
+                data: JSON.stringify({ text: text }),
+                contentType: "application/json",
+                xhrFields: {
+                    responseType: 'blob' // Important for receiving binary data as a Blob
+                },
+                success: function(blob) {
+                    const audio = document.getElementById('audio-output');
+                    const url = URL.createObjectURL(blob);
+                    audio.src = url;
+                    audio.play();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
