@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TTS Demo</title>
+</head>
+<body>
+    <h1>TTS Demo</h1>
+    <textarea id="text-input" placeholder="Enter text here..."></textarea>
+    <button id="convert-button">Convert to Speech</button>
+    <audio id="audio-output" controls></audio>
+
+    <script>
+        document.getElementById('convert-button').addEventListener('click', function() {
+            const text = document.getElementById('text-input').value;
+
+            fetch('/answer_msg/interview/TTS', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ text: text })
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                const audio = document.getElementById('audio-output');
+                const url = URL.createObjectURL(blob);
+                audio.src = url;
+                audio.play();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>

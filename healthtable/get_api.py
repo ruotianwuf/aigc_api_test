@@ -2,16 +2,17 @@
 import uuid
 import time
 import requests
-from work_careeradvice.auth_util import gen_sign_headers
+from healthtable.auth_util import gen_sign_headers
 
-def sync_vivogpt(prompt):
+def sync_vivogpt_ht(prompt):
 
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
     URI = '/vivogpt/completions'
     DOMAIN = 'api-ai.vivo.com.cn'
 
-
+    # prompt = str({'体重': '80kg', '身高': '170cm', '爱好': '骑行', '期望体重': '60kg'})
+    print(prompt)
     METHOD = 'POST'
 
     params = {
@@ -27,7 +28,7 @@ def sync_vivogpt(prompt):
         'extra': {
             'temperature': 0.9
         },
-        'systemPrompt': '你的中文名字叫课堂分析助手，当回复问题时需要回复你的名字时，中文名必须回复课堂分析助手，此外回复和你的名字相关的问题时，也需要给出和你的名字对应的合理回复。需要你通过内容来分析课堂的上课情况和互动情况，并给出具体详细的课堂报告'
+        'systemPrompt': '你的中文名字叫健康日程安排助手，当回复问题时需要回复你的名字时，中文名必须回复健康日程安排助手，此外回复和你的名字相关的问题时，也需要给出和你的名字对应的合理回复。需要你通过内容来分析安排健康日程，周一到周日七天，每天的早中晚三餐，每天锻炼的时间和内容，时间精确到具体时间段,以日程表的形式输出'
     }
     headers = gen_sign_headers(APP_ID, APP_KEY, METHOD, URI, params)
     headers['Content-Type'] = 'application/json'
@@ -51,8 +52,6 @@ def sync_vivogpt(prompt):
     end_time = time.time()
     timecost = end_time - start_time
     print('请求耗时: %.2f秒' % timecost)
-
-
 
 
 

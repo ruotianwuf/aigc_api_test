@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Schedule</title>
+<style>
+    html {
+        overflow-y: auto;
+    }
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .scroll-container {
+        max-height: 500px; /* 或其他高度 */
+        overflow-y: auto; /* 当内容超过容器高度时，允许垂直滚动 */
+        border: 1px solid #ccc; /* 边框仅为示例 */
+    }
+    button:hover {
+        background-color: #45a049;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 120vh;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 1200px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        padding: 20px;
+
+    }
+
+    .header {
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        padding: 1em 0;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 20px;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .btn {
+        display: inline-block;
+        margin: 10px 0;
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        text-align: center;
+        border-radius: 5px;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #45a049;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 400px;
+        border-radius: 8px;
+    }
+
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+    .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+    .button-get {
+        left: 100%;
+    }
+
+    .report-background {
+        background-color: #ffffff;
+        color: #000000;
+        border-radius: 5px;
+        min-height: 100%;
+        justify-content: center;
+        padding: 5em;
+        font-size: 15px;
+        box-sizing: border-box;
+        border: 3px solid #656565;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .report-background h1 {
+       text-align: center;
+       margin-top: 0;
+    }
+
+    .custom-table {
+            width: 100%; /* 表格宽度 */
+            border-collapse: collapse; /* 边框合并 */
+            color: black; /* 设置字体颜色为黑色 */
+    }
+    .custom-table th,
+    .custom-table td {
+        border: 1px solid black; /* 单元格边框 */
+        padding: 8px; /* 单元格内边距 */
+        text-align: left; /* 文本对齐 */
+    }
+    .custom-table th {
+        background-color: #f2f2f2; /* 表头背景色 */
+    }
+    </style>
+</head>
+<body onload="gettable()">
+
+
+    <div class="container">
+        <div class="header">
+            <h1>运动饮食计划表</h1>
+            <button class="btn" id="openBtn">录入信息</button>
+            <button class="btn" id="openModalBtn">录入信息</button>
+        </div>
+        <div class="scroll-container">
+            <div id="backresult">1111</div>
+        </div>
+
+        <table id="scheduleTable">
+            <tr>
+                <th>Time</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+            <tr>
+                <td id="time-07-08" name="time-07-08">07:00 - 08:00 (Breakfast)</td>
+                <td id="mon-07-08" name="mon-07-08" contenteditable="true"></td>
+                <td id="tue-07-08" name="tue-07-08" contenteditable="true"></td>
+                <td id="wed-07-08" name="wed-07-08" contenteditable="true"></td>
+                <td id="thu-07-08" name="thu-07-08" contenteditable="true"></td>
+                <td id="fri-07-08" name="fri-07-08" contenteditable="true"></td>
+                <td id="sat-07-08" name="sat-07-08" contenteditable="true"></td>
+                <td id="sun-07-08" name="sun-07-08" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-08-10" name="time-08-10">08:00 - 10:00</td>
+                <td id="mon-08-10" name="mon-08-10" contenteditable="true"></td>
+                <td id="tue-08-10" name="tue-08-10" contenteditable="true"></td>
+                <td id="wed-08-10" name="wed-08-10" contenteditable="true"></td>
+                <td id="thu-08-10" name="thu-08-10" contenteditable="true"></td>
+                <td id="fri-08-10" name="fri-08-10" contenteditable="true"></td>
+                <td id="sat-08-10" name="sat-08-10" contenteditable="true"></td>
+                <td id="sun-08-10" name="sun-08-10" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-10-12" name="time-10-12">10:00 - 12:00</td>
+                <td id="mon-10-12" name="mon-10-12" contenteditable="true"></td>
+                <td id="tue-10-12" name="tue-10-12" contenteditable="true"></td>
+                <td id="wed-10-12" name="wed-10-12" contenteditable="true"></td>
+                <td id="thu-10-12" name="thu-10-12" contenteditable="true"></td>
+                <td id="fri-10-12" name="fri-10-12" contenteditable="true"></td>
+                <td id="sat-10-12" name="sat-10-12" contenteditable="true"></td>
+                <td id="sun-10-12" name="sun-10-12" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-lunch" name="time-lunch">12:00 - 13:00 (Lunch)</td>
+                <td id="mon-lunch" name="mon-lunch" contenteditable="true"></td>
+                <td id="tue-lunch" name="tue-lunch" contenteditable="true"></td>
+                <td id="wed-lunch" name="wed-lunch" contenteditable="true"></td>
+                <td id="thu-lunch" name="thu-lunch" contenteditable="true"></td>
+                <td id="fri-lunch" name="fri-lunch" contenteditable="true"></td>
+                <td id="sat-lunch" name="sat-lunch" contenteditable="true"></td>
+                <td id="sun-lunch" name="sun-lunch" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-13-15" name="time-13-15">13:00 - 15:00</td>
+                <td id="mon-13-15" name="mon-13-15" contenteditable="true"></td>
+                <td id="tue-13-15" name="tue-13-15" contenteditable="true"></td>
+                <td id="wed-13-15" name="wed-13-15" contenteditable="true"></td>
+                <td id="thu-13-15" name="thu-13-15" contenteditable="true"></td>
+                <td id="fri-13-15" name="fri-13-15" contenteditable="true"></td>
+                <td id="sat-13-15" name="sat-13-15" contenteditable="true"></td>
+                <td id="sun-13-15" name="sun-13-15" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-15-17" name="time-15-17">15:00 - 17:00</td>
+                <td id="mon-15-17" name="mon-15-17" contenteditable="true"></td>
+                <td id="tue-15-17" name="tue-15-17" contenteditable="true"></td>
+                <td id="wed-15-17" name="wed-15-17" contenteditable="true"></td>
+                <td id="thu-15-17" name="thu-15-17" contenteditable="true"></td>
+                <td id="fri-15-17" name="fri-15-17" contenteditable="true"></td>
+                <td id="sat-15-17" name="sat-15-17" contenteditable="true"></td>
+                <td id="sun-15-17" name="sun-15-17" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-dinner" name="time-dinner">17:00 - 18:00 (Dinner)</td>
+                <td id="mon-dinner" name="mon-dinner" contenteditable="true"></td>
+                <td id="tue-dinner" name="tue-dinner" contenteditable="true"></td>
+                <td id="wed-dinner" name="wed-dinner" contenteditable="true"></td>
+                <td id="thu-dinner" name="thu-dinner" contenteditable="true"></td>
+                <td id="fri-dinner" name="fri-dinner" contenteditable="true"></td>
+                <td id="sat-dinner" name="sat-dinner" contenteditable="true"></td>
+                <td id="sun-dinner" name="sun-dinner" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-18-20" name="time-18-20">18:00 - 20:00</td>
+                <td id="mon-18-20" name="mon-18-20" contenteditable="true"></td>
+                <td id="tue-18-20" name="tue-18-20" contenteditable="true"></td>
+                <td id="wed-18-20" name="wed-18-20" contenteditable="true"></td>
+                <td id="thu-18-20" name="thu-18-20" contenteditable="true"></td>
+                <td id="fri-18-20" name="fri-18-20" contenteditable="true"></td>
+                <td id="sat-18-20" name="sat-18-20" contenteditable="true"></td>
+                <td id="sun-18-20" name="sun-18-20" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-20-22" name="time-20-22">20:00 - 22:00</td>
+                <td id="mon-20-22" name="mon-20-22" contenteditable="true"></td>
+                <td id="tue-20-22" name="tue-20-22" contenteditable="true"></td>
+                <td id="wed-20-22" name="wed-20-22" contenteditable="true"></td>
+                <td id="thu-20-22" name="thu-20-22" contenteditable="true"></td>
+                <td id="fri-20-22" name="fri-20-22" contenteditable="true"></td>
+                <td id="sat-20-22" name="sat-20-22" contenteditable="true"></td>
+                <td id="sun-20-22" name="sun-20-22" contenteditable="true"></td>
+            </tr>
+            <tr>
+                <td id="time-22-23" name="time-22-23">22:00 - 23:00</td>
+                <td id="mon-22-23" name="mon-22-23" contenteditable="true"></td>
+                <td id="tue-22-23" name="tue-22-23" contenteditable="true"></td>
+                <td id="wed-22-23" name="wed-22-23" contenteditable="true"></td>
+                <td id="thu-22-23" name="thu-22-23" contenteditable="true"></td>
+                <td id="fri-22-23" name="fri-22-23" contenteditable="true"></td>
+                <td id="sat-22-23" name="sat-22-23" contenteditable="true"></td>
+                <td id="sun-22-23" name="sun-22-23" contenteditable="true"></td>
+            </tr>
+        </table>
+        <button onclick="back()" style="float:right">返回</button>
+        <button onclick="buildDictionaryFromTable()" style="float:left">编辑提交</button>
+
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>录入信息</h2>
+            <form id="infoForm">
+                <div class="form-group">
+                    <label for="height">身高 (cm):</label>
+                    <input type="number" id="height" name="height" required>
+                </div>
+                <div class="form-group">
+                    <label for="weight">体重 (kg):</label>
+                    <input type="number" id="weight" name="weight" required>
+                </div>
+                <div class="form-group">
+                    <label for="desiredWeight">期望体重 (kg):</label>
+                    <input type="number" id="desiredWeight" name="desiredWeight" required>
+                </div>
+                <div class="form-group">
+                    <label for="exercise">运动爱好:</label>
+                    <textarea id="exercise" name="exercise" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">提交</button>
+                </div>
+            </form>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+    function fillTableWithData(data) {
+        // 获取表格
+        var table = document.getElementById('scheduleTable');
+        var trs = table.getElementsByTagName('tr');
+
+        // 遍历字典数据
+        for (var key in data) {
+            if (data.hasOwnProperty(key)) {
+                // 构造单元格的ID
+                var cellId = key;
+                var cell = document.getElementById(cellId); // 通过ID获取单元格元素
+
+                // 检查单元格是否存在
+                if (cell) {
+                    // 设置单元格的文本内容
+                    cell.textContent = data[key];
+                } else {
+                    console.warn('Cell with id ' + cellId + ' not found.');
+                }
+            }
+        }
+    }
+
+
+    var cookies = document.cookie.split("; ");
+    for (var i = 0; i < cookies.length; i++) {
+        var cookiePair = cookies[i].split("=");
+        if (cookiePair[0] === "user" && cookiePair[1]) {
+            var name = cookiePair[1];
+            $.ajax({
+                url: "/health_info_get",
+                type: "POST",
+                data: JSON.stringify({'name': name}),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response.result)
+                    if (response.result) {
+                        var res = response.result
+                        var info = document.getElementById("openBtn");
+                        info.innerHTML = `
+                                        <div class="custom-table">
+                                            <table>
+                                                <tr>
+                                                    <th>姓名</th>
+                                                    <th>身高</th>
+                                                    <th>体重</th>
+                                                    <th>爱好运动</th>
+                                                </tr>
+                                                <tr>
+                                                    <td>${name}</td>
+                                                    <td>${res.height}</td>
+                                                    <td>${res.weight}</td>
+                                                    <td>${res.love_sports}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        `;
+                        getadvice(res)
+                    }
+                },
+                error: function () {
+                    alert("错误error");
+                }
+            });
+        }
+    }
+
+    // gettable()
+    function gettable(){
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+            if (cookiePair[0] === "user" && cookiePair[1]) {
+                var name = cookiePair[1];
+                $.ajax({
+                    url: "/table_get",
+                    type: "POST",
+                    data: JSON.stringify({'name': name}),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response.result)
+                        fillTableWithData(response.result)
+                    },
+                    error: function () {
+                        alert("错误error");
+                    }
+                });
+                modal.style.display = "none";
+            }
+        }
+    }
+
+
+    // 获取弹窗元素
+    var modal = document.getElementById("myModal");
+
+    // 获取按钮元素
+    var btn = document.getElementById("openModalBtn");
+
+    // 获取 <span> 元素，设置关闭按钮
+    var span = document.getElementsByClassName("close")[0];
+
+    // 点击按钮打开弹窗
+    btn.onclick = function() {
+        modal.style.display = "flex";
+    }
+
+    // 点击 <span> 元素关闭弹窗
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // 在用户点击其他地方时关闭弹窗
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    // 提交表单时处理数据
+    document.getElementById("infoForm").onsubmit = function(event) {
+        event.preventDefault();
+        var height = document.getElementById("height").value;
+        var weight = document.getElementById("weight").value;
+        var desiredWeight = document.getElementById("desiredWeight").value;
+        var exercise = document.getElementById("exercise").value;
+        data = {
+            "height": height + "cm",
+            "weight": weight + "kg",
+            "want_weight": desiredWeight + "kg",
+            "love_sports": exercise
+        }
+        getadvice(data)
+    }
+
+    function getadvice(data) {
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+            if (cookiePair[0] === "user" && cookiePair[1]) {
+                var name = cookiePair[1];
+                // alert(name)
+                //alert("身高: " + height + "cm\n体重: " + weight + "kg\n期望体重: " + desiredWeight + "kg\n运动爱好: " + exercise);
+                $.ajax({
+                    url: "/health_answer",
+                    type: "POST",
+                    data: JSON.stringify({'data': data, 'name': name}),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response.result)
+                        if (response.success) {
+                            var replay = response.result
+                            replay = replay.replace(/(\d+)\. /g, '$1.');
+                            replay = replay.replace(/\((\d+)\) /g, '($1)');
+                            replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                            replay = replay.replace(/\n/g, '<br>');
+
+                            var reportDiv = document.getElementById("backresult");
+                            reportDiv.innerHTML = "<div class='report-background'>" +replay + "</div>";
+                        }
+                    },
+                    error: function () {
+                        alert("错误error");
+                    }
+                });
+                modal.style.display = "none";
+            }
+        }
+    }
+
+
+    function back(){
+        window.location.href = "/smartlife/health"
+    }
+    function buildDictionaryFromTable() {
+        // 获取表格中所有的td元素
+        var cells = document.querySelectorAll('table td[contenteditable="true"]');
+        var dictionary = {};
+
+        // 遍历每个单元格
+        cells.forEach(function(cell) {
+            // 检查元素是否有ID
+            if (cell.id) {
+                // 使用ID作为键，内容作为值
+                dictionary[cell.id] = cell.textContent || cell.innerHTML;
+            }
+        });
+
+        // 返回构建的字典对象
+        console.log(dictionary);
+        // return dictionary;
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+            if (cookiePair[0] === "user" && cookiePair[1]) {
+                var name = cookiePair[1];
+                $.ajax({
+                    url: "/table_commit",
+                    type: "POST",
+                    data: JSON.stringify({'data': dictionary, 'name': name}),
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        console.log(response.result)
+                        gettable()
+                    },
+                    error: function () {
+                        alert("错误error");
+                    }
+                });
+                modal.style.display = "none";
+            }
+        }
+    }
+    </script>
+</body>
+</html>

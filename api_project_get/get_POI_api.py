@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 import requests
-from auth_util import gen_sign_headers
+from work_careeradvice.auth_util import gen_sign_headers
 
 # 请注意替换APP_ID、APP_KEY
 APP_ID = '3032660331'

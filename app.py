@@ -4,26 +4,31 @@ import os
 import random
 import datetime
 import re
+import pyautogui
 
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, Response
+from flask import jsonify,send_file
 import requests
 
 from PIL import Image
 import base64
 
-from werkzeug.utils import secure_filename
-
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
 from controller.UserServerController import UserServerController
-from msg_api_test.msg_api_test import get_msg_answer
 from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
-from api_project_get.get_api_careeradvice import sync_vivogpt_careeradvice
-from api_project_get.get_api_travelpoi import get_explanation, get_poi
+from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
+from healthtable.get_api import sync_vivogpt_ht
+from flask import Flask, render_template, request
+from flask_socketio import SocketIO
+from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
+from work_interview.get_interview_api import sync_vivogpt_interview_writting,sync_vivogpt_interview_writting_answers
+from work_interview.get_TTS_api import get_tts_instance, AueType, pcm2wav, TTS
+from work_interview.get_interview_chat import sync_vivogpt_interview_chat
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
@@ -45,8 +50,86 @@ def samartlearn():
 def samartlife():
     return render_template('smartlife.html')
 
+@app.route('/smartlife/health', methods=['GET'])
+def samartlife_health():
+    return render_template('health.html')
+
+@app.route('/smartlife/health/healthtable', methods=['GET'])
+def samartlife_healthtable():
+    return render_template('healthy_table.html')
+
+@app.route('/smartlife/health/healthtest', methods=['GET'])
+def samartlife_healthtest():
+    return render_template('healthy_test.html')
 
 
+
+
+@app.route('/health_answer', methods=['POST'])
+def gethealthanswer_msg():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        data = data['data']
+        # data['love_sports'] = text_translate_c_to_e(data['love_sports'])
+        # data = json.dumps(data)
+        print(data)
+        # data_need = json.dumps(data)
+        con = UserServerController()
+        res = con.insert_info(name,data)
+        result = sync_vivogpt_ht(str(data))
+
+        if result is not None and res:
+            return jsonify({'success': True, 'result': result}), 200
+        else:
+            return jsonify({'success': False}), 200
+
+@app.route('/health_info_get', methods=['POST'])
+def gethealth_info():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        con = UserServerController()
+        res = con.get_healthy_info(name)
+
+        if res[0][0] is not None:
+            res = json.loads(res[0][0])
+            # res['love_sports'] = text_translate_e_to_c(res['love_sports'])
+            res = res
+        else:
+            res = 1
+        if res:
+            return jsonify({'success': True, 'result': res}), 200
+        else :
+            return jsonify({'success': True}), 200
+
+@app.route('/table_commit', methods=['POST'])
+def gettable_commit():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        tdata = data['data']
+        con = UserServerController()
+        res = con.get_table_commit(name, tdata)
+
+        if res:
+            return jsonify({'success': True, 'result': res}), 200
+        else :
+            return jsonify({'success': True}), 200
+
+@app.route('/table_get', methods=['POST'])
+def gettable_get():
+        data = json.loads(request.get_data(as_text=True))
+        name = data['name']
+        con = UserServerController()
+        res = con.get_table_get(name)
+        print(type(res))
+
+        if res[0][0] is not None:
+            res = json.loads(res[0][0])
+        else:
+            res = 1
+        if res:
+            return jsonify({'success': True, 'result': res}), 200
+        else:
+            return jsonify({'success': True}), 200
 # @app.route('/file/upload/', methods=['POST', 'GET'])
 # def upload():
 #     try:
@@ -93,12 +176,63 @@ def getanswer_advice_msg():
 @app.route('/answer_msg/career_advice', methods=['POST'])
 def getanswer_careeradvice_msg():
     data = json.loads(request.get_data(as_text=True))
-    data = data['question']
-    result = sync_vivogpt_careeradvice(data)
+    questions = data['questions']
+    result = sync_vivogpt_careeradvice(questions)
     if result != None:
         return jsonify({'success': True, 'result': result}), 200
     else:
         return jsonify({'success': False}), 200
+@app.route('/answer_msg/interview', methods=['POST'])
+def getanswer_interview_msg():
+    data = json.loads(request.get_data(as_text=True))
+    question = data['question']
+    result = sync_vivogpt_interview_writting(question)
+    print(question)
+    if result is not None:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
+@app.route('/answer_msg/interview/answer', methods=['POST'])
+def getanswer_interview_answer():
+    data = request.json
+    questions = data['questions']
+    result = sync_vivogpt_interview_writting_answers(questions)
+    if result is not None:
+        return jsonify({'success': True, 'result': result}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+
+@app.route('/answer_msg/interview/TTS', methods=['POST'])
+def text_to_speech():
+    data = request.json
+    text = data.get('text', '你好')
+    voice_type = data.get('voice_type', 'vivoHelper')#更改语音
+    engine_id = data.get('engine_id', 'short_audio_synthesis_jovi')
+
+    tts = get_tts_instance(engine_id)
+    tts.open()
+    pcm_buffer = tts.gen_radio(aue=AueType.PCM, vcn=voice_type, text=text)
+    if pcm_buffer:
+        wav_io = pcm2wav(pcm_buffer)
+        return send_file(
+            wav_io,
+            mimetype='audio/wav',
+            as_attachment=True,
+            download_name='output.wav'
+        )
+    else:
+        return jsonify({'error': 'TTS generation failed'}), 500
+
+@app.route('/answer_msg/interview/chat', methods=['POST'])
+def getanswer_interview_chat():
+    data = request.json
+    questions = data['questions']
+    result = sync_vivogpt_interview_chat(questions)
+    if result:
+        return jsonify({'success': True, 'recommend': result}), 200
+    else:
+        return jsonify({'success': True}), 200
 
 @app.route('/answer', methods=['POST'])
 def getanswer():
@@ -113,6 +247,7 @@ def getanswer():
 @app.route('/smartlearn/student', methods=['GET'])
 def getstudent():
     return render_template('student.html')
+
 
 online_user = []
 room_user = {}
@@ -153,6 +288,7 @@ def course_recommend_getiframe():
         return jsonify({'success': True}), 200
 
 
+
 @app.route('/student/course/get', methods=['POST'])
 def getstudent_course_get():
     data = json.loads(request.get_data(as_text=True))
@@ -181,6 +317,7 @@ def getstudent_course_get():
         return jsonify({'success': True, 'info': info, 'course_grade': course_grade, 'all_grade': info[4]}), 200
     else:
         return jsonify({'success': True}), 200
+
 
 @app.route('/smartlearn/student/forum', methods=['GET'])
 def getstudent_forum():
@@ -251,6 +388,39 @@ def getstudent_forum_post():
     else:
         return jsonify({'success': False}), 200
 
+
+@app.route('/smartlearn/student/live', methods=['GET'])
+def get_student_live():
+    return render_template('student_live.html')
+
+@app.route('/pointer')
+def pointer():
+    x = int(float(request.args["xrate"]) * 1920)
+    y = int(float(request.args["yrate"]) * 1080)
+    # 执行点击操作
+    pyautogui.click(x, y)
+    return "success"
+
+
+
+def gen():
+    while True:
+        screenShotImg = pyautogui.screenshot()
+
+        imgByteArr = io.BytesIO()
+        screenShotImg.save(imgByteArr, format='JPEG')
+        imgByteArr = imgByteArr.getvalue()
+        frame = imgByteArr
+        yield (b'--frame\r\n Content-Type: image/jpeg\r\n\r\n' + frame)
+
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+
+
 @app.route('/smartlearn/student/recommend', methods=['GET'])
 def getstudent_recommend():
     return render_template('student_course_recommend.html')
@@ -278,6 +448,25 @@ def getteacher_check():
 def getteacher_public():
     return render_template('teacher_public.html')
 
+@app.route('/smartlife/work', methods=['GET'])
+def getwork():
+    return render_template('work.html')
+@app.route('/smartlife/work/career_advice', methods=['GET'])
+def getcareer_advice():
+    return render_template('career_advice.html')
+
+@app.route('/smartlife/work/interview', methods=['GET'])
+def getinterview():
+    return render_template('interview.html')
+
+@app.route('/smartlife/work/interview_question',methods=['GET'])
+def getinterview_question():
+    return render_template('interview_question.html')
+
+@app.route('/test',methods=['GET'])
+def gettest():
+    return render_template('A-test.html')
+
 
 @app.route('/teacher/public/get_sinfo', methods=['POST'])
 def get_teacher_sinfo():
@@ -302,10 +491,15 @@ def add_course_grade():
     print(data)
     con = UserServerController()
     result = con.addcourse_grade(data)
+
     if result:
         return jsonify({'success': True}), 200
     else:
         return jsonify({'success': True}), 200
+
+
+
+
 @app.route('/smartlearn/adduser', methods=['GET'])
 def adduser():
     return render_template('/')
@@ -317,6 +511,10 @@ def adduser_student():
 @app.route('/smartlearn/adduser/teacher', methods=['GET'])
 def adduser_teacher():
     return render_template('register_teacher.html')
+
+@app.route('/smartlife/adduser/user', methods=['GET'])
+def adduser_user():
+    return render_template('register_user.html')
 
 
 @app.route('/adduser/student/1', methods=['POST'])
@@ -347,14 +545,43 @@ def adduser_teacher_info():
 
 @app.route('/adduser/user/1', methods=['POST'])
 def adduser_user_info():
-    data = json.loads(request.get_data(as_text=True))
+
+
+    if 'screenshot' not in request.files:
+        return jsonify(success=False, message="没有文件部分")
+
+    file = request.files['screenshot']
+    print(file.mode)
+    # 如果用户没有选择文件，浏览器也会提交一个没有文件名的空部分
+    if file.filename == '':
+        return jsonify(success=False, message="没有选择文件")
+
+    filename = 'test2.png'
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+    username = request.form.get('username')
+    password = request.form.get('password')
+    email = request.form.get('email')
+    phone = request.form.get('phone')
+
+    data = {'username': username, 'password': password, 'phone': phone, 'email': email}
     data["userid"] = "u" + str(random.randint(100000 - 1, 1000000 - 1))
-    print(data)
     con = UserServerController()
     result = con.adduser_user_ServerStatus(data)
-    print(result)
-    if result:
-        return jsonify({'success': True}), 200
+
+    image_path1 = 'static/humanphoto/test2.png'
+    # base64_image1 = image_to_base64(image_path1)
+    base64_image1 = image_to_base64(image_path1)
+    img = {'blob': base64_image1}
+
+    res = con.insert_blob_ServerStatus(username, img)
+    print(res)
+
+    print(data)
+
+
+    if result and res:
+        return jsonify({'success': True, 'data': result}), 200
     else:
         return jsonify({'success': False}), 200
 
@@ -364,6 +591,8 @@ def adduser_user_info():
 def getlogin():
     return render_template('/')
 
+
+
 @app.route('/smartlearn/login/student', methods=['GET'])
 def getlogin_student():
     return render_template('login_student.html')
@@ -372,7 +601,9 @@ def getlogin_student():
 def getlogin_teacher():
     return render_template('login_teacher.html')
 
-
+@app.route('/smartlife/login/user', methods=['GET'])
+def getlogin_user():
+    return render_template('login_user.html')
 
 @app.route('/login/teacher/1', methods=['POST'])
 def getlogin_teacher_info():
@@ -395,6 +626,9 @@ def getlogin_student_info():
         return jsonify({'success': True, 'data': result}), 200
     else:
         return jsonify({'success': False}), 200
+
+
+
 
 
 def image_to_base64(image_path):
@@ -438,7 +672,7 @@ def getlogin_user_info():
         return jsonify(success=False, message="没有选择文件")
 
 
-    filename = '123123.png'
+    filename = 'test.png'
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
     username = request.form.get('username')
@@ -450,16 +684,17 @@ def getlogin_user_info():
     # print(base64_image2)
     request_url = "https://aip.baidubce.com/rest/2.0/face/v3/match"
 
-    image_path1 = 'static/humanphoto/'+str(username)+str(phone)+'.png'
-    base64_image1 = image_to_base64(image_path1)
+    # image_path1 = 'static/humanphoto/'+str(username)+str(phone)+'.png'
+    # base64_image1 = image_to_base64(image_path1)
 
     con = UserServerController()
-    # base64_image1 = con.find_blob_ServerStatus(data)
-    # base64_image1 = base64_image1[0][0]
+    base64_image1 = con.find_blob_ServerStatus(data)
+    base64_image1 = json.loads(base64_image1[0][0])
+    base64_image1 = base64_image1['blob']
     # base64_image1 = base64_image1.decode('utf-8')
-    # print(base64_image1)
+    print(base64_image1)
 
-    image_path2 = 'static/humanphoto/123123.png'
+    image_path2 = 'static/humanphoto/test.png'
     base64_image2 = image_to_base64(image_path2)
 
 
@@ -534,12 +769,9 @@ def get_teacher_info():
 
 @app.route('/teacher/info/c_delete', methods=['POST'])
 def delete_teacher_c_info():
-
     data = json.loads(request.get_data(as_text=True))
     print(data)
-
     con = UserServerController()
-
     result = con.delete_course_info_ServerStatus(data)
     if result:
         return jsonify({'success': True}), 200
@@ -710,52 +942,6 @@ def upload_student_homework():
     check_result = get_correct_check(upload_dir+'/'+homework_file.filename)
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
-
-
-
-
-
-
-@app.route('/smartlife/work', methods=['GET'])
-def getwork():
-    return render_template('work.html')
-
-@app.route('/smartlife/work/career_advice', methods=['GET'])
-def getcareer_advice():
-    return render_template('career_advice.html')
-
-@app.route('/smartlife/work/interview', methods=['GET'])
-def getinterview():
-    return render_template('interview.html')
-
-@app.route('/smartlife/adduser/user', methods=['GET'])
-def adduser_user():
-    return render_template('register_user.html')
-
-@app.route('/smartlife/login/user', methods=['GET'])
-def getlogin_user():
-    return render_template('login_user.html')
-
-@app.route('/smartlife/travel', methods=['GET'])
-def gettavel():
-    return render_template('travel.html')
-
-@app.route('/smartlife/travel/get_traveluser_location', methods=['GET','POST'])
-def get_traveluser_location():
-    lat = request.form['lat']
-    lon = request.form['lon']
-    # 假设此时已经获取到了用户的位置信息
-    return jsonify({'lat': lat, 'lon': lon})
-
-@app.route('/smartlife/travel/get_sight_info', methods=['GET', 'POST'])
-def get_sight_info():
-    lat = request.form['lat']
-    lon = request.form['lon']
-    # 调用Vivo API获取景点信息（假设已经封装好函数）
-    poi_info = get_poi(lat, lon)
-    # 调用Vivo的chat模型获取景点讲解（假设已经封装好函数）
-    explanation = get_explanation(poi_info['name'])
-    return jsonify({'poi_info': poi_info, 'explanation': explanation})
 
 
 if __name__ == '__main__':

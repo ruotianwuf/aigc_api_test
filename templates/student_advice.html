@@ -168,7 +168,7 @@
 
                                 var reportDiv = document.getElementById("content");
                                 reportDiv.innerHTML = "<div class='report-background'>" + "<h1>学业报告与建议</h1>" +replay + "</div>";
-                                }
+                            }
                         },
                         error: function() {
                             alert("错误error");
@@ -192,7 +192,7 @@
         var data = { 'question': questionText };
         var outputDiv = document.getElementById("content");
         var questionHTML = "<div class='message user-message' style='display: flex;'>" +
-                           "<img src='../static/img/student.png' alt='User Avatar' class='avatar'>" +
+                           "<img src='/static/img/student.png' alt='User Avatar' class='avatar'>" +
                            "<div>" +
                             "<div class='name'>You</div>" +
                             "<div class='text'>" + "You: " + data.question + "</div>" +
@@ -217,7 +217,7 @@
 
 
                     var answerHTML = "<div class='message ai-message' style='display: flex;'>" +
-                                     "<img src='../static/img/AI%20UI.png' alt='AI Avatar' class='avatar'>" +
+                                     "<img src='/static/img/AI%20UI.png' alt='AI Avatar' class='avatar'>" +
                                      "<div>" +
                                        "<div class='name'>Assistant</div>" +
                                        "<div class='text'></div>" +

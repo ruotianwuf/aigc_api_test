@@ -160,7 +160,7 @@
             <div class="field">
                 <input required type="password" id="Rpassword" class="input">
                 <span class="material-icons">lock</span>
-                <label class="label">确认密码</label>
+                <label class="label">密码不一致</label>
             </div>
             <br>
             <div class="field">
@@ -174,67 +174,156 @@
                 <span class="material-icons">phone</span>
                 <label class="label">电话</label>
             </div>
+            <div id="vedio"></div>
             <br>
-            <button class="button" type="submit">注册</button>
+            <button class="button" type="submit" >注册</button>
             <button class="button" onclick="go_home()">取消</button>
             <div class="sign-up">
                 已经有账号？
                 <a onclick="go_signin()">立即登录</a>
             </div>
+            <canvas id="canvas" style="display: none;"></canvas>
+
         </form>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        // 获取登录表单元素
-        const loginForm = document.getElementById('loginForm');
 
-        // 添加表单提交事件监听器
-        loginForm.addEventListener('submit', function(event) {
-            event.preventDefault(); // 阻止表单默认提交行为
+        let stream; // 用于存储MediaStream对象
+        let imgData
 
-            // 获取用户名和密码输入框的值
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const Rpassword = document.getElementById('Rpassword').value;
-            const email = document.getElementById('email').value;
-            const phone = document.getElementById('phone').value;
+         function takeSnapshot() {
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            const video = document.getElementById('video');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 将canvas转换为图片Blob
+            canvas.toBlob(function(blob) {
+                imgData = blob;
+                // 截图完成后的操作
+                closeCameraAndSubmitForm();
+            }, 'image/png');
+        }
+
+        function closeCameraAndSubmitForm() {
+            closeCamera(); // 关闭摄像头
+            // 这里执行提交表单的操作
+            submitFormWithImage();
+        }
+
+        function closeCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+            }
+        }
 
 
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('Rpassword');
+        // const loginForm = document.getElementById('loginForm');
 
-            // 创建一个FormData对象，用于将表单数据发送给后端
-            var data = {'username': username, 'password': password, 'email': email, 'phone': phone};
-            if (username && password && password===Rpassword) {
+        // 为密码和确认密码输入框添加input事件监听器
+        password.addEventListener('input', validatePassword);
+        confirmPassword.addEventListener('input', validatePassword);
+
+        // 校验密码是否一致的函数
+        function validatePassword() {
+            // 如果密码和确认密码相同，则显示成功消息或样式
+            if (password.value === confirmPassword.value) {
+                confirmPassword.setCustomValidity(""); // 清除错误消息
+                // 你可以在这里添加显示成功状态的代码，例如改变边框颜色等
+            } else {
+                // 如果密码和确认密码不同，设置错误消息
+                confirmPassword.setCustomValidity("密码不匹配，请重新输入。");
+                // 你可以在这里添加显示错误状态的代码，例如改变边框颜色等
+            }
+        }
+
+        function submitFormWithImage() {
+            // 假设imgData是已经赋值的图片Blob
+            if (imgData) {
+                // 创建FormData对象
+                var formData = new FormData();
+
+                // 获取其他表单数据
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                // const Rpassword = document.getElementById('Rpassword').value;
+                const email = document.getElementById('email').value;
+                const phone = document.getElementById('phone').value;
+
+                // 添加其他表单数据到FormData
+                formData.append('username', username);
+                formData.append('password', password);
+                // formData.append('Rpassword', Rpassword);
+                formData.append('email', email);
+                formData.append('phone', phone);
+
+                // 添加图片文件到FormData
+                var imgBlob = new File([imgData], "screenshot.png", { type: "image/png" });
+                formData.append('screenshot', imgBlob);
+
+                // 使用jQuery的ajax发送FormData
                 $.ajax({
                     url: "/adduser/user/1",
                     type: "POST",
-                    data: JSON.stringify(data),
-                    contentType: "application/json",
-                    dataType: "json",
+                    data: formData,
+                    contentType: false, // 告诉jQuery不要设置内容类型为application/json
+                    processData: false, // 告诉jQuery不要处理数据
                     success: function (response) {
+                        // 登录成功的处理
                         if(response.success){
-                             alert("注册成功");
-
-                            window.location.href = "/smartlife/login/user";
-                        }else{
-                            alert("用户名重复");
-                            window.location.href="/smartlife/adduser/user";
+                            alert("注册成功");
+                            // 跳转到相应页面
+                            var url = "/smartlife?data=" + username;
+                            window.location.href = url;
+                        } else {
+                            // 登录失败的处理
+                            alert("注册错误");
+                            window.location.href="/smartlife/login/user";
                         }
-
-            // 重定向到接收页面
                     },
-                    error: function () {
-                        alert("错误error");
+                    error: function (xhr, status, error) {
+                        // 错误处理
+                        alert("注册失败: " + error);
                     }
                 });
+            } else {
+                // 图片数据为空的处理
+                alert("未获取到截图，请重试。");
             }
-            else if(password !== Rpassword){
-                alert("密码不一致");
-            }
-            else {
-                alert("用户名和密码不能为空");
-            }
-        })
+        }
+
+// 监听表单提交事件
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+        document.getElementById('vedio').innerHTML='<video id="video" width="340" height="360" autoplay></video>'
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({video: true})
+                .then(function (mediaStream) {
+                    stream = mediaStream;
+                    const video = document.getElementById('video');
+                    video.srcObject = stream;
+
+                    // 5秒后对视频进行截图
+                    setTimeout(takeSnapshot, 5000);
+                    // document.getElementById('vedio').innerHTML='<div id="vedio"></div>'
+                })
+                .catch(function (error) {
+                    console.error("Something went wrong!", error);
+                    alert("无法访问摄像头，请检查权限设置。");
+                });
+        } else {
+            alert("您的浏览器不支持访问摄像头。");
+        }
+    })
 
         function go_home(){
          window.location.href = '/smartlife';

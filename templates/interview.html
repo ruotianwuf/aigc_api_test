@@ -2,9 +2,447 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>模拟面试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/static/img/interview_bg1.jpg') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        main {
+            display: flex;
+            width: 90%;
+            height: 70%;
+            max-width: 1200px;
+            background-color: rgba(252, 145, 145, 0.9); /* 半透明背景以突出内容 */
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding-left: 20px; /* 为了与抽屉菜单空间对齐 */
+        }
+        /* 抽屉样式 */
+        .drawer {
+            position: fixed;
+            left: -220px;
+            top: 0;
+            width: 200px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9); /* 半透明背景 */
+            padding: 20px;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.1);
+            transition: left 0.3s ease;
+            z-index: 99;
+        }
+
+        .drawer h3 {
+            margin-top: 0;
+        }
+
+        .drawer ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .drawer li {
+            margin: 10px 0;
+        }
+
+        .drawer li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .drawer li a:hover {
+            color: #d32f2f;
+        }
+
+        .drawer.open {
+            left: 0;
+        }
+
+        .drawer-toggle {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #f19696;
+            width: 50px; /* 按钮宽度 */
+            height: 50px; /* 按钮高度 */
+            color: white;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            transition: left 0.3s ease;
+        }
+
+        .drawer-toggle:hover {
+            background-color: #f5d1d1;
+        }
+
+        /*回答问题区域*/
+        .interview-section {
+            background-color: rgba(255, 255, 255, 0.9); /* 半透明背景 */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex-grow: 1;
+        }
+
+        .question-area h2 {
+            margin-top: 0;
+            font-size: 2em;
+        }
+
+        .answer-area textarea {
+            width: 95%;
+            height: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 2em;
+            resize: block;
+        }
+
+        .next-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .next-button:hover {
+            background-color: #45a049;
+        }
+
+        .timer {
+            text-align: right;
+            font-size: 1em;
+            color: #555;
+            margin-top: 10px;
+        }
+
+        /* 全屏模糊蒙版样式 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+        }
+
+        .overlay-content {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9); /* 半透明背景 */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .start-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .start-button:hover {
+            background-color: #45a049;
+        }
+
+        .submit-button {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: 10px; /* 与下一题按钮的间距 */
+        }
+        .submit-button:hover {
+            background-color: #d32f2f;
+        }
+
+        #timer {
+            margin-left: auto;
+        }
+        #loading {
+            display: none;
+            text-align: center;
+            font-size: 24px;
+        }
+    </style>
 </head>
 <body>
+    <div id="overlay" class="overlay">
+        <div class="overlay-content">
+            <h1>本次面试分为<span style="color: #007bff">笔试</span>和<span style="color: #0022ff">问答</span>两部分</h1>
+            <h2>请输入你想要面试的岗位</h2>
+            <input type="text" id="user-input" placeholder="请输入岗位名称" />
+            <h2>准备好开始面试了吗？</h2>
+            <button id="start-button" class="start-button">开始面试</button>
+        </div>
+    </div>
 
+    <button id="drawer-toggle" class="drawer-toggle">
+        <span class="material-icons Icon" id="Icon">arrow_forward_ios</span>
+    </button>
+    <aside id="drawer" class="drawer">
+        <h3>题号</h3>
+        <ul id="question-list">
+            <!-- 目录项将由JavaScript动态生成 -->
+        </ul>
+    </aside>
+    <main id="question-container">
+        <section class="interview-section">
+            <div class="timer">剩余时间: <span id="timer" style="color: #000000"></span></div>
+            <div class="question-area">
+                <h2 id="question-title"></h2>
+                <p id="question-text"></p>
+            </div>
+            <div class="answer-area">
+                <textarea id="answer-input" placeholder="在这里输入你的答案,单个题目最大可输入200字..." maxlength="200"></textarea>
+                <button id="before-button" class="next-button">上一题</button>
+                <button id="next-button" class="next-button">下一题</button>
+                <button id="submit-button" class="submit-button">提交</button>
+                <button  class="submit-button" onclick="go_back()">退出面试</button>
+                <button class="submit-button" onclick="jumpsecond()">进入下一部分</button>
+            </div>
+
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let questions = [];
+        let currentQuestionIndex = 0;
+        let timerInterval; // 用于存储定时器的引用，方便后续清除
+
+        const questionTitle = document.getElementById('question-title');
+        const questionText = document.getElementById('question-text');
+        const answerInput = document.getElementById('answer-input');
+        const beforeButton = document.getElementById('before-button');
+        const nextButton = document.getElementById('next-button');
+        const questionList = document.getElementById('question-list');
+        const overlay = document.getElementById('overlay');
+        const startButton = document.getElementById('start-button');
+        const submitButton = document.getElementById('submit-button');
+        const drawer = document.getElementById('drawer');
+        const drawerToggle = document.getElementById('drawer-toggle');
+        const drawerToggleIcon = document.getElementById('Icon');
+        const timerElement = document.getElementById('timer');
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 检查Session Storage中是否有存储的题目数据
+            const storedQuestions = sessionStorage.getItem('interviewQuestions');
+
+            if (storedQuestions) {
+                // 如果有存储的数据，则解析并使用这些数据
+                questions = JSON.parse(storedQuestions);
+                populateQuestionList();
+                loadQuestion(currentQuestionIndex);
+                overlay.style.display = 'none';
+            }
+
+        });
+        const loadQuestion = (index) => {
+            questionTitle.textContent = questions[index].title;
+            questionText.textContent = questions[index].text;
+            answerInput.value = questions[index].answer || ''; // 从questions对象中读取答案，如果没有则为空
+        };
+        const saveCurrentAnswer = () => {
+            questions[currentQuestionIndex].answer = answerInput.value; // 保存当前问题的答案
+        };
+
+        const populateQuestionList = () => {
+            questions.forEach((question, index) => {
+                const listItem = document.createElement('li');
+                const link = document.createElement('a');
+                link.href = '#';
+                link.textContent = question.title;
+                link.addEventListener('click', () => {
+                    saveCurrentAnswer(); // 切换问题前保存当前答案
+                    currentQuestionIndex = index;
+                    loadQuestion(index);
+                });
+                listItem.appendChild(link);
+                questionList.appendChild(listItem);
+            });
+        };
+        //下一题
+        nextButton.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                saveCurrentAnswer(); // 切换问题前保存当前答案
+                currentQuestionIndex++;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                alert('已经是最后一道题了！');
+            }
+        });
+        //上一题
+        beforeButton.addEventListener('click', () => {
+            if (currentQuestionIndex > 0) {
+                saveCurrentAnswer(); // 切换问题前保存当前答案
+                currentQuestionIndex--;
+                loadQuestion(currentQuestionIndex);
+            } else {
+                alert('已经是第一道题了！');
+            }
+        });
+        //开始面试按钮
+        startButton.addEventListener('click', () => {
+            const userInput = document.getElementById('user-input').value;
+            if (userInput.length !== 0) {
+                console.log(userInput);
+                fetchQuestions(userInput);
+                overlay.style.display = 'none';
+                startTimer();
+            }else{
+                alert("不能为空");
+            }
+        });
+        //提交按钮
+        submitButton.addEventListener('click', () => {
+            if (confirm('你确定要提交吗？')) {
+                saveCurrentAnswer();
+                disableInputs();
+                clearInterval(timerInterval);
+                alert('答题已提交！');
+                submitAnswersToServer();
+            }
+        });
+        //左边抽屉按钮
+        drawerToggle.addEventListener('click', () => {
+            const drawerIsOpen = drawer.classList.toggle('open');
+            drawerToggle.style.left = drawerIsOpen ? '220px' : '0'; // 更新按钮位置
+            drawerToggleIcon.style.rotate = drawerIsOpen ? '180deg' : '0deg';
+        });
+
+        //禁用输入
+        const disableInputs = () => {
+            answerInput.disabled = true;
+        };
+        //计时器（前端计时）
+        const startTimer = () => {
+            const totalTimeInSeconds = 600; // 倒计时总时间，单位秒
+            const timerKey = 'timerStartTime'; // 用于存储计时器开始时间的键名
+
+            let startTime = sessionStorage.getItem(timerKey);
+
+            if (!startTime) {
+                startTime = Date.now();
+                sessionStorage.setItem(timerKey, startTime);
+            } else {
+                startTime = parseInt(startTime, 10);
+            }
+
+            const updateTimer = () => {
+                const currentTime = Date.now();
+                const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+                const remainingTimeInSeconds = totalTimeInSeconds - elapsedTime;
+
+                if (remainingTimeInSeconds > 0) {
+                    const minutes = Math.floor(remainingTimeInSeconds / 60);
+                    const seconds = remainingTimeInSeconds % 60;
+                    timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                } else {
+                    clearInterval(timerInterval); // 清除定时器
+                    timerElement.textContent = '时间到！';
+                    sessionStorage.removeItem(timerKey); // 清除计时信息
+                    disableInputs();
+                    alert('时间到！请提交你的答案。');
+                }
+            };
+            // 立即执行一次，然后每秒更新一次
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        };
+        //获取题目
+        function fetchQuestions(questionText) {
+            const data = { 'question': questionText };
+            // 发起AJAX请求
+            $.ajax({
+                url: "/answer_msg/interview",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    console.log('成功获取面试题目：', response);
+                    if (response.success) {
+                        questions = response.result;
+                        populateQuestionList();
+                        loadQuestion(currentQuestionIndex);
+                        sessionStorage.setItem('interviewQuestions', JSON.stringify(questions));
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('获取面试题目失败：', error);
+                }
+            });
+        }
+        //提交功能
+        const submitAnswersToServer = () => {
+            console.log('Submitting answers:', questions); // 检查 questions 数据
+            $.ajax({
+                url: "/answer_msg/interview/answer",
+                type: "POST",
+                data: JSON.stringify({ questions: questions }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    console.log('答案已提交：', response);
+                    if (response.success) {
+                        alert('你的答案已提交成功！');
+                    } else {
+                        alert('提交失败，请稍后重试。');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('提交答案失败：', error);
+                    alert("提交答案时发生错误，请稍后重试。");
+                }
+            });
+        };
+        populateQuestionList();
+        loadQuestion(currentQuestionIndex);
+        //返回功能
+        function  go_back(){
+            if(confirm('确认退出面试')){
+                sessionStorage.removeItem('interviewQuestions');
+                sessionStorage.removeItem('timerKey');
+                window.location.href="/smartlife/work";
+            }
+        }
+        function  jumpsecond(){
+            if(confirm('是否进入下一项')){
+                sessionStorage.removeItem('interviewQuestions');
+                sessionStorage.removeItem('timerKey');
+                window.location.href="/smartlife/work/interview_question";
+            }
+        }
+    </script>
 </body>
 </html>

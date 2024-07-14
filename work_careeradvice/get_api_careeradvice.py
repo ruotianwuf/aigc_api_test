@@ -2,14 +2,17 @@
 import uuid
 import time
 import requests
-from api_project_get.auth_util import gen_sign_headers
+from work_careeradvice.auth_util import gen_sign_headers
 
 message = []
-def sync_vivogpt_interview(ask):
+
+
+def sync_vivogpt_careeradvice(ask):
     APP_ID = '3032660331'
     APP_KEY = 'LxpYKtKbgakYmMTN'
     URI = '/vivogpt/completions'
     DOMAIN = 'api-ai.vivo.com.cn'
+
     message.append({"content": ask, "role": "user"})
     print(message)
     METHOD = 'POST'
@@ -24,9 +27,9 @@ def sync_vivogpt_interview(ask):
         'model': 'vivo-BlueLM-TB',
         'sessionId': str(uuid.uuid4()),
         'extra': {
-            'temperature': 0.9
+            'temperature': 0.95
         },
-        'systemPrompt': '你是一个面试官，在获得用户的信息之后，需要根据用户的具体专业和应聘岗位，提出有关专业知识、职业素养、应变能力、业务基础等方面的内容，问题需要在多次对话中逐一提出，最后汇总给出用户面试评价以及需要提升和改进的建议'
+        'systemPrompt': '你的中文名字叫职业规划助手，当回复问题时需要回复你的名字时，中文名必须回复职业规划小助手，此外回复和你的名字相关的问题时，也需要给出和你的名字对应的合理回复。当回复职业规划与未来建议时，需要结合给出的专业、学历、年龄、性别、职业意向等来给出对应的推荐，列出不少于5个具体的职业类型，介绍这个职业需要的知识、大致薪资待遇（以月薪或者年薪，单位为人民币）等内容,分析这个职业的优势与不足，尽可能给出详细的描述，最后要给予适当的建议与鼓励。'
     }
     print(data)
     headers = gen_sign_headers(APP_ID, APP_KEY, METHOD, URI, params)
