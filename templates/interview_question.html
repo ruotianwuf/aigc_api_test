@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <title>AI Voice Assistant</title>
+    <title>模拟面试-问答</title>
     <style>
         body {
             display: flex;
@@ -12,67 +12,90 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'SimSun', 'Songti SC', 'serif';
+            color: #fff;
+            background-image: url("/static/img/interview_bg2.jpg");
+            background-size: cover; /* 调整背景图片尺寸 */
+            background-position: center; /* 调整背景图片位置 */
+            background-repeat: no-repeat; /* 禁止背景图片重复 */
         }
-
+        h1 {
+           color: #000000;
+        }
         .container {
             width: 80%;
-            height: 80%;
-            text-align: center;
-            background-color: #fff;
+            max-width: 800px;
+            height: 70%;
+            background-color: rgba(255, 255, 255, 0.56);
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             display: flex;
-            flex-wrap: nowrap;
             flex-direction: column;
-            justify-content: space-around;
+            justify-content: center;
             align-items: center;
         }
-
+        .img-container {
+            display: flex;
+            flex-direction: column;
+        }
         .ai-image img {
-            width: 200px;
+            width: 150px;
             height: auto;
-            border-radius: 50%;
+            border-radius: 40%;
             margin-bottom: 20px;
+            border: 4px solid #744caf;
         }
 
-        .titlecontainer{
-            width: 70%;
-            height: auto;
-            background-color: rgb(37, 201, 217);
+        .titlecontainer {
+            width: 100%;
+            background-color: #be7ff5;
+            padding: 10px 0;
+            border-radius: 10px;
+            margin-bottom: 20px;
             display: flex;
             justify-content: center;
         }
 
         .subtitle {
-            font-size: 18px;
-            color: #333;
-            margin-bottom: 20px;
-
+            font-size: 20px;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: rgba(51, 51, 51, 0.81);
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
         }
 
         .input-area {
             position: relative;
+            margin-top: 20px;
         }
 
         #mic-button {
-            width: 200px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             background-color: #007bff;
             border: none;
-            border-radius: 50px;
+            border-radius: 50%;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background-color 0.3s, box-shadow 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Ensure the ripple effect doesn't overflow the button */
+            position: relative; /* For positioning the ripple effect */
         }
-        #mic-button:hover{
-            background-color: #3494fc;
-            box-shadow:inset 0px 0px 5px 1px #444444;
-        }
-        #mic-button.active{
-            background-color: #48a4fd;
 
+        #mic-button:hover {
+            background-color: #3494fc;
+        }
+
+        #mic-button.active {
+            background-color: #48a4fd;
+            box-shadow: inset 0px 0px 5px 1px #444444;
         }
 
         .material-icons {
@@ -80,43 +103,179 @@
             color: #ffffff;
         }
 
+
+
+        #audio-output {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        #voice-type {
+            width: auto;
+            height: 50px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #000000;
+            font-size: 0.8em;
+        }
+        select {
+            padding: 0;
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid #e5e5e5;
+            filter: drop-shadow(0px 1px 0px #efefef)
+            drop-shadow(0px 1px 0.5px rgba(239, 239, 239, 0.5));
+            transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);
+        }
+        select:focus {
+            border: 1px solid transparent;
+            box-shadow: 0px 0px 0px 1px #2B2B2F;
+            background-color: transparent;
+        }
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 600px;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        .drawer.open {
+            transform: translateX(0);
+        }
+
+        .drawer-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #0067d7;
+            color: #fff;
+            border: none;
+            border-radius: 20%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .drawer-toggle:hover {
+            background-color: #0056b3;
+        }
+
+        .dialogue-entry {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dialogue-entry.ai {
+            background-color: #e0f7fa;
+        }
+
+        .dialogue-entry.user {
+            background-color: #fff9c4;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="ai-image">
-            <img src="/static/img/AI%20UI.png" alt="AI Image">
+    <div class="drawer" id="drawer">
+        <h2>对话记录</h2>
+        <div id="dialogue-log">
+            <!-- 对话记录条目将被添加到这里 -->
         </div>
+    </div>
+    <button class="drawer-toggle" id="drawer-toggle">
+        <span class="material-icons">article</span>
+    </button>
+    <div class="container">
+        <h1>模拟面试-ai问答</h1>
+        <div class="img-container">
+            <div class="ai-image">
+                <img src="/static/img/AI%20UI.png" alt="AI Image">
+            </div>
+            <select id="voice-type">
+                <option value="vivoHelper">奕雯</option>
+                <option value="yunye">云野</option>
+                <option value="wanqing">婉清</option>
+                <option value="xiaofu">晓芙</option>
+                <option value="yige_child">小萌</option>
+                <option value="yige">依格</option>
+                <option value="yiyi">依依</option>
+                <option value="xiaoming">小茗</option>
+                <!-- Add more voice types as needed
+                    vivoHelper = "vivoHelper"
+                    yunye = "yunye"
+                    wanqing = "wanqing"
+                    xiaofu = "xiaofu"
+                    yige_child = "yige_child"
+                    yige = "yige"
+                    yiyi = "yiyi"
+                    xiaoming = "xiaoming" -->
+            </select>
+        </div>
+        <br>
         <div class="titlecontainer">
             <div class="subtitle" id="aispeak">
                 AI's question or response will appear here.
             </div>
         </div>
-        <div class="subtitle" id="userspeak">
-            Your response will appear here.
+        <div class="titlecontainer" style="background-color: #8392fd">
+            <div class="subtitle" id="userspeak">
+                Your response will appear here.
+            </div>
         </div>
         <div class="input-area">
             <button id="mic-button">
-                <span class="material-icons Icon" id="Icon">mic</span>
+                <span class="material-icons Icon" id="mic_icon">mic</span>
             </button>
         </div>
+
         <audio id="audio-output" controls style="display: none"></audio>
+
+        <div class="footer">
+            此面试功能由蓝心大模型提供支持，可能会出现错误，请注意判断
+        </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-        let recognition;
-        document.getElementById('mic-button').addEventListener('mousedown', () => {
-            startSpeechRecognition();
-        });
+        const voiceType = document.getElementById('voice-type').value;
+        document.addEventListener('DOMContentLoaded', function() {
+            const micButton = document.getElementById('mic-button');
 
-        document.getElementById('mic-button').addEventListener('mouseup', () => {
-            stopSpeechRecognition();
-        });
+            micButton.addEventListener('mousedown', function() {
+                micButton.classList.add('active');
+                startSpeechRecognition();
+            });
 
-        document.getElementById('mic-button').addEventListener('mouseleave', () => {
-            stopSpeechRecognition();
-        });
+            micButton.addEventListener('mouseup', function() {
+                micButton.classList.remove('active');
+                stopSpeechRecognition();
+            });
 
+            micButton.addEventListener('mouseleave', function() {
+                micButton.classList.remove('active');
+                stopSpeechRecognition();
+            });
+        });
+        recognition = new window.webkitSpeechRecognition();
         function startSpeechRecognition() {
             if (!('webkitSpeechRecognition' in window)) {
                 alert('Sorry, your browser does not support speech recognition.');
@@ -141,13 +300,12 @@
             };
 
             recognition.onend = () => {
-                document.getElementById('Icon').classList.remove('active');
+                document.getElementById('mic_icon').classList.remove('active');
             };
 
             recognition.start();
-            document.getElementById('Icon').classList.add('active');
+            document.getElementById('mic_icon').classList.add('active');
         }
-
         function stopSpeechRecognition() {
             if (recognition) {
                 recognition.stop();
@@ -180,7 +338,7 @@
             $.ajax({
                 url: "/answer_msg/interview/TTS",
                 type: "POST",
-                data: JSON.stringify({ text: text }),
+                data: JSON.stringify({ text: text,voice_type: voiceType }),
                 contentType: "application/json",
                 xhrFields: {
                     responseType: 'blob' // Important for receiving binary data as a Blob
@@ -195,6 +353,19 @@
                     console.error('Error:', error);
                 }
             });
+        }
+        function addDialogueEntry(type, text) {
+            const dialogueLog = document.getElementById('dialogue-log');
+            const entry = document.createElement('div');
+            entry.classList.add('dialogue-entry', type);
+            entry.innerText = text;
+            dialogueLog.appendChild(entry);
+        }
+        document.getElementById('drawer-toggle').addEventListener('click', () => {
+            document.getElementById('drawer').classList.toggle('open');
+        });
+        function go_back(){
+            window.location.href = "/smartlife/work";
         }
     </script>
 </body>

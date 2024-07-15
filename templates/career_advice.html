@@ -6,7 +6,7 @@
     <title>Career_Advice</title>
     <style>
         body {
-            background-image: url("/static/img/Student_bg1.jpg");
+            background-image: url("/static/img/careeradvice_bg1.jpg");
             color: black;
             background-size: cover;
             background-repeat: no-repeat;
@@ -20,7 +20,7 @@
             margin: auto;
             width: 70%;
             height: fit-content;
-            background: #FFFFFF;
+            background: rgba(255, 255, 255, 0.85);
             border-radius: 13px;
         }
         .form {
@@ -86,7 +86,7 @@
             background-color: transparent;
         }
 
-       .submit {
+        .submit {
             display: flex;
             margin: auto;
             flex-direction: row;
@@ -107,7 +107,7 @@
             color: #ffffff;
         }
         .report-background {
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.78);
             color: #000000;
             border-radius: 5px;
             min-height: 100%;
@@ -174,6 +174,35 @@
             justify-content: center; /* Align items horizontally */
             text-align: center; /* Center text */
         }
+        .back_button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            border: 2px solid #ffffff;
+            text-align: center;
+            line-height: 40px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
+        }
+        .back_button:active {
+            transform: scale(0.95);
+        }
+        .material-icons {
+            margin-right: 5px;
+        }
     </style>
 </head>
 <body>
@@ -210,47 +239,52 @@
     </div>
     <br>
     <div id="content" class="report"></div>
+    <button class="back_button" onclick="go_back()"><span class="material-icons Icon">arrow_back</span>返回</button>
 
 
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-function question() {
-    var majorText = document.getElementById("major");
-    var degreeText = document.getElementById("degree");
-    var genderText = document.getElementById("gender");
-    var ageText = document.getElementById("age");
-    var expectationText = document.getElementById("expectation");
-    var careerText = '专业：'+majorText.value.trim()+'；学历：'+degreeText.value.trim()+'；性别：'+genderText.value.trim()+'；年龄'+ageText.value.trim()+'；就业意向：'+expectationText.value.trim();
-    if (careerText) {
-        var reportDiv = document.getElementById("content");
-        reportDiv.innerHTML = "<div class='report-background' >"+
-        "<div class='loader'></div>"+
-        "</div>";
-        var data = { 'question': careerText };
-        alert(careerText);
-        $.ajax({
-            url: "/answer_msg/career_advice",
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json",
-            dataType: "json",
-            success: function(response) {
-                if (response.success) {
-                    var replay = response.result
-                    replay = replay.replace(/(\d+)\. /g, '$1.');
-                    replay = replay.replace(/\((\d+)\) /g, '($1)');
-                    replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
-                    replay = replay.replace(/\n/g, '<br>');
-                    var report = document.getElementById("content");
-                    report.innerHTML = "<div class='report-background'>" + "<h1>职业建议</h1>" +replay + "</div>";
-                    alert('success');
+    function question() {
+        var majorText = document.getElementById("major");
+        var degreeText = document.getElementById("degree");
+        var genderText = document.getElementById("gender");
+        var ageText = document.getElementById("age");
+        var expectationText = document.getElementById("expectation");
+        var careerText = '专业：'+majorText.value.trim()+'；学历：'+degreeText.value.trim()+'；性别：'+genderText.value.trim()+'；年龄'+ageText.value.trim()+'；就业意向：'+expectationText.value.trim();
+        if (careerText) {
+            var reportDiv = document.getElementById("content");
+            reportDiv.innerHTML = "<div class='report-background' >"+
+            "<div class='loader'></div>"+
+            "</div>";
+            var data = { 'question': careerText };
+            alert(careerText);
+            $.ajax({
+                url: "/answer_msg/career_advice",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    if (response.success) {
+                        var replay = response.result
+                        replay = replay.replace(/(\d+)\. /g, '$1.');
+                        replay = replay.replace(/\((\d+)\) /g, '($1)');
+                        replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                        replay = replay.replace(/\n/g, '<br>');
+                        var report = document.getElementById("content");
+                        report.innerHTML = "<div class='report-background'>" + "<h1>职业建议</h1>" +replay + "</div>";
+                        alert('success');
+                    }
+                }, error: function(xhr, status, error) {
+                    alert("发生错误，请稍后重试。");
                 }
-            }, error: function(xhr, status, error) {
-                alert("发生错误，请稍后重试。");
-            }
-        });
+            });
+        }
+
     }
-}
+    function go_back(){
+        window.location.href = "/smartlife/work";
+    }
 </script>
 </html>

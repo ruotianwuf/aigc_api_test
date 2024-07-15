@@ -207,7 +207,7 @@ def getanswer_interview_answer():
 def text_to_speech():
     data = request.json
     text = data.get('text', '你好')
-    voice_type = data.get('voice_type', 'vivoHelper')#更改语音
+    voice_type = data.get('voice_type', 'vivoHelper')
     engine_id = data.get('engine_id', 'short_audio_synthesis_jovi')
 
     tts = get_tts_instance(engine_id)

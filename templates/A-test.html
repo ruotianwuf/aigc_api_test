@@ -7,19 +7,38 @@
 <body>
     <h1>TTS Demo</h1>
     <textarea id="text-input" placeholder="Enter text here..."></textarea>
+    <select id="voice-type">
+        <option value="vivoHelper">奕雯</option>
+        <option value="yunye">云野</option>
+        <option value="wanqing">婉清</option>
+        <option value="xiaofu">晓芙</option>
+        <option value="yige_child">小萌</option>
+        <option value="yige">依格</option>
+        <option value="yiyi">依依</option>
+        <option value="xiaoming">小茗</option>
+        <!-- Add more voice types as needed
+        vivoHelper = "vivoHelper"
+        yunye = "yunye"
+        wanqing = "wanqing"
+        xiaofu = "xiaofu"
+        yige_child = "yige_child"
+        yige = "yige"
+        yiyi = "yiyi"
+        xiaoming = "xiaoming" -->
+    </select>
     <button id="convert-button">Convert to Speech</button>
     <audio id="audio-output" controls></audio>
 
     <script>
         document.getElementById('convert-button').addEventListener('click', function() {
             const text = document.getElementById('text-input').value;
-
+            const voiceType = document.getElementById('voice-type').value;
             fetch('/answer_msg/interview/TTS', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ text: text })
+                body: JSON.stringify({ text: text, voice_type: voiceType})
             })
             .then(response => response.blob())
             .then(blob => {
