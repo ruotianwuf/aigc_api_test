@@ -229,7 +229,7 @@
                 formData.append('username', username);
                 formData.append('password', password);
                 formData.append('phone', phone);
-
+                console.log("1",imgData)
                 // 添加图片文件到FormData
                 var imgBlob = new File([imgData], "screenshot.png", { type: "image/png" });
                 formData.append('screenshot', imgBlob);

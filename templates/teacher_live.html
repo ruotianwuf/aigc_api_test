@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCPlayer Example</title>
+    <!-- 引入 TCPlayer 的 CSS 文件 -->
+     <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css" rel="stylesheet"/>
+ <!--播放器脚本文件-->
+ <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
+</head>
+<body>
+    <!-- 视频播放器容器 -->
+    <video id="player-container-id" width="414" height="270" preload="auto" playsinline webkit-playsinline></video>
+
+    <script>
+            url = 'http://www.ruotianjoy.icu/live/joy.flv?txSecret=30a214fabde1b4313a4dde371cda6d7c&txTime=66960B29'
+            var player = TCPlayer('player-container-id', {
+                sources: [{
+                    src: url, // 播放地址，替换为实际视频文件的路径
+                }],
+                licenseUrl: 'https://license.vod2.myqcloud.com/license/v2/1322941177_1/v_cube.license', // license 地址，替换为实际的 license URL
+            });
+            player.src(url)
+
+    </script>
+</body>
+</html>
