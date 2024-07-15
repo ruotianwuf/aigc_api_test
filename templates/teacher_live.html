@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCPlayer Example</title>
+    <!-- 引入 TCPlayer 的 CSS 文件 -->
+     <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css" rel="stylesheet"/>
+ <!--播放器脚本文件-->
+ <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
+<style>
+    body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center; /* Center the container horizontally */
+            align-items: flex-start; /* Align the container vertically */
+            background-size: cover;
+            background-image: url("/static/img/Teacher_bg2.jpg");
+        }
+        #player-container {
+            display: flex;
+            flex-direction: row; /* Arrange children in a row */
+            width: 100%; /* Adjust the width as needed */
+            max-width: 1500px; /* Max width of the player container */
+            margin: 1%; /* Margin around the player container */
+            background-color: rgba(211, 167, 131, 0.5);
+            border-radius: 10px;
+        }
+        #player-container video {
+            border-radius: 10px;
+        }
+        /* 聊天内容容器设置固定高度和滚动条 */
+        .chat-content {
+            margin-top: 30%;
+            height: 600px; /* 可以根据需要调整高度 */
+            overflow-y: auto; /* 允许垂直滚动 */
+            overflow-x: hidden; /* 隐藏水平滚动条 */
+            margin-bottom: 0; /* 与输入框保持一定间距 */
+            background-color: #BABECC;
+            width: 300px;
+        }
+
+        /* 聊天输入框样式 */
+        .chat-input {
+            background-color: #9a9a9a;
+            position: relative; /* 相对定位，确保按钮可以绝对定位到输入框内部 */
+        }
+
+        /* 聊天消息样式，确保消息从上向下排列 */
+        .message {
+            margin-bottom: 10px; /* 消息之间的间距 */
+        }
+
+        /* 聊天发送者样式 */
+        .sender {
+            font-weight: bold; /* 发送者名称加粗 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 视频播放器容器 -->
+    <div id="player-container">
+        <!-- 视频播放器容器 -->
+        <div style="flex-grow: 1;">
+            <h1>***的直播间</h1>
+            <video style="border-radius: 10px;" id="player-container-id" width="1200" height="730" preload="auto" playsinline webkit-playsinline></video>
+        </div>
+        <!-- Chat container -->
+        <div class="chat-container">
+          <!-- 聊天内容容器 -->
+          <div class="chat-content">
+          </div>
+          <!-- 聊天输入框 -->
+          <div class="chat-input">
+
+            <input style="height: 100px; width: 293px;background-color: bisque;" type="text" id="chat-input" placeholder="按回车输入......" onkeydown="if (event.keyCode == 13) sendMessage();">
+
+          </div>
+        </div>
+    </div>
+    <script>
+            url = 'http://www.ruotianjoy.icu/live/joy.flv?txSecret=30a214fabde1b4313a4dde371cda6d7c&txTime=66960B29'
+            var player = TCPlayer('player-container-id', {
+                sources: [{
+                    src: url, // 播放地址，替换为实际视频文件的路径
+                }],
+                licenseUrl: 'https://license.vod2.myqcloud.com/license/v2/1322941177_1/v_cube.license', // license 地址，替换为实际的 license URL
+            });
+            player.src(url)
+            function sendMessage() {
+                var input = document.getElementById('chat-input');
+                var message = input.value;
+                if (message) {
+                  var contentDiv = document.querySelector('.chat-content');
+                  var messageDiv = document.createElement('div');
+                  messageDiv.className = 'message';
+                  messageDiv.innerHTML = '<span class="sender">You:</span> ' + message;
+                  contentDiv.appendChild(messageDiv);
+                  // Scroll to the bottom of the chat
+                  contentDiv.scrollTop = contentDiv.scrollHeight;
+                  input.value = ''; // Clear the input field
+                }
+              }
+
+    </script>
+</body>
+</html>
