@@ -2,118 +2,156 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>健康中心</title>
+    <title>Work</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image: url("/static/img/健康/智能诊断.jpg");
+            background-size: cover;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
-            background-image: url("../static/img/健康/智能诊断.jpg");
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'SimSun', 'Songti SC', 'serif';
+            background-color: #2B2B2F;
         }
-
         .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 20px auto;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 20px;
-        }
-
-        .header {
-            background-color: #4CAF50;
-            color: white;
             text-align: center;
-            padding: 20px;
-            border-radius: 8px 8px 0 0;
+            color: #fff;
         }
-
-        .section {
-            margin-bottom: 20px;
+        .title h1 {
+            margin: 0;
+            font-size: 6em;
+            animation: fadeInDown 1s ease;
+            color: firebrick;
         }
-
-        .section h2 {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px;
-            border-radius: 8px 8px 0 0;
+        .title p {
+            margin: 0;
+            font-size: 1.5em;
+            animation: fadeInUp 1s ease;
         }
-
-        .content {
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 0 0 8px 8px;
+        .b_container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            animation: fadeIn 1s ease;
         }
-
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
+        .c_button {
+            width: 170px;
+            height: 40px;
+            /*background-color: rgba(255, 255, 255, 0.2);*/
+            background-color: rosybrown;
+            text-align: center;
+            color: black;
+            border: 2px solid transparent;
+            margin: 20px;
+            font-size: 1em;
             cursor: pointer;
-            margin-top: 2%;
-            margin-left: 1%;
+            transition: all 0.3s ease;
         }
-
-        button:hover {
-            background-color: #45a049;
+        .c_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
         }
-
-        .btn {
-            display: inline-block;
-            margin: 10px 0;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+        .c_button:active {
+            transform: scale(0.95);
+        }
+        .back_button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            border: 2px solid #ffffff;
             text-align: center;
+            line-height: 40px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
             border-radius: 5px;
-            text-decoration: none;
-        }
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-        .btn:hover {
-            background-color: #45a049;
+        }
+        .back_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
+        }
+        .back_button:active {
+            transform: scale(0.95);
+        }
+        .material-icons {
+            margin-right: 5px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 0.8em;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
-<button onclick="back()">返回</button>
     <div class="container">
-        <div class="header">
-            <h1>健康中心</h1>
+        <div class="title">
+            <h1>健康护航</h1>
+            <p>为您适应良好的生活习惯</p>
         </div>
-
-        <div class="section">
-            <h2>1. 心理健康自测</h2>
-            <div class="content">
-                <p>通过简单的问卷测试来分析您的心理健康状态，并提供专业的心理指导。</p>
-                <a href="health/healthtest" class="btn">开始测试</a>
-<!--                <iframe src="https://toollist.net/TeamTest/List/7JQKQ"></iframe>-->
-            </div>
+        <div class="b_container">
+            <button class="c_button" onclick="go_test()">心理健康自测</button>
+            <button class="c_button" onclick="go_table()">运动饮食计划</button>
+<!--            <button class="c_button" onclick="go_placerecommend()">实时推荐</button>-->
         </div>
-
-        <div class="section">
-            <h2>2. 运动饮食建议</h2>
-            <div class="content">
-                <p>根据您的健康状况和目标，提供个性化的运动和饮食建议。</p>
-                <a href="health/healthtable" class="btn">获取建议</a>
-            </div>
-        </div>
-
-<!--        <div class="section">-->
-<!--            <h2>3. 智能诊断</h2>-->
-<!--            <div class="content">-->
-<!--                <p>使用智能诊断工具，帮助您更好地了解自己的健康状况。</p>-->
-<!--                <a href="#" class="btn">开始诊断</a>-->
-<!--            </div>-->
-<!--        </div>-->
+        <button class="back_button" onclick="go_back()"><span class="material-icons Icon">arrow_back</span>返回</button>
     </div>
-</body>
-<script>
-    function back() {
+
+    <script>
+        function go_test() {
+            window.location.href = "/smartlife/health/healthtest";
+        }
+        function go_table() {
+            window.location.href = "/smartlife/health/healthtable";
+        }
+
+
+
+        function go_back() {
         var cookies = document.cookie.split("; ");
         for (var i = 0; i < cookies.length; i++) {
             var cookiePair = cookies[i].split("=");
@@ -123,5 +161,6 @@
                 }
             }
         }
-</script>
+    </script>
+</body>
 </html>

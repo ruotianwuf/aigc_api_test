@@ -4,7 +4,249 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>user</title>
-    <link rel="stylesheet" href="../static/css/student.css">
+    <style>
+         body {
+     font-family: Arial, sans-serif;
+     margin: 0;
+     padding: 0;
+     background-image: url("../static/img/健康/运动.jpg");
+     background-size: cover;
+}
+.container {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    padding-top: 30px;
+}
+
+.hidden{
+    display: none;
+}
+
+.wrapper{
+    position: absolute;
+}
+.custom-button {
+    height: 60px;
+    width: 60px;
+    float: left;
+    margin: 0 5px;
+    background: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0px 10px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-button:hover {
+
+    width:200px; /* 将按钮宽度动画单独设置 */
+}
+
+.custom-button .icon {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    border-radius: 50px;
+    box-sizing: border-box;
+    line-height: 60px;
+}
+
+.custom-button .icon i {
+    font-size: 25px;
+    line-height: 60px;
+}
+
+.custom-button span {
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 60px;
+    margin-left: 10px;
+}
+
+.hovered {
+    width: 200px;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+section{
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3em;
+    margin-top:30px;
+}
+.menu{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 5em;
+    backdrop-filter: blur(15px);
+    border: 2px solid #ccc; /* Border properties */
+    border-radius: 6px; /* Optional: Add border radius */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Box shadow effect */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    text-align: center;
+}
+
+.menu button{
+    text-decoration: none;
+    color: #000000;
+    border: none;
+    cursor: pointer;
+}
+.menu h3{
+    color: #000000;
+    margin: 0.4em;
+}
+.menu span{
+    font-size: 3em;
+}
+.menu > div{
+    margin: 2.2em;
+}
+.menu > div button{
+    width: 100%;
+    height: 100%;
+    padding: 1.5em;
+    background: rgba(255, 255, 255, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: 0.2s;
+    min-width: 150px;
+    min-height: 150px;
+}
+
+.menu > div:hover button{
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+    box-shadow: 0 8px 32px 0
+    rgba(0 0 0 / 37%);
+    color: #000000;
+}
+
+@media screen and (max-width: 900px) {
+    .menu {
+        grid-template-columns: repeat(2, 1fr); /* 在较小的屏幕尺寸下，一行显示两个按钮 */
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .menu {
+        grid-template-columns: 1fr; /* 在更小的屏幕尺寸下，一行只显示一个按钮 */
+    }
+}
+
+ .return{
+    position: absolute;
+    width: 200px;
+    height: 60px;
+    background: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: none;
+    letter-spacing: 0.2em;
+    font-size: 1.25em;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.return::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #9a9a9a;
+    border-radius: 10px;
+    transform: scaleX(0);
+    transition: transform 0.5s ease-in-out;
+    transform-origin: right;
+}
+.return:hover::before{
+    transform: scaleX(1);
+    transform-origin: left;
+}
+.return span{
+    display: inline-block;
+    z-index: 2;
+    color: #000000;
+    transition: 0.5s ease-in-out;
+}
+.return:hover span{
+    color: #333;
+}
+.return i{
+    position: relative;
+    display: inline-block;
+    width: 4px;
+    height: 30px;
+    background: #ff0000;
+    transition: 0.5s, width 0.5s, height 0.5s;
+    transition-delay: 0s, 0.2s, 0.5s;
+}
+.return:hover i{
+    width: 30px;
+    height: 2px;
+    background: #ebf804;
+    transition-delay: 0s, 0.2s, 0s;
+}
+.return i::before{
+    content: '';
+    position: absolute;
+    top: 0.5px;
+    right: 0;
+    width: 50%;
+    height: 2px;
+    background: transparent;
+    rotate: 0;
+    transform-origin: right;
+    transition: 1s;
+}
+.return:hover i::before{
+    background: #ebf804;
+    rotate: 45deg;
+    transition-delay: 0.2s;
+}
+.return i::after{
+    content: '';
+    position: absolute;
+    top: -0.5px;
+    right: 0;
+    width: 50%;
+    height: 2px;
+    background: transparent;
+    rotate: 0;
+    transform-origin: right;
+    transition: 1s;
+}
+.return:hover i::after{
+    background: #ebf804;
+    rotate: -45deg;
+    transition-delay: 0.2s;
+}
+.center{
+    display: grid;
+    place-items: center;
+}
+    </style>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
@@ -57,16 +299,6 @@
                   thumb_up
                 </span>
                 <h3>社交</h3>
-              </button>
-            </div>
-
-            <div>
-              <button >
-                <span class="material-icons">
-                  local_cafe
-                </span>
-                <h3>更多功能</h3>
-                <p>正在开发中，敬请期待</p>
               </button>
             </div>
           </div>
