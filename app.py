@@ -50,6 +50,10 @@ def samartlearn():
 def samartlife():
     return render_template('smartlife.html')
 
+@app.route('/smartlife/travel', methods=['GET'])
+def samartlife_travel():
+    return render_template('travel.html')
+
 @app.route('/smartlife/health', methods=['GET'])
 def samartlife_health():
     return render_template('health.html')
@@ -180,8 +184,8 @@ def getanswer_advice_msg():
 @app.route('/answer_msg/career_advice', methods=['POST'])
 def getanswer_careeradvice_msg():
     data = json.loads(request.get_data(as_text=True))
-    questions = data['questions']
-    result = sync_vivogpt_careeradvice(questions)
+    question = data['question']
+    result = sync_vivogpt_careeradvice(question)
     if result != None:
         return jsonify({'success': True, 'result': result}), 200
     else:

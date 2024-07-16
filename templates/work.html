@@ -149,7 +149,15 @@
             window.location.href = "/smartlife/work/interview";
         }
         function go_back() {
-            window.location.href = "/smartlife";
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "user" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    window.location.href = '/smartlife?data='+data.username;
+                }
+            }
+
         }
     </script>
 </body>

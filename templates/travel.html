@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            background-image: url("/static/img/健康/智能诊断.jpg");
+            background-image: url("/static/img/mountain-477832_1280.jpg");
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -26,7 +26,7 @@
             margin: 0;
             font-size: 6em;
             animation: fadeInDown 1s ease;
-            color: firebrick;
+            color: black;
         }
         .title p {
             margin: 0;
@@ -40,15 +40,15 @@
             animation: fadeIn 1s ease;
         }
         .c_button {
-            width: 170px;
+            width: 150px;
             height: 40px;
             /*background-color: rgba(255, 255, 255, 0.2);*/
-            background-color: rosybrown;
+            background-color: #af9273;
             text-align: center;
             color: black;
             border: 2px solid transparent;
             margin: 20px;
-            font-size: 1em;
+            font-size: 1.5em;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -130,26 +130,28 @@
 <body>
     <div class="container">
         <div class="title">
-            <h1>健康护航</h1>
-            <p>为您适应良好的生活习惯</p>
+            <h1>旅游资讯</h1>
+            <p>在这里体验前所未有的旅游规划</p>
         </div>
         <div class="b_container">
-            <button class="c_button" onclick="go_test()">心理健康自测</button>
-            <button class="c_button" onclick="go_table()">运动饮食计划</button>
-<!--            <button class="c_button" onclick="go_placerecommend()">实时推荐</button>-->
+            <button class="c_button" onclick="go_findplace()">景点识别</button>
+            <button class="c_button" onclick="go_tripplan()">旅游计划</button>
+            <button class="c_button" onclick="go_placerecommend()">实时推荐</button>
         </div>
         <button class="back_button" onclick="go_back()"><span class="material-icons Icon">arrow_back</span>返回</button>
     </div>
 
     <script>
-        function go_test() {
-            window.location.href = "/smartlife/health/healthtest";
+        function go_findplace() {
+            window.location.href = "/smartlife/travel/photofind";
         }
-        function go_table() {
-            window.location.href = "/smartlife/health/healthtable";
+        function go_tripplan() {
+            window.location.href = "/smartlife/travel/plan";
         }
 
-
+        function go_placerecommend() {
+            window.location.href = "/smartlife/travel/attraction";
+        }
 
         function go_back() {
         var cookies = document.cookie.split("; ");

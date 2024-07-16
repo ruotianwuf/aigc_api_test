@@ -19,6 +19,7 @@
             position: relative;
             margin: auto;
             width: 70%;
+            max-width: 600px;
             height: fit-content;
             background: rgba(255, 255, 255, 0.85);
             border-radius: 13px;
@@ -257,7 +258,7 @@
             reportDiv.innerHTML = "<div class='report-background' >"+
             "<div class='loader'></div>"+
             "</div>";
-            var data = { 'question': careerText };
+            const data = { 'question': careerText };
             alert(careerText);
             $.ajax({
                 url: "/answer_msg/career_advice",
