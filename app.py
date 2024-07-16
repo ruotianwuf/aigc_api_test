@@ -74,9 +74,13 @@ def gethealthanswer_msg():
         # data = json.dumps(data)
         print(data)
         # data_need = json.dumps(data)
+
         con = UserServerController()
         res = con.insert_info(name,data)
-        result = sync_vivogpt_ht(str(data))
+        if not data == 1:
+            result = sync_vivogpt_ht(str(data))
+        else:
+            result = None
 
         if result is not None and res:
             return jsonify({'success': True, 'result': result}), 200
@@ -207,7 +211,7 @@ def getanswer_interview_answer():
 def text_to_speech():
     data = request.json
     text = data.get('text', '你好')
-    voice_type = data.get('voice_type', 'vivoHelper')#更改语音
+    voice_type = data.get('voice_type', 'vivoHelper')
     engine_id = data.get('engine_id', 'short_audio_synthesis_jovi')
 
     tts = get_tts_instance(engine_id)
@@ -389,9 +393,9 @@ def getstudent_forum_post():
         return jsonify({'success': False}), 200
 
 
-@app.route('/smartlearn/student/live', methods=['GET'])
-def get_student_live():
-    return render_template('student_live.html')
+@app.route('/smartlearn/teacher/live', methods=['GET'])
+def get_teacher_live():
+    return render_template('teacher_live.html')
 
 @app.route('/pointer')
 def pointer():
@@ -945,7 +949,7 @@ def upload_student_homework():
 
 
 if __name__ == '__main__':
-   app.run(debug=False)
-   # app.run(debug=False, host='10.6.0.12', port=443, ssl_context=('ruotianjoy.icu_bundle.pem','ruotianjoy.icu.key'))
+   # app.run(debug=False, port=2750)
+   app.run(debug=False,  port=2750)
 #
 

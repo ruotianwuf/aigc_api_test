@@ -36,6 +36,7 @@
     }
 
     .container {
+        margin-top: 40%;
         width: 100%;
         max-width: 1200px;
         background-color: #fff;
@@ -188,6 +189,8 @@
     .custom-table th {
         background-color: #f2f2f2; /* 表头背景色 */
     }
+
+
     </style>
 </head>
 <body onload="gettable()">
@@ -196,11 +199,11 @@
     <div class="container">
         <div class="header">
             <h1>运动饮食计划表</h1>
-            <button class="btn" id="openBtn">录入信息</button>
+            <button class="btn" id="openBtn"></button>
             <button class="btn" id="openModalBtn">录入信息</button>
         </div>
         <div class="scroll-container">
-            <div id="backresult">1111</div>
+            <div id="backresult"></div>
         </div>
 
         <table id="scheduleTable">
@@ -352,6 +355,7 @@
 
 <script>
 
+
     function fillTableWithData(data) {
         // 获取表格
         var table = document.getElementById('scheduleTable');
@@ -375,7 +379,8 @@
         }
     }
 
-
+getinfo()
+function getinfo(){
     var cookies = document.cookie.split("; ");
     for (var i = 0; i < cookies.length; i++) {
         var cookiePair = cookies[i].split("=");
@@ -389,7 +394,7 @@
                 dataType: "json",
                 success: function (response) {
                     console.log(response.result)
-                    if (response.result) {
+                    if (response.result!==1) {
                         var res = response.result
                         var info = document.getElementById("openBtn");
                         info.innerHTML = `
@@ -410,7 +415,7 @@
                                             </table>
                                         </div>
                                         `;
-                        getadvice(res)
+
                     }
                 },
                 error: function () {
@@ -418,6 +423,7 @@
                 }
             });
         }
+    }
     }
 
     // gettable()
@@ -514,7 +520,9 @@
 
                             var reportDiv = document.getElementById("backresult");
                             reportDiv.innerHTML = "<div class='report-background'>" +replay + "</div>";
+
                         }
+
                     },
                     error: function () {
                         alert("错误error");

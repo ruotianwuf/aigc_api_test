@@ -3,48 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <title>Work</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
-            /*background-image: url("/static/img/work_bg_1.gif");*/
+            background-image: url("/static/img/work_bg1.jpg");
             background-size: cover;
             margin: 0;
             padding: 0;
             display: flex;
-            z-index: -1;
-            justify-content: center; /* 将内容水平居中 */
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
             height: 100vh;
             font-family: 'SimSun', 'Songti SC', 'serif';
             background-color: #2B2B2F;
         }
-        .container{
-
-        }
-        .title{
-            width: 100%;
-            color: #fff;
+        .container {
             text-align: center;
-            width: 100%;
-            height: auto;
-            padding-top: 20px;
+            color: #fff;
         }
-        .b_container{
+        .title h1 {
+            margin: 0;
+            font-size: 3em;
+            animation: fadeInDown 1s ease;
+        }
+        .title p {
+            margin: 0;
+            font-size: 1.5em;
+            animation: fadeInUp 1s ease;
+        }
+        .b_container {
             display: flex;
             justify-content: center;
+            margin-top: 20px;
+            animation: fadeIn 1s ease;
         }
-        .c_button{
-            width: 30%;
-            height: 30px;
-            background-color: rgba(255, 255, 255, 0);
+        .c_button {
+            width: 150px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
             text-align: center;
             color: #FFFFFF;
-            border-color: #ffffff;
-            border-size: 2px;
-            box-shadow: 0px 0px 0px 1px #2B2B2F;
-            margin:20px;
+            border: 2px solid #ffffff;
+            margin: 20px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
-        .c_button:hover{
-
+        .c_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
+        }
+        .c_button:active {
+            transform: scale(0.95);
+        }
+        .back_button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #FFFFFF;
+            border: 2px solid #ffffff;
+            text-align: center;
+            line-height: 40px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
+        }
+        .back_button:active {
+            transform: scale(0.95);
+        }
+        .material-icons {
+            margin-right: 5px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 0.8em;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -58,18 +134,22 @@
             <button class="c_button" onclick="go_careeradvice()">职业推荐</button>
             <button class="c_button" onclick="go_interview()">面试模拟</button>
         </div>
-        <button onclick="go_back()">返回</button>
+        <button class="back_button" onclick="go_back()"><span class="material-icons Icon">arrow_back</span>返回</button>
+    </div>
+
+    <div class="footer">
+        职业推荐与面试功能由蓝心大模型提供支持，可能会出现错误，请注意判断
     </div>
 
     <script>
-        function go_careeradvice(){
-             window.location.href="/smartlife/work/career_advice";
+        function go_careeradvice() {
+            window.location.href = "/smartlife/work/career_advice";
         }
-        function go_interview(){
-            window.location.href="/smartlife/work/interview";
+        function go_interview() {
+            window.location.href = "/smartlife/work/interview";
         }
-        function  go_back(){
-            window.location.href="/smartlife";
+        function go_back() {
+            window.location.href = "/smartlife";
         }
     </script>
 </body>

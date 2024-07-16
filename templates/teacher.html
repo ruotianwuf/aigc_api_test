@@ -63,6 +63,15 @@
                 <p>学生的命运掌握在你手中</p>
               </button>
             </div>
+              <div>
+              <button onclick="go_live()">
+                <span class="material-icons">
+                  thumbs_up_down
+                </span>
+                <h3>直播教学</h3>
+                <p>互动课堂</p>
+              </button>
+            </div>
           </div>
         </section>
     </div>
@@ -180,6 +189,19 @@
          if(ck==cookieValue){
              // alert(ck);
              window.location.href="/smartlearn/teacher/public";
+
+         }else{
+             alert("请先登录");
+             window.location.href="/smartlearn/login/teacher";
+         }
+     }
+
+     function go_live(){
+         var ck=checkCookie('teacher');
+         // alert(cookieValue);
+         if(ck==cookieValue){
+             // alert(ck);
+             window.location.href="/smartlearn/teacher/live";
 
          }else{
              alert("请先登录");
