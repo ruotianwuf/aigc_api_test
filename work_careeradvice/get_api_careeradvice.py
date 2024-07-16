@@ -54,5 +54,6 @@ def sync_vivogpt_careeradvice(ask):
     timecost = end_time - start_time
     print('请求耗时: %.2f秒' % timecost)
 
-
+# if __name__ == '__main__':
+#     sync_vivogpt_careeradvice('专业：；学历：学历；性别：性别；年龄；就业意向：')
 
