@@ -302,3 +302,13 @@ class UserServerController:
         model = CommonDb('user')
         consequence = model.get_table_get(name)
         return consequence
+
+    def insert_live_info(self,data):
+        model = CommonDb('livemsg')
+        consequence = model.insert_live_info(data)
+        return consequence
+
+    def get_live_info(self,data):
+        model = CommonDb('livemsg')
+        consequence = model.get_live_info(data)
+        return consequence

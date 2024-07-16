@@ -416,6 +416,10 @@ def getstudent_forum_post():
         return jsonify({'success': False}), 200
 
 
+@app.route('/smartlearn/student/live', methods=['GET'])
+def get_student_live():
+    return render_template('student_live.html')
+
 @app.route('/smartlearn/teacher/live', methods=['GET'])
 def get_teacher_live():
     return render_template('teacher_live.html')
@@ -970,6 +974,24 @@ def upload_student_homework():
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
 
+
+@app.route('/insertmsg', methods=['POST'])
+def get_insert_live_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.insert_live_info(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/getmsg', methods=['POST'])
+def get_get_live_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_live_info(data)
+    if result:
+        return jsonify({'success': True, 'result': result}), 200
 
 if __name__ == '__main__':
    # app.run(debug=False, port=2750)

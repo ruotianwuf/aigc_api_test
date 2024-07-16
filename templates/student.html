@@ -75,11 +75,11 @@
             </div>
 
               <div>
-              <button onclick="go_chatgroup()">
+              <button onclick="go_live()">
                 <span class="material-icons">
                   groups
                 </span>
-                <h3>聊天室</h3>
+                <h3>进入直播</h3>
                 <p>同专业学生分享聊天</p>
               </button>
             </div>
@@ -200,12 +200,12 @@
          }
      }
 
-     function go_chatgroup(){
+     function go_live(){
          var ck=checkCookie('student');
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/smartlearn/student/group?data="+"ck";
+             window.location.href="/smartlearn/student/live";
          }else{
              //alert("请先登录");
              window.location.href="/smartlearn/login/student";
