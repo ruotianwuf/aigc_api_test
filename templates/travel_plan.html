@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Travel Plan</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+        }
+        .navbar {
+            background-color: #333;
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: #fff;
+        }
+        .carousel-item img {
+            height: 600px;
+            object-fit: cover;
+        }
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px 0;
+        }
+        footer a {
+            color: #fff;
+        }
+        .scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            scroll-behavior: smooth;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .card {
+            min-width: 250px;
+        }
+        .modal-content {
+            border: none;
+            border-radius: 0;
+        }
+        .modal-body {
+            padding: 20px;
+        }
+        #contentModal .modal-body {
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        .report-background {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 5px;
+            min-height: 100%;
+            justify-content: center;
+            padding: 5em;
+            font-size: 15px;
+            box-sizing: border-box;
+            border: 3px solid #656565;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 60%;
+            margin-left: 20%;
+        }
+        .return-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Return Button -->
+    <button class="btn btn-primary return-button" onclick="back();">
+        <i class="fas fa-arrow-left"></i> 返回
+    </button>
+
+    <!-- Carousel -->
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000">
+        <ol class="carousel-indicators">
+            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/static/img/旅游/旅游%20(2).jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>探索世界</h5>
+                    <p>在平常中发现新世界</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/static/img/旅游/旅游%20(3).jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>刺激的冒险</h5>
+                    <p>在与大自然的互动中获取愉悦</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/static/img/旅游/旅游%20(4).jpg" class="d-block w-100" alt="...">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>难忘的回忆</h5>
+                    <p>在你的旅游过程中创造属于你的难忘回忆</p>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+
+    <!-- Featured Destinations -->
+    <div class="container mt-5">
+        <h2 class="text-center">看看心仪的城市？</h2>
+        <div class="scroll-container mt-4" id="scrollContainer">
+            <div class="card">
+                <img src="/static/img/pic/8.法国-巴黎.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">巴黎, 法国</h5>
+                    <p class="card-text">感受这个城市的浪漫与光明</p>
+                    <button class="btn btn-primary" onclick="getContent('巴黎')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/7.日本-东京.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">东京, 日本</h5>
+                    <p class="card-text">探索这个城市的历史和文化</p>
+                    <button class="btn btn-primary" onclick="getContent('东京')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/2.丹麦-哥本哈根.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">哥本哈根, 丹麦</h5>
+                    <p class="card-text">感受一代丹麦童话的发源之地</p>
+                    <button class="btn btn-primary" onclick="getContent('哥本哈根')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/4.马来西亚-吉隆坡.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">吉隆坡, 马来西亚</h5>
+                    <p class="card-text">热带雨林的首选</p>
+                    <button class="btn btn-primary" onclick="getContent('吉隆坡')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/1.意大利-佛罗伦萨.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">佛罗伦萨, 意大利</h5>
+                    <p class="card-text">文艺复兴的摇篮</p>
+                    <button class="btn btn-primary" onclick="getContent('佛罗伦萨')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/3.德国-柏林.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">柏林, 德国</h5>
+                    <p class="card-text">一个充满活力的大都市</p>
+                    <button class="btn btn-primary" onclick="getContent('柏林')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/5.韩国-首尔.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">首尔, 韩国</h5>
+                    <p class="card-text">带你领略现代化国际大都市</p>
+                    <button class="btn btn-primary" onclick="getContent('首尔')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/6.芬兰-赫尔辛基.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">赫尔辛基, 芬兰</h5>
+                    <p class="card-text">感受高质量的生活和创新精神</p>
+                    <button class="btn btn-primary" onclick="getContent('赫尔辛基')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/9.瑞士-茵特拉肯.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">茵特拉肯, 瑞士</h5>
+                    <p class="card-text">图恩湖和布里恩茨湖交汇之地</p>
+                    <button class="btn btn-primary" onclick="getContent('茵特拉肯')">旅游攻略</button>
+                </div>
+            </div>
+            <div class="card">
+                <img src="/static/img/pic/10.希腊-雅典.jpg" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">雅典, 希腊</h5>
+                    <p class="card-text">体会沉重的历史和文化</p>
+                    <button class="btn btn-primary" onclick="getContent('雅典')">旅游攻略</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Modal -->
+    <div class="modal fade" id="contentModal" tabindex="-1" aria-labelledby="contentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contentModalLabel">旅游攻略</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalContent">
+                    <p>请选择一个目的地获取旅游攻略。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="container mt-5 mb-5">
+        <h2 class="text-center">没有找到你想要的城市旅游攻略？试试获取吧！</h2>
+        <form id="touristGuideForm">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="inputCountry">国家</label>
+                    <input type="text" class="form-control" id="inputCountry" placeholder="国家">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="inputCity">城市</label>
+                    <input type="text" class="form-control" id="inputCity" placeholder="城市">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">获取攻略...</button>
+        </form>
+    </div>
+    <div id="advice2"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('touristGuideForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const country = document.getElementById('inputCountry').value;
+            const city = document.getElementById('inputCity').value;
+
+            console.log('国家:', country);
+            console.log('城市:', city);
+            getadvice2(city);
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const scrollContainer = document.getElementById("scrollContainer");
+            let scrollAmount = 0;
+
+            function autoScroll() {
+                scrollAmount += 1;
+                if (scrollAmount >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+                    scrollAmount = 0;
+                }
+                scrollContainer.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+
+            setInterval(autoScroll, 20); // Adjust the interval for speed control
+        });
+
+        function getContent(city) {
+            const modalContent = document.getElementById("modalContent");
+            modalContent.innerHTML = `<p>正在获取 ${city} 的旅游攻略...</p>`;
+            $('#contentModal').modal('show');
+            getadvice(city);
+
+        }
+
+        function getadvice2(city) {
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "user" && cookiePair[1]) {
+                    $.ajax({
+                        url: "/travel_answer",
+                        type: "POST",
+                        data: JSON.stringify({'city': city}),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response.result)
+                            if (response.success) {
+                                var replay = response.result;
+                                replay = replay.replace(/(\d+)\. /g, '$1.');
+                                replay = replay.replace(/\((\d+)\) /g, '($1)');
+                                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                                replay = replay.replace(/\n/g, '<br>');
+
+                                const modalContent = document.getElementById("advice2");
+                                modalContent.innerHTML = "<div class='report-background'>" + replay + "</div>";
+                            }
+                        },
+                        error: function () {
+                            alert("错误error");
+                        }
+                    });
+                }
+            }
+        }
+
+        function getadvice(city) {
+            var cookies = document.cookie.split("; ");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "user" && cookiePair[1]) {
+                    $.ajax({
+                        url: "/travel_answer",
+                        type: "POST",
+                        data: JSON.stringify({'city': city}),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (response) {
+                            console.log(response.result);
+                            if (response.success) {
+                                var replay = response.result;
+                                replay = replay.replace(/(\d+)\. /g, '$1.');
+                                replay = replay.replace(/\((\d+)\) /g, '($1)');
+                                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                                replay = replay.replace(/\n/g, '<br>');
+
+                                const modalContent = document.getElementById("modalContent");
+                                modalContent.innerHTML = "<div class='report-background'>" + replay + "</div>";
+                            }
+                        },
+                        error: function () {
+                            alert("错误error");
+                        }
+                    });
+                }
+            }
+        }
+
+
+        function back(){
+            window.location.href = "/smartlife/travel"
+        }
+    </script>
+</body>
+</html>
