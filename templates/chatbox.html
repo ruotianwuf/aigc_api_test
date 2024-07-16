@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级暗色主题聊天界面</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .sidebar {
+            width: 300px;
+            background-color: #1E1E1E;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar .header {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .sidebar .user-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .sidebar .user {
+            padding: 10px;
+            border-bottom: 1px solid #2C2C2C;
+            cursor: pointer;
+        }
+        .sidebar .user:hover {
+            background-color: #333333;
+        }
+        .chat-window {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: #121212;
+            position: relative;
+        }
+        .chat-window .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .chat-window .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .chat-window .message .name {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: #444444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        .chat-window .message .text {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 20px;
+            max-width: 60%;
+        }
+        .chat-window .message.sent .text {
+            background-color: #1A73E8;
+            color: #FFFFFF;
+            align-self: flex-end;
+        }
+        .chat-window .message.received .text {
+            background-color: #333333;
+            color: #E0E0E0;
+        }
+        .chat-window .input-area {
+            padding: 20px 10px;
+            border-top: 1px solid #2C2C2C;
+            display: flex;
+            align-items: center;
+            background-color: #1E1E1E;
+        }
+        .chat-window .input-area input {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 20px;
+            background-color: #2B2B2B;
+            color: #FFFFFF;
+            outline: none;
+            margin-right: 10px;
+        }
+        .chat-window .input-area button {
+            background-color: #1A73E8;
+            border: none;
+            color: #FFFFFF;
+            padding: 15px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .chat-window .input-area button:hover {
+            background-color: #165ABE;
+        }
+        .chat-window .return-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #1A73E8;
+            border: none;
+            color: #FFFFFF;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .chat-window .return-button:hover {
+            background-color: #165ABE;
+        }
+        .chat-window .scroll-to-bottom {
+            position: absolute;
+            bottom: 80px;
+            right: 20px;
+            background-color: #1A73E8;
+            border: none;
+            color: #FFFFFF;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+        }
+        .chat-window .scroll-to-bottom:hover {
+            background-color: #165ABE;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div class="header">Chat</div>
+        <div class="user-list" id="user-list">
+            <!-- 用户列表从后端获取 -->
+        </div>
+    </div>
+    <div class="chat-window">
+        <button class="return-button" onclick="go_back()">返回</button>
+        <button class="scroll-to-bottom" id="scroll-to-bottom" onclick="scrollToBottom()">⬇️</button>
+        <div class="messages" id="messages">
+            <!-- 聊天内容从后端获取 -->
+        </div>
+        <div class="input-area">
+            <input type="text" id="message-input" placeholder="Type a message...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "user" && cookiePair[1]) {
+                    var data = {"name": cookiePair[1]};
+                    $.ajax({
+                        url: "/addchatbox",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                console.log("添加");
+                            }
+                        },
+                        error: function () {
+                            alert("错误error");
+                        }
+                    });
+                }
+            }
+
+
+
+
+
+        // 获取cookie中的用户名
+        function getCookie(name) {
+            let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+            if (match) return decodeURIComponent(match[2]);
+        }
+        const username = getCookie('user');
+        let autoScroll = true;
+
+        // 每秒重载用户列表和聊天内容
+        setInterval(() => {
+            loadUserList();
+            loadMessages();
+        }, 1000);
+
+        function loadUserList() {
+            const data = { data: "1" };
+            $.ajax({
+                url: "/getchatmanmsg",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        const userListElement = document.getElementById('user-list');
+                        const uniqueUsers = [...new Set(response.data.map(user => user[0]))];
+                        userListElement.innerHTML = uniqueUsers.map(user => `<div class="user">${user}</div>`).join('');
+                    }
+                },
+                error: function () {
+                    alert("错误error");
+                }
+            });
+        }
+
+        function loadMessages() {
+            const data = { data: "1" };
+            $.ajax({
+                url: "/getchatmsg",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        const messagesElement = document.getElementById('messages');
+                        messagesElement.innerHTML = response.data.map(message => `
+                           <div class="message ${message[1] === username ? 'sent' : 'received'}">
+                               <div class="name">${message[1][0].toUpperCase()}</div>
+                               <div class="text">${decodeURIComponent(message[2])}</div>
+                           </div>
+                       `).join('');
+                       if (autoScroll) {
+                           messagesElement.scrollTop = messagesElement.scrollHeight;
+                       }
+                    }
+                },
+                error: function () {
+                    alert("错误error");
+                }
+            });
+        }
+
+        // 发送消息
+        function sendMessage() {
+            const inputElement = document.getElementById('message-input');
+            const message = inputElement.value;
+            if (message.trim() === '') return;
+            const data = { "name": username, "msg": message };
+            $.ajax({
+                url: "/insertchatmsg",
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    if (response.success) {
+                        console.log("发送成功");
+                        autoScroll = true;
+                    }
+                },
+                error: function () {
+                    alert("错误error");
+                }
+            });
+
+            inputElement.value = '';
+        }
+
+        // 监听Enter键发送消息
+        document.getElementById('message-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // 监听滚动事件
+        const messagesElement = document.getElementById('messages');
+        messagesElement.addEventListener('scroll', () => {
+            const scrollToBottomButton = document.getElementById('scroll-to-bottom');
+            if (messagesElement.scrollHeight - messagesElement.scrollTop === messagesElement.clientHeight) {
+                autoScroll = true;
+                scrollToBottomButton.style.display = 'none';
+            } else {
+                autoScroll = false;
+                scrollToBottomButton.style.display = 'block';
+            }
+        });
+
+        function scrollToBottom() {
+            const messagesElement = document.getElementById('messages');
+            messagesElement.scrollTop = messagesElement.scrollHeight;
+            autoScroll = true;
+        }
+
+
+        function go_back() {
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "user" && cookiePair[1]) {
+                    var data = {"name": cookiePair[1]};
+                    $.ajax({
+                        url: "/deletechatbox",
+                        type: "POST",
+                        data: JSON.stringify(data),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (response) {
+                            if (response.success) {
+                                console.log("删除");
+                            }
+                        },
+                        error: function () {
+                            alert("错误error");
+                        }
+                    });
+                    window.location.href = '/smartlife?data='+data.name;
+
+                }
+            }
+        }
+    </script>
+</body>
+</html>

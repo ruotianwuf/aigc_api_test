@@ -63,6 +63,12 @@ def samartlife_health():
     return render_template('health.html')
 
 
+@app.route('/smartlife/chat', methods=['GET'])
+def samartlife_chat():
+    return render_template('chatbox.html')
+
+
+
 @app.route('/smartlife/health/healthtable', methods=['GET'])
 def samartlife_healthtable():
     return render_template('healthy_table.html')
@@ -992,6 +998,53 @@ def get_get_live_msg():
     result = con.get_live_info(data)
     if result:
         return jsonify({'success': True, 'result': result}), 200
+
+@app.route('/getchatmsg', methods=['POST'])
+def get_get_chat_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_chatmsg_info(data)
+    if result:
+        return jsonify({'success': True, 'data': result}), 200
+
+@app.route('/getchatmanmsg', methods=['POST'])
+def get_get_chatman_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_chatmanmsg_info(data)
+    if result:
+        return jsonify({'success': True, 'data': result}), 200
+
+
+@app.route('/insertchatmsg', methods=['POST'])
+def get_insert_chat_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.insert_chatmsg_info(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/deletechatbox', methods=['POST'])
+def delete_chat_man():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.delete_chatman(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/addchatbox', methods=['POST'])
+def add_chat_man():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.add_chatman(data)
+    if result:
+        return jsonify({'success': True}), 200
+
 
 if __name__ == '__main__':
    # app.run(debug=False, port=2750)

@@ -295,7 +295,7 @@
             </div>
 
             <div>
-              <button onclick="go_recommend()">
+              <button onclick="go_chat()">
                 <span class="material-icons">
                   thumb_up
                 </span>
@@ -388,12 +388,12 @@
          }
      }
      
-     function go_communit(){
+     function go_chat(){
          var ck=checkCookie('user');
          // alert(cookieValue);
          if(ck==cookieValue){
              // alert(ck);
-             window.location.href="/smartlife/communit";
+             window.location.href="/smartlife/chat";
          }else{
              //alert("请先登录");
              window.location.href="/smartlife/login/user";
