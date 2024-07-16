@@ -74,9 +74,13 @@ def gethealthanswer_msg():
         # data = json.dumps(data)
         print(data)
         # data_need = json.dumps(data)
+
         con = UserServerController()
         res = con.insert_info(name,data)
-        result = sync_vivogpt_ht(str(data))
+        if not data == 1:
+            result = sync_vivogpt_ht(str(data))
+        else:
+            result = None
 
         if result is not None and res:
             return jsonify({'success': True, 'result': result}), 200
