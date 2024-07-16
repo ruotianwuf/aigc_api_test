@@ -4,6 +4,8 @@ import os
 import random
 import datetime
 import re
+import uuid
+
 import pyautogui
 
 from flask import Flask, request, jsonify, render_template, Response
@@ -12,6 +14,8 @@ import requests
 
 from PIL import Image
 import base64
+
+from werkzeug.utils import secure_filename
 
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
@@ -53,6 +57,10 @@ def samartlife():
 @app.route('/smartlife/travel', methods=['GET'])
 def samartlife_travel():
     return render_template('travel.html')
+
+@app.route('/smartlife/travel/photofind', methods=['GET'])
+def samartlife_photofind():
+    return render_template('photofind.html')
 
 @app.route('/smartlife/travel/plan', methods=['GET'])
 def samartlife_travelplan():
@@ -1045,6 +1053,60 @@ def add_chat_man():
     if result:
         return jsonify({'success': True}), 200
 
+
+UPLOAD= 'static/location'
+app.config['UPLOAD'] = UPLOAD
+def get_access_token():
+    API_KEY = 'krDViPrnNz62q5XFueECkfCN'
+    SECRET_KEY = 'LfSpJRSp34S6IpEnwsmhduz99cglCxnI'
+    token_url = f'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={API_KEY}&client_secret={SECRET_KEY}'
+    response = requests.get(token_url)
+    return response.json().get('access_token')
+
+
+# 地表识别的路由
+@app.route('/smartlife/travel/recognize-landmark', methods=['POST'])
+def recognize_landmark():
+
+
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image part in the request'}), 400
+
+    image_file = request.files['image']
+    if image_file.filename == '':
+        return jsonify({'error': 'No selected image'}), 400
+
+    unique_filename = secure_filename(f"{uuid.uuid4().hex}.{image_file.filename.split('.')[-1]}")
+
+    # 正确的保存文件的方法
+    image_path = os.path.join(app.config['UPLOAD'], unique_filename)
+    image_file.save(image_path)
+
+
+    # 调用百度地表识别API
+    access_token = get_access_token()
+    api_url = f'https://aip.baidubce.com/rest/2.0/image-classify/v1/landmark?access_token={access_token}'
+
+    # 将图片转换为base64编码
+    f = open(image_path, 'rb')
+    img = base64.b64encode(f.read())
+
+    params = {"image": img}
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
+    response = requests.post(api_url,  data=params, headers=headers)
+
+    # 处理API响应
+    if response.ok:
+        result = response.json()
+        # 返回识别结果
+        return jsonify(result)
+    else:
+        # 返回错误信息
+        return jsonify({'error': 'Failed to recognize landmark'}), response.status_code
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 if __name__ == '__main__':
    # app.run(debug=False, port=2750)
