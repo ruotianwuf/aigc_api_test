@@ -149,7 +149,7 @@ class CommonDb(BaseModel):
         return self.db.update(sql)
 
     def delete_chatman(self,data):
-        sql = "delete from " + self.table + " where 1 and where name = " + str(data['name']) + ";"
+        sql = "delete from " + self.table + " where username = " + "'"+str(data['username'])+"'" + ";"
         print(sql)
         return self.db.update(sql)
 
@@ -224,7 +224,7 @@ class CommonDb(BaseModel):
         return self.db.executeSql(sql)
 
     def get_chatmanmsg_info(self,data):
-        sql = "select name from " + self.table + " where 1 ; "
+        sql = "select username from " + self.table + " where 1 ; "
         print(sql)
         return self.db.executeSql(sql)
 

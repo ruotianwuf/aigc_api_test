@@ -163,11 +163,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <script>
+        setTimeout(4000)
         var cookies = document.cookie.split("; ");
         for (var i = 0; i < cookies.length; i++) {
             var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "user" && cookiePair[1]) {
-                    var data = {"name": cookiePair[1]};
+                    var data = {"username": cookiePair[1]};
                     $.ajax({
                         url: "/addchatbox",
                         type: "POST",
@@ -311,7 +312,7 @@
         for (var i = 0; i < cookies.length; i++) {
             var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "user" && cookiePair[1]) {
-                    var data = {"name": cookiePair[1]};
+                    var data = {"username": cookiePair[1]};
                     $.ajax({
                         url: "/deletechatbox",
                         type: "POST",
@@ -327,7 +328,7 @@
                             alert("错误error");
                         }
                     });
-                    window.location.href = '/smartlife?data='+data.name;
+                    window.location.href = '/smartlife?data='+data.username;
 
                 }
             }
