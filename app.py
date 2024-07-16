@@ -22,7 +22,7 @@ from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
-from healthtable.get_api import sync_vivogpt_ht
+from healthtable.get_api import sync_vivogpt_ht, sync_vivogpt_traveladvice
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
@@ -54,9 +54,14 @@ def samartlife():
 def samartlife_travel():
     return render_template('travel.html')
 
+@app.route('/smartlife/travel/plan', methods=['GET'])
+def samartlife_travelplan():
+    return render_template('travel_plan.html')
+
 @app.route('/smartlife/health', methods=['GET'])
 def samartlife_health():
     return render_template('health.html')
+
 
 @app.route('/smartlife/health/healthtable', methods=['GET'])
 def samartlife_healthtable():
@@ -87,6 +92,20 @@ def gethealthanswer_msg():
             result = None
 
         if result is not None and res:
+            return jsonify({'success': True, 'result': result}), 200
+        else:
+            return jsonify({'success': False}), 200
+
+@app.route('/travel_answer', methods=['POST'])
+def get_travel_answer_msg():
+        data = json.loads(request.get_data(as_text=True))
+        data = data['city']
+        # data['love_sports'] = text_translate_c_to_e(data['love_sports'])
+        # data = json.dumps(data)
+        print(data)
+        # data_need = json.dumps(data)
+        result = sync_vivogpt_traveladvice(data)
+        if result:
             return jsonify({'success': True, 'result': result}), 200
         else:
             return jsonify({'success': False}), 200

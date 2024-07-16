@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TCPlayer Example</title>
     <!-- 引入 TCPlayer 的 CSS 文件 -->
-     <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css" rel="stylesheet"/>
- <!--播放器脚本文件-->
- <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
-<style>
-    body, html {
+    <link href="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.min.css" rel="stylesheet"/>
+    <!--播放器脚本文件-->
+    <script src="https://web.sdk.qcloud.com/player/tcplayer/release/v5.1.0/tcplayer.v5.1.0.min.js"></script>
+    <style>
+        body, html {
             height: 100%;
             margin: 0;
             padding: 0;
@@ -72,41 +72,131 @@
         </div>
         <!-- Chat container -->
         <div class="chat-container">
-          <!-- 聊天内容容器 -->
-          <div class="chat-content">
-          </div>
-          <!-- 聊天输入框 -->
-          <div class="chat-input">
-
-            <input style="height: 100px; width: 293px;background-color: bisque;" type="text" id="chat-input" placeholder="按回车输入......" onkeydown="if (event.keyCode == 13) sendMessage();">
-
-          </div>
+            <!-- 聊天内容容器 -->
+            <div class="chat-content" id="chat-content">
+            </div>
+            <!-- 聊天输入框 -->
+            <div class="chat-input">
+                <input style="height: 100px; width: 293px;background-color: bisque;" type="text" id="chat-input" placeholder="按回车输入......" onkeydown="if (event.keyCode == 13) sendMessage();">
+            </div>
         </div>
     </div>
     <script>
-            url = 'http://www.ruotianjoy.icu/live/joy.flv?txSecret=30a214fabde1b4313a4dde371cda6d7c&txTime=66960B29'
-            var player = TCPlayer('player-container-id', {
-                sources: [{
-                    src: url, // 播放地址，替换为实际视频文件的路径
-                }],
-                licenseUrl: 'https://license.vod2.myqcloud.com/license/v2/1322941177_1/v_cube.license', // license 地址，替换为实际的 license URL
-            });
-            player.src(url)
-            function sendMessage() {
-                var input = document.getElementById('chat-input');
-                var message = input.value;
-                if (message) {
-                  var contentDiv = document.querySelector('.chat-content');
-                  var messageDiv = document.createElement('div');
-                  messageDiv.className = 'message';
-                  messageDiv.innerHTML = '<span class="sender">You:</span> ' + message;
-                  contentDiv.appendChild(messageDiv);
-                  // Scroll to the bottom of the chat
-                  contentDiv.scrollTop = contentDiv.scrollHeight;
-                  input.value = ''; // Clear the input field
-                }
+        url = 'http://www.ruotianjoy.icu/live/joy.flv?txSecret=30a214fabde1b4313a4dde371cda6d7c&txTime=66960B29';
+        var player = TCPlayer('player-container-id', {
+            sources: [{
+                src: url, // 播放地址，替换为实际视频文件的路径
+            }],
+            licenseUrl: 'https://license.vod2.myqcloud.com/license/v2/1322941177_1/v_cube.license', // license 地址，替换为实际的 license URL
+        });
+        player.src(url);
+
+        // function getCookie(name) {
+        //     let cookieArr = document.cookie.split(";");
+        //     for (let i = 0; i < cookieArr.length; i++) {
+        //         let cookiePair = cookieArr[i].split("=");
+        //         if (name == cookiePair[0].trim()) {
+        //             return decodeURIComponent(cookiePair[1]);
+        //         }
+        //     }
+        //     return null;
+        // }
+        //
+        // function sendMessage() {
+        //     var input = document.getElementById('chat-input');
+        //     var message = input.value;
+        //     var username = getCookie('student');
+        //     var timestamp = new Date().toISOString();
+        //
+        //     if (message) {
+        //         fetch('https://your-cloud-database-url/send-message', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 username: username,
+        //                 message: message,
+        //                 timestamp: timestamp
+        //             })
+        //         }).then(response => response.json())
+        //           .then(data => {
+        //               // 处理发送消息后的响应数据
+        //           });
+        //
+        //         input.value = ''; // Clear the input field
+        //     }
+        // }
+        //
+        // function fetchMessages() {
+        //     fetch('https://your-cloud-database-url/get-messages')
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             var contentDiv = document.getElementById('chat-content');
+        //             contentDiv.innerHTML = '';
+        //             data.forEach(msg => {
+        //                 var messageDiv = document.createElement('div');
+        //                 messageDiv.className = 'message';
+        //                 messageDiv.innerHTML = `<span class="sender">${msg.username}:</span> ${msg.message}`;
+        //                 contentDiv.appendChild(messageDiv);
+        //             });
+        //             // Scroll to the bottom of the chat
+        //             contentDiv.scrollTop = contentDiv.scrollHeight;
+        //         });
+        // }
+        //
+        // setInterval(fetchMessages, 1000);
+
+connectsql()
+        function connectsql(){
+            const mysql = require("mysql")
+
+            const connection = mysql.createConnection({
+              host: "gz-cynosdbmysql-grp-53cuswb9.sql.tencentcdb.com", // MySQL 地址
+              port: 26837, // MySQL 端口
+              user: "vivo", // MySQL 用户名
+              password: "Vivo@1234", // MySQL 密码
+              database: "api_vivo_project" // 数据库名称
+            })
+
+            // 连接到 MySQL
+            connection.connect((err) => {
+              if (err) {
+                console.error("连接失败:", err)
+                return
               }
 
+              console.log("成功连接到 MySQL")
+
+              // 查询用户表格中的所有数据
+              connection.query("SELECT * FROM livemsg", (err, results) => {
+                if (err) {
+                  console.error("查询失败:", err)
+                  return
+                }
+
+                console.log("列表：")
+                results.forEach((row) => {
+                  console.log(`name: ${row.name}, msg: ${row.msg}, time: ${row.sendtime}`)
+                })
+
+                // 插入一条用户记录
+                var timestamp = new Date().toISOString();
+                const newUser = { name: "john_doe", msg: "22222" ,sendtime: timestamp}
+                connection.query("INSERT INTO user SET ?", newUser, (err, results) => {
+                  if (err) {
+                    console.error("插入失败:", err)
+                    return
+                  }
+
+                  console.log("数据插入成功！")
+
+                  关闭数据库连接
+                  connection.end()
+                })
+              })
+            })
+        }
     </script>
 </body>
 </html>
