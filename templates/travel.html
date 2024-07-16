@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Work</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("/static/img/旅游/旅游.jpg");
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: 'SimSun', 'Songti SC', 'serif';
+            background-color: #2B2B2F;
+        }
+        .container {
+            text-align: center;
+            color: #fff;
+        }
+        .title h1 {
+            margin: 0;
+            font-size: 6em;
+            animation: fadeInDown 1s ease;
+            color: black;
+        }
+        .title p {
+            margin: 0;
+            font-size: 1.5em;
+            animation: fadeInUp 1s ease;
+        }
+        .b_container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            animation: fadeIn 1s ease;
+        }
+        .c_button {
+            width: 150px;
+            height: 40px;
+            /*background-color: rgba(255, 255, 255, 0.2);*/
+            background-color: #af9273;
+            text-align: center;
+            color: black;
+            border: 2px solid transparent;
+            margin: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .c_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
+        }
+        .c_button:active {
+            transform: scale(0.95);
+        }
+        .back_button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 150px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: black;
+            border: 2px solid #ffffff;
+            text-align: center;
+            line-height: 40px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+        .back_button:hover {
+            background-color: #ffffff;
+            color: #2B2B2F;
+        }
+        .back_button:active {
+            transform: scale(0.95);
+        }
+        .material-icons {
+            margin-right: 5px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 0.8em;
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <h1>旅游资讯</h1>
+            <p>在这里体验前所未有的旅游规划</p>
+        </div>
+        <div class="b_container">
+            <button class="c_button" onclick="go_findplace()">景点识别</button>
+            <button class="c_button" onclick="go_tripplan()">旅游计划</button>
+            <button class="c_button" onclick="go_placerecommend()">实时推荐</button>
+        </div>
+        <button class="back_button" onclick="go_back()"><span class="material-icons Icon">arrow_back</span>返回</button>
+    </div>
+
+    <script>
+        function go_findplace() {
+            window.location.href = "/smartlife/travel/photofind";
+        }
+        function go_tripplan() {
+            window.location.href = "/smartlife/travel/plan";
+        }
+
+        function go_placerecommend() {
+            window.location.href = "/smartlife/travel/attraction";
+        }
+
+        function go_back() {
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+                if (cookiePair[0] === "user" && cookiePair[1]) {
+                    var data = {"username": cookiePair[1]};
+                    window.location.href = '/smartlife?data='+data.username;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

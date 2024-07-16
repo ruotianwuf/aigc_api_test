@@ -50,6 +50,10 @@ def samartlearn():
 def samartlife():
     return render_template('smartlife.html')
 
+@app.route('/smartlife/travel', methods=['GET'])
+def samartlife_travel():
+    return render_template('travel.html')
+
 @app.route('/smartlife/health', methods=['GET'])
 def samartlife_health():
     return render_template('health.html')
