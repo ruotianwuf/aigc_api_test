@@ -1073,20 +1073,23 @@ def recognize_landmark():
     image_file = request.files['image']
     if image_file.filename == '':
         return jsonify({'error': 'No selected image'}), 400
-    unique_filename = secure_filename(f"{uuid.uuid4().hex}.{image_file.filename.split('.')[-1]}")
-    # 正确的保存文件的方法
+
+    # 使用统一的文件名
+    unique_filename = 'photofind.jpg'
     image_path = os.path.join(app.config['UPLOAD'], unique_filename)
     image_file.save(image_path)
+
     # 调用百度地表识别API
     access_token = get_access_token()
     api_url = f'https://aip.baidubce.com/rest/2.0/image-classify/v1/landmark?access_token={access_token}'
+
     # 将图片转换为base64编码
-    f = open(image_path, 'rb')
-    img = base64.b64encode(f.read())
+    with open(image_path, 'rb') as f:
+        img = base64.b64encode(f.read())
+
     params = {"image": img}
     headers = {'content-type': 'application/x-www-form-urlencoded'}
-    response = requests.post(api_url,  data=params, headers=headers)
-
+    response = requests.post(api_url, data=params, headers=headers)
 
     # 处理API响应
     if response.ok:
@@ -1095,12 +1098,10 @@ def recognize_landmark():
         print(result['result']['landmark'])
         res = sync_vivogpt_place(str(result['result']['landmark']))
         # 返回识别结果
-        return jsonify({'success': True,'nameRes':result['result']['landmark'],'details':res}), 200
+        return jsonify({'success': True, 'nameRes': result['result']['landmark'], 'details': res}), 200
     else:
         # 返回错误信息
         return jsonify({'error': 'Failed to recognize landmark'}), response.status_code
-
-
 
 
 if __name__ == '__main__':
