@@ -161,7 +161,7 @@
         var cookies = document.cookie.split("; ");
         for (var i = 0; i < cookies.length; i++) {
             var cookiePair = cookies[i].split("=");
-                if (cookiePair[0] === "student" && cookiePair[1]) {
+                if (cookiePair[0] === "teacher" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
                     window.location.href = '/smartlearn/teacher?data='+data.username;
                 }

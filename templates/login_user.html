@@ -164,10 +164,24 @@
 <!--            </div>-->
             <br>
             <div class="field">
-                <input required type="text" id="phone" class="input">
+                <input pattern="^\d{11}$" required type="text" id="phone" class="input">
                 <span class="material-icons">phone</span>
                 <label class="label">电话</label>
             </div>
+            <br>
+            <div class="field">
+                <input required type="email" id="email" class="input" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+                <span class="material-icons">email</span>
+                <label class="label">邮箱</label>
+            </div>
+            <br>
+            <div class="field">
+                <input required type="text" id="emailCode" class="input">
+                <span class="material-icons">verified</span>
+                <label class="label">验证码</label>
+            </div>
+            <button id="sendcode" type="button" class="button" onclick="getEmailCode()">获取验证码</button>
+            <br>
             <div id="vedio"></div>
 <!--            <video id="video" width="360" height="480" autoplay></video>-->
             <button class="button" type="submit">登录</button>
@@ -207,6 +221,33 @@
             submitFormWithImage();
         }
 
+        let code = null
+        function getEmailCode() {
+            const email = document.getElementById('email').value;
+            if (email) {
+                $.ajax({
+                    url: "/get_email_code",
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({email: email}),
+                    success: function(response) {
+                        if(response.success){
+                            // alert("验证码已发送到您的邮箱");
+                            code = response.code
+                            document.getElementById('sendcode').innerText="已发送"
+                        } else {
+                            alert("获取验证码失败，请重试");
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert("获取验证码失败: " + error);
+                    }
+                });
+            } else {
+                alert("请输入邮箱地址");
+            }
+        }
+
         function closeCamera() {
             if (stream) {
                 stream.getTracks().forEach(track => track.stop());
@@ -224,41 +265,44 @@
                 const username = document.getElementById('username').value;
                 const password = document.getElementById('password').value;
                 const phone = document.getElementById('phone').value;
-
+                const emailcode = document.getElementById('emailCode').value;
                 // 添加其他表单数据到FormData
                 formData.append('username', username);
                 formData.append('password', password);
                 formData.append('phone', phone);
+
                 console.log("1",imgData)
                 // 添加图片文件到FormData
                 var imgBlob = new File([imgData], "screenshot.png", { type: "image/png" });
                 formData.append('screenshot', imgBlob);
-
-                // 使用jQuery的ajax发送FormData
-                $.ajax({
-                    url: "/login/user/1",
-                    type: "POST",
-                    data: formData,
-                    contentType: false, // 告诉jQuery不要设置内容类型为application/json
-                    processData: false, // 告诉jQuery不要处理数据
-                    success: function (response) {
-                        // 登录成功的处理
-                        if(response.success){
-                            alert("登录成功");
-                            // 跳转到相应页面
-                            var url = "/smartlife?data=" + username;
-                            window.location.href = url;
-                        } else {
-                            // 登录失败的处理
-                            alert("账号或密码错误");
-                            window.location.href="/smartlife/login/user";
+                console.log(code,emailcode)
+                if (code.toString() === emailcode) {
+                    // 使用jQuery的ajax发送FormData
+                    $.ajax({
+                        url: "/login/user/1",
+                        type: "POST",
+                        data: formData,
+                        contentType: false, // 告诉jQuery不要设置内容类型为application/json
+                        processData: false, // 告诉jQuery不要处理数据
+                        success: function (response) {
+                            // 登录成功的处理
+                            if (response.success) {
+                                alert("登录成功");
+                                // 跳转到相应页面
+                                var url = "/smartlife?data=" + username;
+                                window.location.href = url;
+                            } else {
+                                // 登录失败的处理
+                                alert("账号或密码错误");
+                                window.location.href = "/smartlife/login/user";
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // 错误处理
+                            alert("登录失败: " + error);
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        // 错误处理
-                        alert("登录失败: " + error);
-                    }
-                });
+                    });
+                }
             } else {
                 // 图片数据为空的处理
                 alert("未获取到截图，请重试。");
