@@ -58,6 +58,9 @@ def samartlife_travel():
 def samartlife_travelplan():
     return render_template('travel_plan.html')
 
+@app.route('/smartlife/travel/travel_attraction', methods=['GET'])
+def samartlife_travelattraction():
+    return render_template('travel_attraction.html')
 @app.route('/smartlife/health', methods=['GET'])
 def samartlife_health():
     return render_template('health.html')
