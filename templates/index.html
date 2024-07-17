@@ -17,13 +17,13 @@
              font-family: Arial, sans-serif;
              margin: 0;
              padding: 0;
-             background-image: url("../static/img/地图.jpg");
+             background-image: url("../static/img/珠穆朗玛峰/1.jpg");
              background-size: cover;
         .container {
             display: flex;
             justify-content: center; /* 水平居中 */
             align-items: center;     /* 垂直居中 */
-            height: 100vh;
+            height: 30vh;
         }
         .button {
             display: inline-block;
@@ -48,18 +48,35 @@
             box-shadow: 0 5px #666;
             transform: translateY(4px);
         }}
+        header {
+            /*background: rgba(255, 255, 255, 0.4);*/
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        .small-image {
+            width: 350px;
+            height: auto;
+            text-align: center;
+            padding: 10px 20px;
+
+        }
     </style>
 </head>
 <body>
 <br>
+
+<header>
 <div>
     <h1 style="text-align: center;font-size: 50px">欢迎来到VIVO智慧平台</h1>
+    <img src="/static/img/logo2.png" alt="Logo" class="small-image">
     <div class="container">
         <a href="/smartlearn/" class="button">VIVO·智慧学习</a>
 
         <a href="/smartlife/" class="button">VIVO·智慧生活</a>
     </div>
 </div>
+</header>
     <footer>
         <p style="display: inline-block;">&copy; 2024 一体化在线社区系统 VIVO·智慧平台. All rights reserved.</p>
         <svg onclick="goToGithub()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-github" viewBox="0 0 16 16">

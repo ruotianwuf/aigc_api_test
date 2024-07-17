@@ -26,7 +26,7 @@ from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
-from healthtable.get_api import sync_vivogpt_ht, sync_vivogpt_traveladvice
+from healthtable.get_api import sync_vivogpt_ht, sync_vivogpt_traveladvice ,sync_vivogpt_place
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
@@ -60,7 +60,7 @@ def samartlife_travel():
 
 @app.route('/smartlife/travel/photofind', methods=['GET'])
 def samartlife_photofind():
-    return render_template('photofind.html')
+    return render_template('travel_photofind.html')
 
 @app.route('/smartlife/travel/plan', methods=['GET'])
 def samartlife_travelplan():
@@ -1067,46 +1067,41 @@ def get_access_token():
 # 地表识别的路由
 @app.route('/smartlife/travel/recognize-landmark', methods=['POST'])
 def recognize_landmark():
-
-
     if 'image' not in request.files:
         return jsonify({'error': 'No image part in the request'}), 400
 
     image_file = request.files['image']
     if image_file.filename == '':
         return jsonify({'error': 'No selected image'}), 400
-
     unique_filename = secure_filename(f"{uuid.uuid4().hex}.{image_file.filename.split('.')[-1]}")
-
     # 正确的保存文件的方法
     image_path = os.path.join(app.config['UPLOAD'], unique_filename)
     image_file.save(image_path)
-
-
     # 调用百度地表识别API
     access_token = get_access_token()
     api_url = f'https://aip.baidubce.com/rest/2.0/image-classify/v1/landmark?access_token={access_token}'
-
     # 将图片转换为base64编码
     f = open(image_path, 'rb')
     img = base64.b64encode(f.read())
-
     params = {"image": img}
     headers = {'content-type': 'application/x-www-form-urlencoded'}
     response = requests.post(api_url,  data=params, headers=headers)
 
+
     # 处理API响应
     if response.ok:
         result = response.json()
+        print(result)
+        print(result['result']['landmark'])
+        res = sync_vivogpt_place(str(result['result']['landmark']))
         # 返回识别结果
-        return jsonify(result)
+        return jsonify({'success': True,'nameRes':result['result']['landmark'],'details':res}), 200
     else:
         # 返回错误信息
         return jsonify({'error': 'Failed to recognize landmark'}), response.status_code
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
 
 if __name__ == '__main__':
    # app.run(debug=False, port=2750)

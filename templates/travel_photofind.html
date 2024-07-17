@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>地表识别</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: url('/static/img/旅游/旅游 (3).jpg') no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-top: 20px;
+        }
+
+        #container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-start;
+            margin: 20px auto;
+            width: 90%;
+            height: 650px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #leftBox {
+            flex: 1;
+            text-align: center;
+            height: 550px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #dropZone {
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            width: 80%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: border 0.3s;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        #dropZone.dragover {
+            border-color: #5cb85c;
+        }
+
+        #dropZone p {
+            color: #666;
+        }
+
+        #rightBox {
+            flex: 2;
+            padding-left: 20px;
+            color: #000;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow-y: auto;
+        }
+
+        #imageInput, #reuploadButton {
+            display: none;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        img:hover::after {
+            content: '点击查看大图';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #5cb85c;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        #result {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .error {
+            color: red;
+        }
+
+        .landmark-name {
+            color: red;
+            font-weight: bold;
+            font-size: 3em;
+        }
+
+        #backButton {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background-color: #d9534f;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #backButton:hover {
+            background-color: #c9302c;
+        }
+
+        .loading {
+            font-size: 1.5em;
+            color: #666;
+        }
+
+        #imageModal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+        }
+
+        #imageModalContent {
+            margin: 15% auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        #imageModalContent img {
+            width: 100%;
+            height: auto;
+        }
+
+        #imageModalClose {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px;
+            }
+
+            #container {
+                flex-direction: column;
+                align-items: center;
+                height: 550px;
+            }
+
+            #rightBox {
+                padding-left: 0;
+                height: 550px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>地表识别</h1>
+    <button id="backButton" onclick="window.location.href='/smartlife/travel';">返回</button>
+    <div id="container">
+        <div id="leftBox">
+            <div id="dropZone">
+                <p id="dropZoneText">拖拽或点击上传文件</p>
+                <input type="file" id="imageInput" name="image" accept="image/*">
+            </div>
+            <img id="uploadedImage" src="" alt="上传的图片" style="display:none;">
+            <button id="reuploadButton" style="display:none;" onclick="reuploadImage()">重新上传</button>
+        </div>
+        <div id="rightBox">
+            <div id="result" class="loading">请选择一张图片进行识别</div>
+        </div>
+    </div>
+    <div id="imageModal">
+        <span id="imageModalClose">&times;</span>
+        <div id="imageModalContent">
+            <img id="modalImage" src="" alt="大图">
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const imageInput = document.getElementById('imageInput');
+
+        dropZone.addEventListener('click', () => imageInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                imageInput.files = files;
+                handleFiles(files);
+            }
+        });
+
+        imageInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        function handleFiles(files) {
+            if (files && files[0]) {
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadedImage = document.getElementById('uploadedImage');
+                    uploadedImage.src = e.target.result;
+                    uploadedImage.style.display = 'block';
+                    uploadedImage.onclick = function() {
+                        showImageModal(e.target.result);
+                    };
+                    document.getElementById('reuploadButton').style.display = 'block';
+                    dropZone.style.display = 'none';
+                    document.getElementById('result').classList.add('loading');
+                    document.getElementById('result').innerHTML = '正在获取...';
+
+                    // 自动触发识别地表
+                    recognizeLandmark(file);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                alert('请先选择一个图片文件。');
+            }
+        }
+
+        function recognizeLandmark(file) {
+            const formData = new FormData();
+            formData.append('image', file);
+            const xhr = new XMLHttpRequest();
+
+            xhr.open('POST', '/smartlife/travel/recognize-landmark', true);
+
+            xhr.onload = function() {
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    displayResult(JSON.parse(xhr.responseText));
+                } else {
+                    console.error('Error:', xhr.statusText);
+                    displayResult({error: 'Failed to recognize landmark or upload image.'});
+                }
+            };
+
+            xhr.onerror = function() {
+                console.error('Request error');
+                displayResult({error: 'Request failed.'});
+            };
+
+            xhr.send(formData);
+        }
+
+        function reuploadImage() {
+            const uploadedImage = document.getElementById('uploadedImage');
+            const reuploadButton = document.getElementById('reuploadButton');
+            const dropZone = document.getElementById('dropZone');
+
+            uploadedImage.style.display = 'none';
+            reuploadButton.style.display = 'none';
+            dropZone.style.display = 'flex';
+            document.getElementById('result').innerHTML = '请选择一张图片进行识别';
+            document.getElementById('result').classList.remove('loading');
+        }
+
+        function displayResult(result) {
+            const resultElement = document.getElementById('result');
+            resultElement.style.opacity = 0;
+
+            if (result.error) {
+                resultElement.innerHTML = '<p class="error">' + result.error + '</p>';
+            } else {
+                let replay = result.details;
+                replay = replay.replace(/(\d+)\. /g, '$1.');
+                replay = replay.replace(/\((\d+)\) /g, '($1)');
+                replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+                replay = replay.replace(/\n/g, '<br>');
+                resultElement.innerHTML = '<p class="landmark-name">地标名称: ' + result.nameRes + '</p>';
+                resultElement.innerHTML += '<p>' + replay + '</p>';
+            }
+
+            setTimeout(function() {
+                resultElement.style.opacity = 1;
+                resultElement.classList.remove('loading');
+            }, 10);
+        }
+
+        function showImageModal(src) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const span = document.getElementById('imageModalClose');
+
+            modal.style.display = "block";
+            modalImg.src = src;
+
+            span.onclick = function() {
+                modal.style.display = "none";
+            };
+
+            window.onclick = function(event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+        }
+    </script>
+</body>
+</html>

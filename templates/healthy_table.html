@@ -26,26 +26,27 @@
     }
     body {
         background-image: url("/static/img/健康/运动.jpg");
+        background-size: cover;
+        background-position: center;
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
         display: flex;
         justify-content: center;
-        align-items: center;
-        height: 120vh;
+        align-items: flex-start;
+        height: 100vh;
         background-color: #f4f4f4;
     }
 
     .container {
-        margin-top: 40%;
-        width: 100%;
+        margin-top: 10%;
+        width: 90%;
         max-width: 1200px;
         background-color: #fff;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         overflow: hidden;
         padding: 20px;
-
     }
 
     .header {
@@ -200,7 +201,7 @@
     <div class="container">
         <div class="header">
             <h1>运动饮食计划表</h1>
-            <div class="btn" id="openBtn" style="visibility: hidden"></div>
+            <div class="btn" id="openBtn" ></div>
             <button class="btn" id="openModalBtn">录入信息</button>
         </div>
         <div class="scroll-container">
