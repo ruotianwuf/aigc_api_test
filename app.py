@@ -4,6 +4,8 @@ import os
 import random
 import datetime
 import re
+import uuid
+
 import pyautogui
 
 from flask import Flask, request, jsonify, render_template, Response
@@ -12,6 +14,8 @@ import requests
 
 from PIL import Image
 import base64
+
+from werkzeug.utils import secure_filename
 
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
@@ -22,7 +26,7 @@ from long_video_transfer.run_bat import run_bat_file
 from flask import Flask, render_template, request, session, redirect, url_for
 from flask_socketio import SocketIO, join_room, leave_room
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
-from healthtable.get_api import sync_vivogpt_ht
+from healthtable.get_api import sync_vivogpt_ht, sync_vivogpt_traveladvice
 from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
@@ -54,9 +58,24 @@ def samartlife():
 def samartlife_travel():
     return render_template('travel.html')
 
+@app.route('/smartlife/travel/photofind', methods=['GET'])
+def samartlife_photofind():
+    return render_template('photofind.html')
+
+@app.route('/smartlife/travel/plan', methods=['GET'])
+def samartlife_travelplan():
+    return render_template('travel_plan.html')
+
 @app.route('/smartlife/health', methods=['GET'])
 def samartlife_health():
     return render_template('health.html')
+
+
+@app.route('/smartlife/chat', methods=['GET'])
+def samartlife_chat():
+    return render_template('chatbox.html')
+
+
 
 @app.route('/smartlife/health/healthtable', methods=['GET'])
 def samartlife_healthtable():
@@ -87,6 +106,20 @@ def gethealthanswer_msg():
             result = None
 
         if result is not None and res:
+            return jsonify({'success': True, 'result': result}), 200
+        else:
+            return jsonify({'success': False}), 200
+
+@app.route('/travel_answer', methods=['POST'])
+def get_travel_answer_msg():
+        data = json.loads(request.get_data(as_text=True))
+        data = data['city']
+        # data['love_sports'] = text_translate_c_to_e(data['love_sports'])
+        # data = json.dumps(data)
+        print(data)
+        # data_need = json.dumps(data)
+        result = sync_vivogpt_traveladvice(data)
+        if result:
             return jsonify({'success': True, 'result': result}), 200
         else:
             return jsonify({'success': False}), 200
@@ -396,6 +429,10 @@ def getstudent_forum_post():
     else:
         return jsonify({'success': False}), 200
 
+
+@app.route('/smartlearn/student/live', methods=['GET'])
+def get_student_live():
+    return render_template('student_live.html')
 
 @app.route('/smartlearn/teacher/live', methods=['GET'])
 def get_teacher_live():
@@ -951,6 +988,125 @@ def upload_student_homework():
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
 
+
+@app.route('/insertmsg', methods=['POST'])
+def get_insert_live_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.insert_live_info(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/getmsg', methods=['POST'])
+def get_get_live_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_live_info(data)
+    if result:
+        return jsonify({'success': True, 'result': result}), 200
+
+@app.route('/getchatmsg', methods=['POST'])
+def get_get_chat_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_chatmsg_info(data)
+    if result:
+        return jsonify({'success': True, 'data': result}), 200
+
+@app.route('/getchatmanmsg', methods=['POST'])
+def get_get_chatman_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.get_chatmanmsg_info(data)
+    if result:
+        return jsonify({'success': True, 'data': result}), 200
+
+
+@app.route('/insertchatmsg', methods=['POST'])
+def get_insert_chat_msg():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.insert_chatmsg_info(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/deletechatbox', methods=['POST'])
+def delete_chat_man():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.delete_chatman(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+@app.route('/addchatbox', methods=['POST'])
+def add_chat_man():
+    data = json.loads(request.get_data(as_text=True))
+    print(data)
+    con = UserServerController()
+    result = con.add_chatman(data)
+    if result:
+        return jsonify({'success': True}), 200
+
+
+UPLOAD= 'static/location'
+app.config['UPLOAD'] = UPLOAD
+def get_access_token():
+    API_KEY = 'krDViPrnNz62q5XFueECkfCN'
+    SECRET_KEY = 'LfSpJRSp34S6IpEnwsmhduz99cglCxnI'
+    token_url = f'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={API_KEY}&client_secret={SECRET_KEY}'
+    response = requests.get(token_url)
+    return response.json().get('access_token')
+
+
+# 地表识别的路由
+@app.route('/smartlife/travel/recognize-landmark', methods=['POST'])
+def recognize_landmark():
+
+
+    if 'image' not in request.files:
+        return jsonify({'error': 'No image part in the request'}), 400
+
+    image_file = request.files['image']
+    if image_file.filename == '':
+        return jsonify({'error': 'No selected image'}), 400
+
+    unique_filename = secure_filename(f"{uuid.uuid4().hex}.{image_file.filename.split('.')[-1]}")
+
+    # 正确的保存文件的方法
+    image_path = os.path.join(app.config['UPLOAD'], unique_filename)
+    image_file.save(image_path)
+
+
+    # 调用百度地表识别API
+    access_token = get_access_token()
+    api_url = f'https://aip.baidubce.com/rest/2.0/image-classify/v1/landmark?access_token={access_token}'
+
+    # 将图片转换为base64编码
+    f = open(image_path, 'rb')
+    img = base64.b64encode(f.read())
+
+    params = {"image": img}
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
+    response = requests.post(api_url,  data=params, headers=headers)
+
+    # 处理API响应
+    if response.ok:
+        result = response.json()
+        # 返回识别结果
+        return jsonify(result)
+    else:
+        # 返回错误信息
+        return jsonify({'error': 'Failed to recognize landmark'}), response.status_code
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 if __name__ == '__main__':
    # app.run(debug=False, port=2750)

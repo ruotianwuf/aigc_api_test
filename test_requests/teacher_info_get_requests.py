@@ -1,7 +1,8 @@
 import requests
 import json
+import datetime
 data = json.dumps({
-    'username': "yzw",
+    "data": "1"
 })
-response = requests.post(url='http://127.0.0.1:5000/teacher/info/get', data=data)
+response = requests.post(url='http://127.0.0.1:2750/getchatmanmsg', data=data)
 print(response.text)

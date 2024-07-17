@@ -302,3 +302,38 @@ class UserServerController:
         model = CommonDb('user')
         consequence = model.get_table_get(name)
         return consequence
+
+    def insert_live_info(self,data):
+        model = CommonDb('livemsg')
+        consequence = model.insert_live_info(data)
+        return consequence
+
+    def get_live_info(self,data):
+        model = CommonDb('livemsg')
+        consequence = model.get_live_info(data)
+        return consequence
+
+    def get_chatmsg_info(self,data):
+        model = CommonDb('chatbox')
+        consequence = model.get_chatmsg_info(data)
+        return consequence
+
+    def get_chatmanmsg_info(self,data):
+        model = CommonDb('chatperson')
+        consequence = model.get_chatmanmsg_info(data)
+        return consequence
+
+    def insert_chatmsg_info(self,data):
+        model = CommonDb('chatbox')
+        consequence = model.insert_chatmsg_info(data)
+        return consequence
+
+    def delete_chatman(self,data):
+        model = CommonDb('chatperson')
+        consequence = model.delete_chatman(data)
+        return consequence
+
+    def add_chatman(self, data):
+        model = CommonDb('chatperson')
+        consequence = model.add_chatman(data)
+        return consequence

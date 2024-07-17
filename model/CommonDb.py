@@ -148,6 +148,11 @@ class CommonDb(BaseModel):
         print(sql)
         return self.db.update(sql)
 
+    def delete_chatman(self,data):
+        sql = "delete from " + self.table + " where username = " + "'"+str(data['username'])+"'" + ";"
+        print(sql)
+        return self.db.update(sql)
+
     def executeMap(self,sql):
         print(sql)
         return self.db.executeSqlMap(sql,self.table)
@@ -206,3 +211,69 @@ class CommonDb(BaseModel):
         sql = "select htable from " + self.table + " where 1 and " + ' username= ' + "'" + str(name) + "'" + ";"
         print(sql)
         return self.db.executeSql(sql)
+
+
+    def get_live_info(self,data):
+        sql = "select * from " + self.table + " where 1 ; "
+        print(sql)
+        return self.db.executeSql(sql)
+
+    def get_chatmsg_info(self,data):
+        sql = "select * from " + self.table + " where 1 ; "
+        print(sql)
+        return self.db.executeSql(sql)
+
+    def get_chatmanmsg_info(self,data):
+        sql = "select username from " + self.table + " where 1 ; "
+        print(sql)
+        return self.db.executeSql(sql)
+
+
+    def insert_chatmsg_info(self,info,noUpdate=False):
+        sInsertField = ""
+        sInsertValue = ""
+
+        sUpdateSql = ""
+        for key in info.keys():
+            sInsertField += "," + key
+            sInsertValue += ",\"" + str(info[key]) + "\""
+            sUpdateSql += key + "=\"" + str(info[key]) + "\","
+        if noUpdate:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ") ON DUPLICATE KEY UPDATE " + sUpdateSql[:-1] + ";"
+        else:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ");"
+        print(sql)
+        return self.db.add(sql)
+
+    def insert_live_info(self,info,noUpdate=False):
+        sInsertField = ""
+        sInsertValue = ""
+
+        sUpdateSql = ""
+        for key in info.keys():
+            sInsertField += "," + key
+            sInsertValue += ",\"" + str(info[key]) + "\""
+            sUpdateSql += key + "=\"" + str(info[key]) + "\","
+        if noUpdate:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ") ON DUPLICATE KEY UPDATE " + sUpdateSql[:-1] + ";"
+        else:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ");"
+        print(sql)
+        return self.db.add(sql)
+
+    def add_chatman(self,info,noUpdate=False):
+        sInsertField = ""
+        sInsertValue = ""
+
+        sUpdateSql = ""
+        for key in info.keys():
+            sInsertField += "," + key
+            sInsertValue += ",\"" + str(info[key]) + "\""
+            sUpdateSql += key + "=\"" + str(info[key]) + "\","
+        if noUpdate:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ") ON DUPLICATE KEY UPDATE " + sUpdateSql[:-1] + ";"
+        else:
+            sql = "insert into " + self.table + "(" + sInsertField[1:] + ") values(" + sInsertValue[1:] + ");"
+        print(sql)
+        return self.db.add(sql)
+

@@ -82,7 +82,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
-
         const url = 'http://www.ruotianjoy.icu/live/joy.flv?txSecret=30a214fabde1b4313a4dde371cda6d7c&txTime=66960B29';
         const player = TCPlayer('player-container-id', {
             sources: [{ src: url }],
@@ -104,7 +103,7 @@
         function sendMessage() {
             const input = document.getElementById('chat-input');
             const message = input.value;
-            const username = getCookie('teacher');
+            const username = getCookie('student');
             const timestamp = new Date().toISOString();
             const data = { 'msg': message, 'name': username, 'sendtime': timestamp };
 
@@ -163,7 +162,7 @@
             var cookiePair = cookies[i].split("=");
                 if (cookiePair[0] === "student" && cookiePair[1]) {
                     var data = {"username": cookiePair[1]};
-                    window.location.href = '/smartlearn/teacher?data='+data.username;
+                    window.location.href = '/smartlearn/student?data='+data.username;
                 }
             }
         }
