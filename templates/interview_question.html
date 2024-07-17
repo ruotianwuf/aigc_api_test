@@ -178,22 +178,6 @@
             background-color: #0056b3;
         }
 
-        .dialogue-entry {
-            margin-bottom: 10px;
-            padding: 10px;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .dialogue-entry.ai {
-            background-color: #e0f7fa;
-        }
-
-        .dialogue-entry.user {
-            background-color: #fff9c4;
-        }
-
         .back_button {
             position: absolute;
             top: 20px;
@@ -219,6 +203,24 @@
         }
         .back_button:active {
             transform: scale(0.95);
+        }
+
+        .dialogue-entry {
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f5f5f5;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .dialogue-entry.ai {
+            background-color: #c7f4ff;
+            color: #000000;
+        }
+
+        .dialogue-entry.user {
+            background-color: #fff9c4;
+            color: #000000;
         }
     </style>
 </head>
@@ -280,6 +282,13 @@
         <div class="footer">
             此面试功能由蓝心大模型提供支持，可能会出现错误，请注意判断
         </div>
+
+<!--        <div class="container">-->
+<!--            <div class="input-test">-->
+<!--                <input type="text" id="manual-input" placeholder="输入测试文本">-->
+<!--                <button onclick="testSpeechInput()">提交测试文本</button>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
@@ -345,10 +354,12 @@
                 dataType: "json",
                 success: function(response) {
                     console.log('答案已提交：', response);
+                    addDialogueEntry('user', speechText);  // 用户输入的内容
                     if (response.success) {
                         const textToSpeak = response.recommend || 'No recommendation available.';
                         document.getElementById('aispeak').innerText = textToSpeak;
                         convertTextToSpeech(textToSpeak);
+                        addDialogueEntry('ai', textToSpeak);  // AI 的回答
                     } else {
                         alert('提交失败，请稍后重试。');
                     }
@@ -384,7 +395,12 @@
             const dialogueLog = document.getElementById('dialogue-log');
             const entry = document.createElement('div');
             entry.classList.add('dialogue-entry', type);
-            entry.innerText = text;
+            if (type === 'ai') {
+                entry.innerText = `蓝心面试官: ${text}`;
+            } else if (type === 'user') {
+                entry.innerText = `You: ${text}`;
+            }
+
             dialogueLog.appendChild(entry);
         }
         document.getElementById('drawer-toggle').addEventListener('click', () => {
@@ -392,6 +408,16 @@
         });
         function go_back(){
             window.location.href = "/smartlife/work";
+        }
+
+        //测试功能
+        function testSpeechInput() {
+            const speechText = document.getElementById('manual-input').value;
+            if (speechText) {
+                sendSpeechToServer(speechText);
+            } else {
+                alert('请输入测试文本。');
+            }
         }
     </script>
 </body>
