@@ -29,9 +29,6 @@ from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
 from work_interview.get_interview_api import sync_vivogpt_interview_writting,sync_vivogpt_interview_writting_answers
 from work_interview.get_TTS_api import get_tts_instance, AueType, pcm2wav, TTS
 from work_interview.get_interview_chat import sync_vivogpt_interview_chat
-from travel_attraction.get_TTS_attraction import get_tts_instance
-from travel_attraction.get_api_travelAdvicei import sync_vivogpt_travelAdvice
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
@@ -57,10 +54,6 @@ def samartlife():
 def samartlife_travel():
     return render_template('travel.html')
 
-@app.route('/smartlife/travel/attraction', methods=['GET'])
-def samartlife_travelattraction():
-    return render_template('travel_attraction.html')
-
 @app.route('/smartlife/travel/plan', methods=['GET'])
 def samartlife_travelplan():
     return render_template('travel_plan.html')
@@ -77,6 +70,9 @@ def samartlife_healthtable():
 @app.route('/smartlife/health/healthtest', methods=['GET'])
 def samartlife_healthtest():
     return render_template('healthy_test.html')
+
+
+
 
 @app.route('/health_answer', methods=['POST'])
 def gethealthanswer_msg():
@@ -660,6 +656,8 @@ def getlogin_student_info():
 
 
 
+
+
 def image_to_base64(image_path):
     # 打开图片文件
     with Image.open(image_path) as img:
@@ -971,32 +969,6 @@ def upload_student_homework():
     check_result = get_correct_check(upload_dir+'/'+homework_file.filename)
     response_data = {'success': True, 'message': 'Homework uploaded successfully', 'check': check_result}
     return jsonify(response_data), 200
-
-@app.route('/get_address', methods=['POST'])
-def get_address():
-    data = request.json
-    lat = data.get('lat')
-    lng = data.get('lng')
-
-    # 反向地理编码获取详细地址，设置语言为中文
-    url = f'https://api.opencagedata.com/geocode/v1/json?q={lat}+{lng}&key={'79b89ebd09984761a4797e0c61009fc9'}&language=zh'
-    response = requests.get(url)
-    if response.status_code == 200:
-        address = response.json()['results'][0]['formatted']
-    else:
-        address = '未知地址'
-
-    return jsonify({"status": "success", "address": address})
-
-@app.route('/get_nearby_places', methods=['POST'])
-def get_nearby_places():
-    data = request.json
-    address = data.get('address')
-
-    question = f"这是我现在所处的位置：{address}，列出该地址附近5km内的五个景点或者更少，选择的景点按照名气等级排序，并详细讲解介绍每个景点的距离当前位置的距离，历史背景，游玩攻略等详细信息，每个景点的讲解不少于200字。"
-    advice = sync_vivogpt_travelAdvice(question)
-
-    return jsonify({"status": "success", "advice": advice})
 
 
 if __name__ == '__main__':
