@@ -4,8 +4,6 @@ import os
 import random
 import datetime
 import re
-import uuid
-
 import pyautogui
 
 from flask import Flask, request, jsonify, render_template, Response
@@ -14,8 +12,6 @@ import requests
 
 from PIL import Image
 import base64
-
-from werkzeug.utils import secure_filename
 
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
@@ -66,15 +62,12 @@ def samartlife_photofind():
 def samartlife_travelplan():
     return render_template('travel_plan.html')
 
+@app.route('/smartlife/travel/travel_attraction', methods=['GET'])
+def samartlife_travelattraction():
+    return render_template('travel_attraction.html')
 @app.route('/smartlife/health', methods=['GET'])
 def samartlife_health():
     return render_template('health.html')
-
-
-@app.route('/smartlife/chat', methods=['GET'])
-def samartlife_chat():
-    return render_template('chatbox.html')
-
 
 
 @app.route('/smartlife/health/healthtable', methods=['GET'])
@@ -429,10 +422,6 @@ def getstudent_forum_post():
     else:
         return jsonify({'success': False}), 200
 
-
-@app.route('/smartlearn/student/live', methods=['GET'])
-def get_student_live():
-    return render_template('student_live.html')
 
 @app.route('/smartlearn/teacher/live', methods=['GET'])
 def get_teacher_live():
