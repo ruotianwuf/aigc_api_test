@@ -29,9 +29,6 @@ from work_careeradvice.get_api_careeradvice import sync_vivogpt_careeradvice
 from work_interview.get_interview_api import sync_vivogpt_interview_writting,sync_vivogpt_interview_writting_answers
 from work_interview.get_TTS_api import get_tts_instance, AueType, pcm2wav, TTS
 from work_interview.get_interview_chat import sync_vivogpt_interview_chat
-from travel_attraction.get_TTS_attraction import get_tts_instance
-from travel_attraction.get_api_travelAdvicei import sync_vivogpt_travelAdvice
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'jjj'
