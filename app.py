@@ -13,6 +13,9 @@ import requests
 from PIL import Image
 import base64
 
+
+from travel_attraction.get_TTS_attraction import get_tts_instance
+from travel_attraction.get_api_travelAdvicei import sync_vivogpt_travelAdvice
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
 from api_project_get.get_api_msg import sync_vivogpt_msg
@@ -54,6 +57,10 @@ def samartlife():
 def samartlife_travel():
     return render_template('travel.html')
 
+@app.route('/smartlife/chat', methods=['GET'])
+def samartlife_chat():
+    return render_template('chatbox.html')
+
 @app.route('/smartlife/travel/photofind', methods=['GET'])
 def samartlife_photofind():
     return render_template('travel_photofind.html')
@@ -62,7 +69,7 @@ def samartlife_photofind():
 def samartlife_travelplan():
     return render_template('travel_plan.html')
 
-@app.route('/smartlife/travel/travel_attraction', methods=['GET'])
+@app.route('/smartlife/travel/attraction', methods=['GET'])
 def samartlife_travelattraction():
     return render_template('travel_attraction.html')
 @app.route('/smartlife/health', methods=['GET'])
@@ -1051,6 +1058,34 @@ def get_access_token():
     token_url = f'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id={API_KEY}&client_secret={SECRET_KEY}'
     response = requests.get(token_url)
     return response.json().get('access_token')
+
+
+@app.route('/get_address', methods=['POST'])
+def get_address():
+    data = request.json
+    lat = data.get('lat')
+    lng = data.get('lng')
+
+    # 反向地理编码获取详细地址，设置语言为中文
+    url = f"https://api.opencagedata.com/geocode/v1/json?q={lat}+{lng}&key=79b89ebd09984761a4797e0c61009fc9&language=zh"
+    response = requests.get(url)
+    if response.status_code == 200:
+        address = response.json()['results'][0]['formatted']
+    else:
+        address = '未知地址'
+
+    return jsonify({"status": "success", "address": address})
+
+
+@app.route('/get_nearby_places', methods=['POST'])
+def get_nearby_places():
+    data = request.json
+    address = data.get('address')
+
+    question = f"这是我现在所处的位置：{address}，列出该地址附近5km内的五个景点或者更少，选择的景点按照名气等级排序，并详细讲解介绍每个景点的距离当前位置的距离，历史背景，游玩攻略等详细信息，每个景点的讲解不少于200字。"
+    advice = sync_vivogpt_travelAdvice(question)
+
+    return jsonify({"status": "success", "advice": advice})
 
 
 # 地表识别的路由

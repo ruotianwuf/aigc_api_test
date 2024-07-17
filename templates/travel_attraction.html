@@ -7,32 +7,27 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
-       body {
+        body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-image: url("/static/img/旅游/travel.jpg");
-            background-size: cover; /* 确保背景图片完全覆盖整个页面 */
-            background-size: auto 100%; /* 水平方向自适应，垂直方向100%填充 */
-            background-position: center; /* 将背景图片居中 */
-            background-repeat: repeat-y; /* 垂直方向重复 */
-            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
             align-items: center;
-            height: 100vh; /* 设置body的高度为视口高度，保证背景图片填满整个页面 */
+            justify-content: center;
         }
-
-
-
         .title {
-            margin:30px;
             text-align: center;
             z-index: 2;
-
         }
         .title h1 {
-            z-index:100;
             margin: 40px;
-            font-size: 4em;
+            font-size: 3em;
             animation: fadeInDown 1s ease;
             color: black;
         }
@@ -43,26 +38,19 @@
         }
         .container {
             max-width: 1000px;
-
             backdrop-filter: blur(15px);
-            border: 2px solid #ccc; /* Border properties */
-            border-radius: 6px; /* Optional: Add border radius */
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); /* Box shadow effect */
-
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
             text-align: center;
             position: relative;
             z-index: 2;
             width: 80vw;
-
             padding: 2em 1.5em;
-            border-radius: 0.6em;
-            box-shadow: 0 0.6em 2.5em rgba(0, 7, 70, 0.2);
-            text-align: center;
             overflow-y: auto;
             max-height: 70vh;
-            margin-bottom: auto;
+            background: rgba(255, 255, 255, 0.8);
         }
-
         .loading {
             min-height: 50px;
             margin-bottom: 1em;
@@ -77,7 +65,6 @@
             color: #021d38;
             font-weight: 500;
         }
-
         .loading::before {
             content: "";
             border: 6px solid #f3f3f3;
@@ -87,19 +74,16 @@
             height: 30px;
             animation: spin 1s linear infinite;
         }
-
         .loading::after {
             content: "Loading...";
             margin-top: 10px;
             font-size: 1em;
             color: #0076ec;
         }
-
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .btn-custom {
             display: inline-block;
             background-color: #42a1ff;
@@ -112,7 +96,6 @@
             margin: 0.5em 0;
             transition: background-color 0.3s;
         }
-
         .btn-custom.clicked {
             background-color: #f0f0f0;
             color: #42a1ff;
@@ -121,14 +104,12 @@
         .btn-custom:hover {
             background-color: #0076ec;
         }
-
         .return-button {
-        z-index=1000;
-        margin: 0.5em 0;
-         position: absolute;
-            top:10px;
-            left:10px;
-            display: inline-block;
+            z-index: 1000;
+            margin: 0.5em 0;
+            position: absolute;
+            top: 10px;
+            left: 10px;
             background-color: #42a1ff;
             color: #ffffff;
             border: none;
@@ -136,15 +117,11 @@
             padding: 0.75em 1.5em;
             border-radius: 0.25em;
             cursor: pointer;
-            margin: 0.5em 0;
             transition: background-color 0.3s;
-            text-align: center;
         }
-
         .return-button:hover {
             background-color: #0076ec;
         }
-
         .footer {
             text-align: center;
             color: #fff;
@@ -153,20 +130,18 @@
             margin-top: auto;
             padding-bottom: 10px;
         }
-
         #address, #attraction {
             overflow-y: auto;
             max-height: 50vh;
         }
-       #audioPlayer {
-            top:20px;
-            left: 20px;
-       }
+        #audioPlayer {
+            margin-top: 20px;
+        }
         .attraction {
             background-color: #ffffff;
-            padding: 1em; /* 可选：添加一些内边距 */
-            border-radius: 0.6em; /* 可选：添加圆角 */
-            box-shadow: 0 0.6em 2.5em rgba(0, 7, 70, 0.2); /* 可选：添加阴影 */
+            padding: 1em;
+            border-radius: 0.6em;
+            box-shadow: 0 0.6em 2.5em rgba(0, 7, 70, 0.2);
         }
         .placeholder {
             background-color: rgba(255, 255, 255, 0.8);
@@ -175,55 +150,31 @@
             border-radius: 0.6em;
             box-shadow: 0 0.6em 2.5em rgba(0, 7, 70, 0.2);
         }
-
-        .Rbtn_container {
-
-            backdrop-filter: blur(15px);
-            border: 2px solid #ccc; /* Border properties */
-            border-radius: 6px; /* Optional: Add border radius */
-            position: relative;
-            z-index: 2;
-            width: 80vw;
-            max-width: 40px;
-            padding: 2em 1.5em;
-            border-radius: 0.6em;
-
-            text-align: center;
-            overflow-y: auto;
-            max-height: 70vh;
-            margin-bottom: auto;
-        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-<button class="return-button" onclick="go_back()">返回</button>
-    <div class="overlay"></div>
+    <button class="return-button" onclick="go_back()">返回</button>
     <div class="title">
-
         <h1>景点介绍</h1>
         <p>在这里可以获取您的当前位置并为您进行旅游景点的推荐和讲解</p>
     </div>
-    <br><br>
     <div class="container">
         <div id="address" class="loading">请点击获取当前位置</div>
         <div class="b-container">
             <button id="getLocationBtn" class="btn-custom" onclick="getLocation()">获取当前位置</button>
             <button id="getPlacesBtn" class="btn-custom" onclick="getNearbyPlaces()" style="display: none;">附近景点介绍</button>
         </div>
-        <button id="textRevealBtn" class="btn-custom" onclick="revealText()" style="display: none; ">显示文字介绍</button>
-        <audio id="audioPlayer" controls style="display: none; "></audio>
+        <button id="textRevealBtn" class="btn-custom" onclick="revealText()" style="display: none;">显示文字介绍</button>
+        <audio id="audioPlayer" controls style="display: none;"></audio>
         <br>
         <div class="content" id="content" style="overflow: auto; max-height: 50vh; overflow-y: hidden;">
-        <div id="attraction" class="loading"></div>
-
-    </div>
-
+            <div id="attraction" class="loading"></div>
+        </div>
     </div>
     <div class="footer">
         © 2024 旅游推荐
     </div>
-
     <script>
         let currentLat, currentLng;
         let attractionText = "";
@@ -269,10 +220,8 @@
 
         function getNearbyPlaces() {
             const attractionDiv = document.getElementById('attraction');
-
             attractionDiv.classList.add('loading');
             attractionDiv.style.visibility = 'visible';
-
             const address = document.getElementById('address').innerText;
 
             fetch('/get_nearby_places', {
@@ -308,12 +257,11 @@
             });
         }
 
-
         function revealText() {
             const attractionDiv = document.getElementById('attraction');
             document.getElementById('content').style.display = 'inline';
             attractionDiv.innerHTML = attractionText;
-           attractionDiv.classList.add('attraction');
+            attractionDiv.classList.add('attraction');
         }
 
         function playAudio(text) {
@@ -354,13 +302,12 @@
                 case error.UNKNOWN_ERROR:
                     alert("未知错误.");
                     break;
-
             }
         }
 
-       function go_back(){
+        function go_back() {
             window.location.href = "/smartlife/travel";
-    }
+        }
     </script>
 </body>
 </html>

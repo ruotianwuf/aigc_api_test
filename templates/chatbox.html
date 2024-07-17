@@ -239,7 +239,7 @@
                         const messagesElement = document.getElementById('messages');
                         messagesElement.innerHTML = response.data.map(message => `
                            <div class="message ${message[1] === username ? 'sent' : 'received'}">
-                               <div class="name">${message[1][0].toUpperCase()}</div>
+                               <div class="name">${message[1].toUpperCase()}</div>
                                <div class="text">${decodeURIComponent(message[2])}</div>
                            </div>
                        `).join('');
