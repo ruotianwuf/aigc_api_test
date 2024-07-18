@@ -13,7 +13,7 @@ import requests
 from PIL import Image
 import base64
 
-
+from api_project_get.get_email_api import send_email
 from travel_attraction.get_TTS_attraction import get_tts_instance
 from travel_attraction.get_api_travelAdvicei import sync_vivogpt_travelAdvice
 from hw_pp_correct.correct import get_correct_check
@@ -584,10 +584,19 @@ def adduser_teacher_info():
     else:
         return jsonify({'success': False}), 200
 
+@app.route('/get_email_code', methods=['POST'])
+def get_email_code():
+    data = json.loads(request.get_data(as_text=True))
+    code = send_email(data['email'])
+    if code:
+        return jsonify({'success': True, 'code': code}), 200
+    else:
+        return jsonify({'success': False}), 200
+
+
+
 @app.route('/adduser/user/1', methods=['POST'])
 def adduser_user_info():
-
-
     if 'screenshot' not in request.files:
         return jsonify(success=False, message="没有文件部分")
 
