@@ -259,7 +259,6 @@
             "<div class='loader'></div>"+
             "</div>";
             const data = { 'question': careerText };
-            alert(careerText);
             $.ajax({
                 url: "/answer_msg/career_advice",
                 type: "POST",
@@ -275,7 +274,6 @@
                         replay = replay.replace(/\n/g, '<br>');
                         var report = document.getElementById("content");
                         report.innerHTML = "<div class='report-background'>" + "<h1>职业建议</h1>" +replay + "</div>";
-                        alert('success');
                     }
                 }, error: function(xhr, status, error) {
                     alert("发生错误，请稍后重试。");

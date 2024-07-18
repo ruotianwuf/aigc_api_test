@@ -238,7 +238,8 @@
                 <button  class="submit-button" onclick="go_back()">退出面试</button>
                 <button class="submit-button" onclick="jumpsecond()">进入下一部分</button>
             </div>
-
+            <div id="response-display"></div>
+            <button id="view-report-button" class="next-button" style="display:none;">查看报告</button>
         </section>
     </main>
     <div class="footer">
@@ -356,7 +357,7 @@
         };
         //计时器（前端计时）
         const startTimer = () => {
-            const totalTimeInSeconds = 600; // 倒计时总时间，单位秒
+            const totalTimeInSeconds = 1800; // 倒计时总时间，单位秒
             const timerKey = 'timerStartTime'; // 用于存储计时器开始时间的键名
 
             let startTime = sessionStorage.getItem(timerKey);
@@ -424,15 +425,24 @@
                 dataType: "json",
                 success: function(response) {
                     console.log('答案已提交：', response);
+                    const responseDisplay = document.getElementById('response-display');
+                    const viewReportButton = document.getElementById('view-report-button');
                     if (response.success) {
                         alert('你的答案已提交成功！');
+                        responseDisplay.innerHTML = '你的答案已提交成功！';
+                        viewReportButton.style.display = 'inline-block'; // 显示查看报告按钮
+                        viewReportButton.addEventListener('click', () => {
+                            alert('服务器返回的报告：<br>'+ response.result);
+                        });
                     } else {
-                        alert('提交失败，请稍后重试。');
+                        responseDisplay.innerHTML = '提交失败，请稍后重试。';
+                        viewReportButton.style.display = 'none'; // 隐藏查看报告按钮
                     }
                 },
                 error: function(xhr, status, error) {
                     console.error('提交答案失败：', error);
-                    alert("提交答案时发生错误，请稍后重试。");
+                    const responseDisplay = document.getElementById('response-display');
+                    responseDisplay.innerHTML = '提交答案时发生错误，请稍后重试。';
                 }
             });
         };
