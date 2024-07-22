@@ -274,7 +274,7 @@
                             // 此处仅为示例
                             // alert("Comment submitted successfully!");
                             if (response.success) {
-                                location.reload();
+                                getpostdetails()
                             }
                         },
                         error: function () {
@@ -325,7 +325,8 @@
                     // 成功提交后可以刷新页面或者更新评论列表
                     // 此处仅为示例
                     // alert("Comment submitted successfully!");
-                    location.reload();
+                    // location.reload();
+                    getpostdetails()
                 },
                 error: function(xhr, status, error) {
                     // 处理错误
@@ -334,47 +335,49 @@
             });
         }
 
+        getpostdetails()
+function getpostdetails() {
+    // 使用 jQuery 发送 AJAX 请求获取后端数据
+    $(document).ready(function () {
+        // 发送 AJAX 请求
+        var cookies = document.cookie.split("; ");
+        for (var i = 0; i < cookies.length; i++) {
+            var cookiePair = cookies[i].split("=");
+            if (cookiePair[0] === "student" && cookiePair[1]) {
+                var data = {"username": cookiePair[1]};
+                $.ajax({
+                    url: "/student/forum/getPost", // 后端提供数据的 API 地址
+                    type: "POST", // 请求类型为 GET
+                    data: JSON.stringify(data),
+                    contentType: "application/json",
+                    dataType: "json", // 响应数据类型为 JSON
+                    success: function (response) {
+                        // 请求成功时执行的回调函数
+                        if (response.success) {
+                            // 解析后端传递的数据
+                            // const data = JSON.stringify(response.result);
 
-        // 使用 jQuery 发送 AJAX 请求获取后端数据
-        $(document).ready(function() {
-            // 发送 AJAX 请求
-                var cookies = document.cookie.split("; ");
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookiePair = cookies[i].split("=");
-                    if (cookiePair[0] === "student" && cookiePair[1]) {
-                        var data = {"username": cookiePair[1]};
-                        $.ajax({
-                            url: "/student/forum/getPost", // 后端提供数据的 API 地址
-                            type: "POST", // 请求类型为 GET
-                            data: JSON.stringify(data),
-                            contentType: "application/json",
-                            dataType: "json", // 响应数据类型为 JSON
-                            success: function (response) {
-                                // 请求成功时执行的回调函数
-                                if (response.success) {
-                                    // 解析后端传递的数据
-                                    // const data = JSON.stringify(response.result);
 
+                            var posts = response.result.Post;
+                            var comments = response.result.Comment;
 
-                                var posts = response.result.Post;
-                                var comments = response.result.Comment;
-
-                                renderPosts(posts, comments);
-                                    // 渲染帖子和评论到页面
-                                    // renderPosts(posts, comments);
-                                } else {
-                                    console.error("Failed to fetch posts:", response.error);
-                                }
-                            },
-                            error: function (xhr, status, error) {
-                                // 请求失败时执行的回调函数
-                                console.error("Failed to fetch posts:", error);
-                            }
-                        });
+                            renderPosts(posts, comments);
+                            // 渲染帖子和评论到页面
+                            // renderPosts(posts, comments);
+                        } else {
+                            console.error("Failed to fetch posts:", response.error);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 请求失败时执行的回调函数
+                        console.error("Failed to fetch posts:", error);
                     }
-                }
+                });
+            }
+        }
 
-        });
+    });
+}
 
         // 渲染帖子和评论到页面
                  // 根据学生号码、帖子号码、评论号码匹配帖子和评论
@@ -388,10 +391,10 @@
         postsContainer.empty();
 
         // 确保posts和comments是数组
-        if (!Array.isArray(posts) || !Array.isArray(comments)) {
-            console.error("Posts or Comments are not in the expected array format.");
-            return;
-        }
+        // if (!Array.isArray(posts) || !Array.isArray(comments)) {
+        //     console.error("Posts or Comments are not in the expected array format.");
+        //     return;
+        // }
 
         // 遍历每个帖子
         posts.forEach(post => {
@@ -405,21 +408,22 @@
             postElement.append(`<button onclick="like('${post[6]}','${post[5]}')" id="likeid">点赞</button>&ensp;`);
             postElement.append(`<button onclick="openCommentForm('${post[6]}','${post[1]}')">评论</button>`);
 
+            if (comments) {
+                // 创建评论元素
+                const commentsList = $("<ul></ul>", {"class": "comments"});
 
-            // 创建评论元素
-            const commentsList = $("<ul></ul>", { "class": "comments" });
+                // 遍历当前帖子的评论
+                comments.forEach(comment => {
+                    if (comment[1] === post[6]) {
+                        const commentElement = $("<li></li>");
+                        commentElement.append(`<h3 id="${comment[5]}">${comment[2]}</h3>`);
+                        commentElement.append(`<p>${comment[3]} 在 ${comment[4]}评论</p>`);
+                        commentsList.append(commentElement);
+                    }
+                });
 
-            // 遍历当前帖子的评论
-            comments.forEach(comment => {
-                if (comment[1] === post[6]) {
-                    const commentElement = $("<li></li>");
-                    commentElement.append(`<h3 id="${comment[5]}">${comment[2]}</h3>`);
-                    commentElement.append(`<p>${comment[3]} 在 ${comment[4]}评论</p>`);
-                    commentsList.append(commentElement);
-                }
-            });
-
-            postElement.append(commentsList);
+                postElement.append(commentsList);
+            }
 
             // 将帖子元素添加到容器中
             postsContainer.append(postElement);
@@ -439,7 +443,7 @@
                 dataType: "json",
                 success: function (response) {
                     if (response.success) {
-                        location.reload()
+                        getpostdetails()
                     } else {
                         console.error("Failed");
                     }

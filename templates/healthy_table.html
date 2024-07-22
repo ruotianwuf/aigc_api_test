@@ -421,7 +421,7 @@ function getinfo(){
                     }
                 },
                 error: function () {
-                    alert("错误error");
+                    // alert("错误error");
                 }
             });
         }
@@ -446,7 +446,7 @@ function getinfo(){
                         fillTableWithData(response.result)
                     },
                     error: function () {
-                        alert("错误error");
+                        // alert("错误error");
                     }
                 });
                 modal.style.display = "none";
@@ -494,6 +494,7 @@ function getinfo(){
             "want_weight": desiredWeight + "kg",
             "love_sports": exercise
         }
+        gettable()
         getadvice(data)
     }
 
@@ -527,7 +528,7 @@ function getinfo(){
 
                     },
                     error: function () {
-                        alert("错误error");
+                        // alert("错误error");
                     }
                 });
                 modal.style.display = "none";
@@ -572,7 +573,7 @@ function getinfo(){
                         gettable()
                     },
                     error: function () {
-                        alert("错误error");
+                        // alert("错误error");
                     }
                 });
                 modal.style.display = "none";

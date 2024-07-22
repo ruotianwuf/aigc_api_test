@@ -424,6 +424,7 @@ def getstudent_forum_post():
     con = UserServerController()
     result = con.find_student_Post_ServerStatus(data)
     print(result)
+
     if result:
         return jsonify({'success': True, 'result': result}), 200
     else:
@@ -433,6 +434,10 @@ def getstudent_forum_post():
 @app.route('/smartlearn/teacher/live', methods=['GET'])
 def get_teacher_live():
     return render_template('teacher_live.html')
+
+@app.route('/smartlearn/student/live', methods=['GET'])
+def get_student_live():
+    return render_template('student_live.html')
 
 @app.route('/pointer')
 def pointer():
@@ -1138,7 +1143,6 @@ def recognize_landmark():
 
 
 if __name__ == '__main__':
-   # app.run(debug=False, port=2750)
    app.run(debug=False,  port=2750)
 #
 

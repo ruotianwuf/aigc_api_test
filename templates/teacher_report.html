@@ -152,14 +152,14 @@
                 if (xhr.readyState === XMLHttpRequest.DONE) {
                     if (xhr.status === 200) {
                         console.log('Video uploaded successfully');
-                        alert('上传成功');
+                        // alert('上传成功');
                         var response = JSON.parse(xhr.responseText); // 解析响应
                         // var content = response.content; // 获取 content
                         // alert(JSON.stringify(content))
 
                         // window.location.reload();
                         var replay = response.content
-                        alert(replay)
+                        // alert(replay)
                         replay = replay.replace(/(\d+)\. /g, '$1.');
                         replay = replay.replace(/\((\d+)\) /g, '($1)');
                         replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
