@@ -18,7 +18,7 @@ from travel_attraction.get_TTS_attraction import get_tts_instance
 from travel_attraction.get_api_travelAdvicei import sync_vivogpt_travelAdvice
 from hw_pp_correct.correct import get_correct_check
 from api_project_get.get_api import sync_vivogpt
-from api_project_get.get_api_msg import sync_vivogpt_msg
+from api_project_get.get_api_msg import chat
 from controller.UserServerController import UserServerController
 from self_study_plan_project.get_plan_program import get_plan
 from long_video_transfer.run_bat import run_bat_file
@@ -197,7 +197,7 @@ def gettable_get():
 def getanswer_msg():
         data = json.loads(request.get_data(as_text=True))
         data = data['question']
-        result = sync_vivogpt_msg(data)
+        result = chat(data)
         print(result)
         if result != None:
             return jsonify({'success': True, 'result': result}), 200

@@ -1,5 +1,5 @@
 from api_project_get.get_api import sync_vivogpt
-from api_project_get.get_api_msg import sync_vivogpt_msg
+from api_project_get.get_api_msg import chat
 
 
 def get_msg_answer(data):
@@ -9,6 +9,6 @@ def get_msg_answer(data):
     print(a1)
 
     q2 = "成都"
-    result = sync_vivogpt_msg(q1,a1,q2)
+    result = chat(q1,a1,q2)
     print(result)
     return result
