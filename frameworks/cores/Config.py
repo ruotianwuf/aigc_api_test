@@ -9,7 +9,7 @@ class Config:
     def __init__(self):
         sys_platform = platform.platform().lower()
         print(sys_platform)
-        if "windows" in sys_platform:
+        if "windows" or "mac" in sys_platform:
             cfgpath = "configs/machine.ini"
         else:
             cfgpath = "/root/python/code/config/userserver_config.ini"
