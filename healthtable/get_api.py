@@ -141,6 +141,7 @@ def sync_vivogpt_traveladvice(prompt):
     print(completion.choices[0].message.content)
     return completion.choices[0].message.content
 
+
 def sync_vivogpt_place(prompt):
 
     # APP_ID = '3032660331'
