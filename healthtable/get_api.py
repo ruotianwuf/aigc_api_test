@@ -104,6 +104,7 @@ def sync_vivogpt_traveladvice(prompt):
     print('请求耗时: %.2f秒' % timecost)
 
 
+
 def sync_vivogpt_place(prompt):
 
     APP_ID = '3032660331'
