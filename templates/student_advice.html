@@ -160,7 +160,7 @@
                             if (response.success) {
                                 var replay = response.result
 
-
+                                 replay = replay.replace(/\*/g, '').replace(/#/g, '');
                                 replay = replay.replace(/(\d+)\. /g, '$1.');
                                 replay = replay.replace(/\((\d+)\) /g, '($1)');
                                 replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
@@ -210,6 +210,7 @@
                 if (response.success) {
                     var formattedAnswer = response.result;
                 //formattedAnswer = formattedAnswer.replace(/\n\n/g, '<br><br>');
+                      formattedAnswer = formattedAnswer.replace(/\*/g, '').replace(/#/g, '');
                     formattedAnswer = formattedAnswer.replace(/\\n/g, '<br>');
                     formattedAnswer = formattedAnswer.replace(/(\d+)\. /g, '$1. ');
                     formattedAnswer = formattedAnswer.replace(/\((\d+)\) /g, '($1)');

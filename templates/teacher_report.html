@@ -160,6 +160,7 @@
                         // window.location.reload();
                         var replay = response.content
                         // alert(replay)
+                         replay = replay.replace(/\*/g, '').replace(/#/g, '');
                         replay = replay.replace(/(\d+)\. /g, '$1.');
                         replay = replay.replace(/\((\d+)\) /g, '($1)');
                         replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
