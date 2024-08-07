@@ -265,19 +265,24 @@
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 dataType: "json",
-                success: function(response) {
-                    if (response.success) {
-                        var replay = response.result
-                        replay = replay.replace(/(\d+)\. /g, '$1.');
-                        replay = replay.replace(/\((\d+)\) /g, '($1)');
-                        replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
-                        replay = replay.replace(/\n/g, '<br>');
-                        var report = document.getElementById("content");
-                        report.innerHTML = "<div class='report-background'>" + "<h1>职业建议</h1>" +replay + "</div>";
-                    }
-                }, error: function(xhr, status, error) {
-                    alert("发生错误，请稍后重试。");
-                }
+          success: function(response) {
+    if (response.success) {
+        var replay = response.result;
+
+
+        replay = replay.replace(/(\d+)\. /g, '$1.');
+        replay = replay.replace(/\((\d+)\) /g, '($1)');
+        replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
+        replay = replay.replace(/\n/g, '<br>');
+
+        replay = replay.replace(/\*/g, '');
+
+        var report = document.getElementById("content");
+        report.innerHTML = "<div class='report-background'>" + "<h1>职业建议</h1>" + replay + "</div>";
+    }
+}, error: function(xhr, status, error) {
+    alert("发生错误，请稍后重试。");
+}
             });
         }
 

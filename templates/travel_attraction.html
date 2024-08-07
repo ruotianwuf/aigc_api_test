@@ -237,6 +237,7 @@
                 if (data.status === 'success') {
                     const intro = "以下是距离您当前位置5km以内的景点：";
                     let replay = data.advice;
+                     replay = replay.replace(/\*/g, '').replace(/#/g, '');
                     replay = replay.replace(/(\d+)\. /g, '$1.');
                     replay = replay.replace(/\((\d+)\) /g, '($1)');
                     replay = replay.replace(/(①|②|③|④|⑤|⑥)/g, '$1 ');
